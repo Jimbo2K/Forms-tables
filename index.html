@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Proyecto Creación de BBDD Equipo 2</title>
+		<meta name="description" content="Ejercicio de creacion de una aplicacion donde se puedan añadir,modificar,borrar o consultar campos con jquary ">
+		<meta name="author" content="Adrián, Pablo, Pablo, Ruben, Juan">
+		<meta name="keywords" content="jquary,tablas,bootstrap,ejercicio jquary,adrformacion,uf1306">
+		<!-- Latest compiled and minified CSS & JS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<link rel="stylesheet" href="css/estilos.css">
+	</head>
+	<body>
+		<h1>Consulta de datos</h1>
+		<article class="container">
+			<div class="row col-lg-8">
+				<!-- Aquí va el formulario -->
+				<form action="#" id="form1" class="form-horizontal" role="form" autocomplete>
+					<div class="form-group">
+						<label for="isbn" class="col-lg-2 control-label">ISBN: <span>*</span></label>
+						<div class="col-lg-10">
+						<input type="text" class="form-control, col-lg-6" name="isbn" id="isbn" maxlength="13" required>&nbsp <span id="isbnnull"></span><br>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="titulo" class="col-lg-2 control-label">Título: <span>*</span></label>
+						<div class="col-lg-10">
+							<input type="text" class="form-control, col-lg-6" name="titulo" id="titulo" placeholder="Ej. Miguel de Cervantes" required>&nbsp <span id="titulonull"></span><br>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="Autor" class="col-lg-2 control-label">Autor: </label>
+						<div class="col-lg-10">
+							<input type="text" class="form-control, col-lg-6" name="autor" id="autor" placeholder="Ej. La Galatea">&nbsp <span id="autornull"></span><br>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="anio" class="col-lg-2 control-label">Año: </label>
+						<div class="col-lg-10">
+							<input type="text" class="form-control, col-lg-6" name="anio" id="anio" placeholder="Ej. 1591">&nbsp <span id="anionull"></span><br>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="editorial" class="col-lg-2 control-label">Editorial: </label>
+						<div class="col-lg-10">
+							<input type="text" class="form-control, col-lg-6" name="editorial" id="editorial" placeholder="Ej. Planeta">&nbsp <span id="editorialnull"></span>
+						</div>
+					</div>
+					<div class="oculto"><input type="text" id="oculto"></div>
+				</form>
+			</div>
+		</article>
+		<aside class="container">
+			<div class="row">
+				<!-- Aquí va la tabla -->
+				<table class="table table-bordered" id="tableta">
+					<tr>
+						<th>ISBN</th>
+						<th>TITULO</th>
+						<th>AUTOR</th>
+						<th>AÑO PUBLICACIÓN</th>
+						<th>EDITORIAL</th>
+					</tr>
+				</table>
+				<button type="button" class="btn btn-success" id="anadir">AÑADIR</button>
+				<button type="button" class="btn btn-danger " id="quitar">QUITAR</button>
+				<button type="button" class="btn btn-warning " id="modificar">MODIFICAR</button>
+				<button type="button" onclick="probartabla();">PRUEBA</button>
+			</div>
+		</aside>
+		<script src="//code.jquery.com/jquery.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+		<script src="js/funciones.js"></script>
+	</body>
+</html>

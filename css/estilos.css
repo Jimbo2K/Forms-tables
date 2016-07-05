@@ -1,0 +1,23 @@
+.select {
+	background-color: yellow;
+	color: red;
+}
+.oculto {
+	visibility: hidden;
+}
+div.oculto {
+	position: absolute;
+	left: 5000px;
+}
+
+span {
+	color: red;
+}
+
+#autornull, #anionull, #editorialnull {
+	color: orange;
+}
+.seleccionado {
+	background-color: yellow;
+	color: red;
+}
