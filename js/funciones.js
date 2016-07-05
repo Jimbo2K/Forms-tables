@@ -1,10 +1,18 @@
+/*Fecha: 05/07/16
+Descripcion: Código JS (JQuery) asociado a index.html para añadir funcionalidad a la página
+Autores: Adrián Arteaga, Juan José Basco, Pablo Andueza, Pablo Garrido, Rubén Álvarez
+Desarrollado con: Sublime Text 3 (editor) y JQuery*/
+
 //Variables globales
 var libreria =[];
-var seleccionado = false;
+//var seleccionado = false;
 
 
 $(function(){
+	//Inicialización de botones
 	chequeaBotones();
+
+	/******************* GESTIÓN DE EVENTOS *******************/
 	//Cada vez que se escribe algo en el input se valida VISUALMENTE
 	$("#isbn").bind("input change", validarIsbn);
 
@@ -32,19 +40,13 @@ $(function(){
 		if(Boolean($('.seleccionado')[0])){modificar();}
 	});
 
-
-
-// $('#borrar').click(function (){
-// 	borrar();
-// });
-$('#quitar').click(function(){
-	//nos aseguramos que haya una línea seleccionada
-	if(Boolean($('.seleccionado')[0])){borrar();}
-});
-
-
-
-
+	// $('#borrar').click(function (){
+	// 	borrar();
+	// });
+	$('#quitar').click(function(){
+		//nos aseguramos que haya una línea seleccionada
+		if(Boolean($('.seleccionado')[0])){borrar();}
+	});
 	
 });
 /******************** CONTROLAR LOS BOTONES ********************/

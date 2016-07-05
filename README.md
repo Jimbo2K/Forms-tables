@@ -30,8 +30,8 @@ Una reprersentación en "pseudocódigo" de esta estructura sería la siguiente:
 
 ##Miembros del proyecto
 Las personas que han participado en el desarrollo del código son:
-* Adrián
-* Juan
-* Pablo A
+* Adrián Arteaga
+* Juan José Basco
+* Pablo Andueza
 * Pablo Garrido
-* Rubén
+* Rubén Álvarez
