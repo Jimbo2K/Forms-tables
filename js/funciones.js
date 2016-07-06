@@ -103,6 +103,10 @@ function actualizar() {
 			pintarLinea(libreria[i]);
 		}
 		limpiaForm();
+	} else {
+		//Borro las filas de la tabla porque tiene que estar vacía
+		$('.linea').remove();
+		chequeaBotones();
 	}
 }
 
@@ -309,7 +313,10 @@ function modificar() {
 
 function borrar() {
 	var libroaborrar = $("#oculto").val();
+	console.log('libreria original: ' + libreria);
+	console.log('indice de borrado: ' + libroaborrar);
 	libreria.splice(libroaborrar, 1);
+	console.log('libreria a actualizar: ' + libreria);
 	actualizar();
 }
 
@@ -321,4 +328,40 @@ function probartabla() {
 	var contenido = '<tr class="linea" onclick="seleccionar(this);"><td>' + relleno.isbn + '</td>' + '<td>' +relleno.titulo + '</td>' + '<td>' + relleno.autor + '</td>' + '<td>' + relleno.anio + '</td>' + '<td>' + relleno.editorial + '</td>' + '<td class="oculto">' + relleno.indice + '</td></tr>';
 	$("#tableta").append(contenido);
 	libreria.push(relleno);
+}
+
+
+function numeroAzar(){
+	var a=Math.round((Math.random() * 10));
+	return a;
+}
+//Constructor de objetos: libro
+function libro(indice,isbn,titulo,autor,anio,editorial){
+	this.indice=indice;
+	this.isbn=isbn;
+	this.titulo=titulo;
+	this.autor=autor;
+	this.anio=anio;
+	this.editorial=editorial;
+}
+//Array con 10 objetos predefinidos
+var libreriaaux=[new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),];
+//Funcion que genera una lista aleatoria de libros
+function arrayAleatorio(){
+	var arrisbn=['1234567890','1234567890123','1111111111','1212121212123','1452367890','9999999999999','4561597534','9513576546','2584561597','7531598526'];
+	var arrtitulo=['JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros'];
+	var arrautor=['Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito'];
+	var arranio=['1234','5678','9123','2016','1975','1981','1732','2222','1997','2010'];
+	var arreditorial=['Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs'];
+	var i;
+	for (i=0; i<10;i++){
+		libreriaaux[i].indice=i;
+		libreriaaux[i].isbn=arrisbn[numeroAzar()];
+		libreriaaux[i].titulo=arrtitulo[numeroAzar()];
+		libreriaaux[i].autor=arrautor[numeroAzar()];
+		libreriaaux[i].anio=arranio[numeroAzar()];
+		libreriaaux[i].editorial=arreditorial[numeroAzar()];
+	}
+	libreria=libreriaaux;
+	actualizar();
 }
