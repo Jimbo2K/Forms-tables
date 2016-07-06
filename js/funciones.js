@@ -113,7 +113,7 @@ function actualizar() {
 /******************** VALIDACIONES ********************/
 
 function validarIsbn(){
-	var reisbn=/\d{10}|\d{13}/;
+	var reisbn=/^\s*(?:\d{9}[09xX]{1}|\d{13})\s*?/g;
 	var visbn=($('#isbn').val()).trim();
 	if(reisbn.test(visbn)){
 		$('#isbn').css('border','1px solid black');
