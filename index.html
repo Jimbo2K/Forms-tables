@@ -12,7 +12,6 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 		<meta name="description" content="Ejercicio de creacion de una aplicacion donde se puedan añadir,modificar,borrar o consultar campos con jquary ">
 		<meta name="author" content="Adrián, Pablo, Pablo, Ruben, Juan">
 		<meta name="keywords" content="jquary,tablas,bootstrap,ejercicio jquary,adrformacion,uf1306">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- Latest compiled and minified CSS & JS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 		<link rel="stylesheet" href="css/estilos.css">
@@ -26,46 +25,46 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 					<div class="form-group">
 						<label for="isbn" class="col-lg-2 control-label">ISBN: <span>*</span></label>
 						<div class="col-lg-10">
-						<input type="text" class="form-control, col-lg-6 rebonico" name="isbn" id="isbn" maxlength="13" required tabindex="1">&nbsp <span id="isbnnull"></span><br>
+						<input type="text" class="form-control, col-lg-6" name="isbn" id="isbn" maxlength="13" required>&nbsp <span id="isbnnull"></span><br>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="titulo" class="col-lg-2 control-label">Título: <span>*</span></label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control, col-lg-6 rebonico" name="titulo" id="titulo" placeholder="Ej. La Galatea" required tabindex="2">&nbsp <span id="titulonull"></span><br>
+							<input type="text" class="form-control, col-lg-6" name="titulo" id="titulo" placeholder="Ej. Miguel de Cervantes" required>&nbsp <span id="titulonull"></span><br>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="Autor" class="col-lg-2 control-label">Autor: </label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control, col-lg-6 rebonico" name="autor" id="autor" placeholder="Ej. Miguel de Cervantes" tabindex="3">&nbsp <span id="autornull"></span><br>
+							<input type="text" class="form-control, col-lg-6" name="autor" id="autor" placeholder="Ej. La Galatea">&nbsp <span id="autornull"></span><br>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="anio" class="col-lg-2 control-label">Año: </label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control, col-lg-6 rebonico" name="anio" id="anio" maxlength="4" placeholder="Ej. 1591" tabindex="4">&nbsp <span id="anionull"></span><br>
+							<input type="text" class="form-control, col-lg-6" name="anio" id="anio" placeholder="Ej. 1591">&nbsp <span id="anionull"></span><br>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="editorial" class="col-lg-2 control-label">Editorial: </label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control, col-lg-6 rebonico" name="editorial" id="editorial" placeholder="Ej. Planeta" tabindex="5">&nbsp <span id="editorialnull"></span>
+							<input type="text" class="form-control, col-lg-6" name="editorial" id="editorial" placeholder="Ej. Planeta">&nbsp <span id="editorialnull"></span>
 						</div>
 					</div>
 					<div class="oculto"><input type="text" id="oculto"></div>
 				</form>
 			</div>
 		</article>
+		<!-- Aquí va la tabla -->
 		<aside class="container">
-			<div class="row">
-				<!-- Aquí va la tabla -->
-				<table class="table table-bordered" id="tableta">
+			<div class="table-responsive">
+				<table  class="table table-bordered" id="tableta">
 					<tr>
 						<th>ISBN</th>
 						<th>TITULO</th>
 						<th>AUTOR</th>
-						<th>AÑO PUBLICACIÓN</th>
+						<th>AÑO</th>
 						<th>EDITORIAL</th>
 					</tr>
 				</table>

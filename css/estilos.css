@@ -18,9 +18,15 @@ span {
 	color: orange;
 }
 .seleccionado {
-	background-color: yellow;
+	background-color: yellow !important;
 	color: red;
 }
-.rebonico{
-	border:solid 1px black;
+
+tr,th{
+	text-align: center;
+	background-color:  #B4C9CC;
+	border color: red;
+}
+.linea{
+	background-color:  white;
 }
