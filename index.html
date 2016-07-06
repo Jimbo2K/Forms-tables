@@ -19,41 +19,52 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 	<body>
 		<h1>Consulta de datos</h1>
 		<article class="container">
-			<div class="row col-lg-8">
+		<h1>Consulta de datos</h1><br>
+			<div class="row, col-lg-10, col-md-10, col-sm-10, col-xs-10" id="contform">
 				<!-- Aquí va el formulario -->
 				<form action="#" id="form1" class="form-horizontal" role="form" autocomplete>
 					<div class="form-group">
-						<label for="isbn" class="col-lg-2 control-label">ISBN: <span>*</span></label>
-						<div class="col-lg-10">
-						<input type="text" class="form-control, col-lg-6" name="isbn" id="isbn" maxlength="13" required>&nbsp <span id="isbnnull"></span><br>
+						<label for="isbn" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">ISBN: <span>*</span></label>
+						<div class="col-lg-6, col-md-6, col-sm-6, col-xs-6">
+						<input type="text" class="form-control clearable, col-lg-10" name="isbn" id="isbn" maxlength="13" required tabindex="1">&nbsp <span id="isbnnull"></span><br>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="titulo" class="col-lg-2 control-label">Título: <span>*</span></label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control, col-lg-6" name="titulo" id="titulo" placeholder="Ej. Miguel de Cervantes" required>&nbsp <span id="titulonull"></span><br>
+						<label for="titulo" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">Título: <span>*</span></label>
+						<div class="col-lg-6, col-md-6, col-sm-6, col-xs-6">
+							<input type="text" class="form-control clearable, col-lg-10" name="titulo" id="titulo" placeholder="Ej. La Galatea" required tabindex="2">&nbsp <span id="titulonull"></span><br>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="Autor" class="col-lg-2 control-label">Autor: </label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control, col-lg-6" name="autor" id="autor" placeholder="Ej. La Galatea">&nbsp <span id="autornull"></span><br>
+						<label for="Autor" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">Autor: </label>
+						<div class="col-lg-6, col-md-6, col-sm-6, col-xs-6">
+							<input type="text" class="form-control clearable, col-lg-10" name="autor" id="autor" placeholder="Ej. Miguel de Cervantes" tabindex="3">&nbsp <span id="autornull"></span><br>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="anio" class="col-lg-2 control-label">Año: </label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control, col-lg-6" name="anio" id="anio" placeholder="Ej. 1591">&nbsp <span id="anionull"></span><br>
+						<label for="anio" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">Año: </label>
+						<div class="col-lg-6, col-md-6, col-sm-6, col-xs-6">
+							<input type="text" class="form-control clearable, col-lg-10" name="anio" id="anio" placeholder="Ej. 1591" tabindex="4">&nbsp <span id="anionull"></span><br>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="editorial" class="col-lg-2 control-label">Editorial: </label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control, col-lg-6" name="editorial" id="editorial" placeholder="Ej. Planeta">&nbsp <span id="editorialnull"></span>
+						<label for="editorial" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">Editorial: </label>
+						<div class="col-lg-6, col-md-6, col-sm-6, col-xs-6">
+							<input type="text" class="form-control clearable, col-lg-10" name="editorial" id="editorial" placeholder="Ej. Planeta" tabindex="5">&nbsp <span id="editorialnull"></span>
 						</div>
 					</div>
-					<div class="oculto"><input type="text" id="oculto"></div>
+					<div class="oculto"></div>
 				</form>
+			</div>
+			<div class="btn-group-vertical id="botones">
+				<button type="button" class="btn btn-success" id="anadir" tabindex="6" accesskey="a">AÑADIR</button>
+				<br>
+				<button type="button" class="btn btn-danger" id="quitar" tabindex="7" accesskey="q">QUITAR</button>
+				<br>
+				<button type="button" class="btn btn-warning" id="modificar" tabindex="8" accesskey="m">MODIFICAR</button>
+				<button type="button" onclick="probartabla();">PRUEBA1</button>
+				<button type="button" onclick="arrayAleatorio()">PRUEBA2</button>
+				<br>
 			</div>
 		</article>
 		<!-- Aquí va la tabla -->
@@ -68,11 +79,6 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 						<th>EDITORIAL</th>
 					</tr>
 				</table>
-				<button type="button" class="btn btn-success" id="anadir">AÑADIR</button>
-				<button type="button" class="btn btn-danger " id="quitar">QUITAR</button>
-				<button type="button" class="btn btn-warning " id="modificar">MODIFICAR</button>
-				<button type="button" onclick="probartabla();">PRUEBA1</button>
-				<button type="button" onclick="arrayAleatorio()">PRUEBA2</button>
 			</div>
 		</aside>
 		<script src="//code.jquery.com/jquery.js"></script>
