@@ -112,18 +112,88 @@ function actualizar() {
 
 /******************** VALIDACIONES ********************/
 
+function calculaIsbn10(pisbn){
+	var i, cod=0;
+	for (i=0; i<(pisbn.length-1);i++){
+		cod = cod + Number(pisbn[i])*(i+1);
+	}
+	cod=cod%11;
+	if (cod==10){cod='x';}
+	if(cod==Number(pisbn[pisbn.length-1])){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function calculaIsbn13(pisbn){
+	var i,j,cod=0;
+	for (j=1;j<=12;j=j+2){
+		cod=cod + Number(pisbn[j])*3 + Number(pisbn[j-1]);
+	}
+	cod=10-(cod%10);
+	if(cod==Number(pisbn[pisbn.length-1])){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function contarNumeros(pisbn) {
+	 var cuentaNumeros = pisbn.length;
+	 var salida;
+	 if (cuentaNumeros === 10) {
+	 	salida = calculaIsbn10(pisbn);
+	 }
+	 else if (cuentaNumeros === 13) {
+	 	salida = calculaIsbn13(pisbn);
+	 }
+	 return salida;
+}
+
+function compararisbn(numisbn) {
+	extensionlibre = libreria.length;
+	x = 0;
+	for (i=0; i<extensionlibre; i++) {
+		if (libreria[i].isbn == numisbn) {
+			x = 1;
+		}
+	}
+	if (x == 1)	{
+		return false;
+	} else {
+		return true;
+	}
+}
+
 function validarIsbn(){
+	var mensaje='',salida;
 	var reisbn=/^\s*(?:\d{9}[09xX]{1}|\d{13})\s*?/g;
 	var visbn=($('#isbn').val()).trim();
 	if(reisbn.test(visbn)){
-		$('#isbn').css('border','1px solid black');
-		$('#isbnnull').html('');
-		return true;
+		visbn.toLowerCase();
+		if (contarNumeros(visbn)){
+			if (compararisbn(visbn)){
+				$('#isbn').css('border','1px solid black');
+				salida=true;
+			}else{
+				mensaje='Ya existe una entrada con este ISBN';
+				salida = false;
+				$('#isbn').css('border','1px solid red');
+			}
+		}else{
+			mensaje='ISBN inválido, nro. de control incorrecto';
+			$('#isbn').css('border','1px solid red');
+			salida=false;
+		}
 	} else {
 		$('#isbn').css('border','1px solid red');
-		$('#isbnnull').html(' ISBN incorrecto: 10 ó 13 dígitos');
-		return false;
+		mensaje='Formato de ISBN inválido 10/13 dígitos';
+		$('#isbn').css('border','1px solid red');
+		salida = false;
 	}
+		$('#isbnnull').html(mensaje);
+		return salida;
 }
 
 function validarTitulo(){
@@ -327,7 +397,6 @@ function probartabla() {
 	var relleno = {isbn:"6969696969",titulo:"jquery mola", autor:"unas",anio:"1979",editorial:"veces o más"};
 	var contenido = '<tr class="linea" onclick="seleccionar(this);"><td>' + relleno.isbn + '</td>' + '<td>' +relleno.titulo + '</td>' + '<td>' + relleno.autor + '</td>' + '<td>' + relleno.anio + '</td>' + '<td>' + relleno.editorial + '</td>' + '<td class="oculto">' + relleno.indice + '</td></tr>';
 	$("#tableta").append(contenido);
-	libreria.push(relleno);
 }
 
 
