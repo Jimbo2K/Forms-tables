@@ -29,38 +29,46 @@ $(function(){
 	$("#editorial").bind("input change", validarEditorial);
 
 	$('#anadir').click(function (){
-		//Si hay algo seleccionado no se puede añadir
+		//Si hay algo seleccionado no se puede añadir porque introduciría una copia en libreria
+		//y no es deseable tener entradas duplicadas
 		if(!Boolean($('.seleccionado')[0])){alta();}
 	});
 
-	// $('#modificar').click(function (){
-	// 	modificar();
-	// });
+/*Un objeto Js es algo así (simplificando) {id: 'linea1', class: 'seleccionado', value: 12 ...}
+Un objeto JQ es un objeto que contiene un objeto Js {{objeto Js}, {objeto raruno 1}, {objeto raruno 2} ...}
+Un elemento HTML como <tr></tr> es un objeto Js del DOM. Por ej. un <tr id='linea1'></tr> se podría seleccionar en Js
+document.getElementById('linea1'), y Boolean(document.getElementById('linea1')) devuelve true porque existe ese <tr>
+Si pongo Boolean(document.getElementById('chorizo')) devolverá false porque no hay ningún elemento con ese Id.
+Con un objeto JQ puede no pasar esto, puede que creemos un <tr> con id chorizo y luego lo borremos, en ese caso ya no existe
+en el DOM pero puede haber todavía un objeto JQ $('#chorizo')={undefined, {objeto raruno 1}, {objeto raruno 2}, ...}
+Así que si preguntamos Boolean($('#chorizo')) devuelve true porque el objeto JQ existe. Pero si preguntamos por el primer
+elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boolean(undefined)=false*/
+
 	$('#modificar').click(function(){
-		//nos aseguramos que haya una línea seleccionada
+		//nos aseguramos que haya una línea seleccionada para poder utilizar el botón
 		if(Boolean($('.seleccionado')[0])){modificar();}
 	});
 
-	// $('#borrar').click(function (){
-	// 	borrar();
-	// });
 	$('#quitar').click(function(){
-		//nos aseguramos que haya una línea seleccionada
+		//nos aseguramos que haya una línea seleccionada para poder utilizar el botón
 		if(Boolean($('.seleccionado')[0])){borrar();}
 	});
 	
 });
+
 /******************** CONTROLAR LOS BOTONES ********************/
 
 //Esta función comprueba si hay algún elemento con la clase seleccionado
-//si lo hay habilita los botones y si no los deshabilita
+//si lo hay, VISUALMENTE habilita los botones y si no los deshabilita VISUALMENTE
+//El control real de habilitación/inhabilitación está en los gestores de evento
 function chequeaBotones(){
 	var aux=Boolean($('.seleccionado')[0]);
 	//Si el array no está vacío Y hay un objeto con .seleccionado
 	if (libreria.length!==0 && aux) {
-		//añade la clase de Bootstrap disabled
+		//Quita la clase Bootstrap disbled para que los botones aparezcan activos
 		$('#modificar').removeClass('disabled');
 		$('#quitar').removeClass('disabled');
+		//añade la clase de Bootstrap disabled para que el botón aparezca desactivado
 		$('#anadir').addClass('disabled');
 	}else{
 		$('#modificar').addClass('disabled');
@@ -87,14 +95,15 @@ function chequeaBotones(){
 /******************** PINTAR LA TABLA ********************/
 //Se le pasa un objeto del array (un libro) y pinta una línea
 function pintarLinea(pobj){
+	//Añadimos onclick="seleccionar(this);" para que podamos seleccionar las líneas de la tabla (con los eventos de JQuery no responden)
 	$("#tableta").append('<tr class="linea" onclick="seleccionar(this);"><td>' + pobj.isbn + '</td>' + '<td>' + pobj.titulo + '</td>' + '<td>' + pobj.autor + '</td>' + '<td>' + pobj.anio + '</td>' + '<td>' + pobj.editorial + '</td>' + '<td class="oculto">' + pobj.indice + '</td></tr>');
 }
 
 //Esta función chequea el array y si no está vacío pinta la tabla
 function actualizar() {
 	//Al actualizar se deselecciona
-	seleccionado=false;
-	//chequeaBotones();
+	//seleccionado=false;
+
 	//Si el array no está vacío
 	if (libreria.length !== 0){
 		var i;
@@ -104,26 +113,36 @@ function actualizar() {
 		for (i in libreria){
 			pintarLinea(libreria[i]);
 		}
+		//Borro los campos del formulario
 		limpiaForm();
 	} else {
 		//Borro las filas de la tabla porque tiene que estar vacía
 		$('.linea').remove();
-		chequeaBotones();
 	}
+	//Inicializo el estado VISUAL de los botones
+	chequeaBotones();
 }
 
 /******************** VALIDACIONES ********************/
 
 function calculaIsbn10(pisbn){
 	var i, cod=0, aux;
+	//Paso la cadena a minúsculas ya que un ISBN10 puede acabar en 'x' ó 'X'
 	aux=pisbn.toLowerCase();
+
+	/***** Algoritmo de cálculo del 10º dígito de control *****/
 	for (i=0; i<(aux.length-1);i++){
 		cod = cod + Number(aux[i])*(i+1);
 	}
 	cod=cod%11;
+	//Como trabajo en minúsculas sólo tengo que poner 'x'
 	if (cod==10){cod='x';}
+	/**********************************************************/
+
+	//Si coincide el código calculado con el que ha introducido el usuario
 	if(cod==aux[aux.length-1]){
 		return true;
+	//Si no coincide
 	} else {
 		return false;
 	}
@@ -131,10 +150,14 @@ function calculaIsbn10(pisbn){
 
 function calculaIsbn13(pisbn){
 	var j,cod=0;
+
+	/***** Algoritmo de cálculo del 13º dígito de control *****/
 	for (j=1;j<=12;j=j+2){
 		cod=cod + Number(pisbn[j])*3 + Number(pisbn[j-1]);
 	}
 	cod=10-(cod%10);
+	/**********************************************************/
+
 	if(cod==Number(pisbn[pisbn.length-1])){
 		return true;
 	} else {
@@ -142,26 +165,9 @@ function calculaIsbn13(pisbn){
 	}
 }
 
-//FUNCIÓN SÓLO PARA DESARROLLO: daodas9 dígitos calcula el cod de ISBN
-function dame10cod(pisbn){
-	var i,cod=0;
-	var aux=pisbn;
-	for (i=0; i<(aux.length);i++){
-		cod = cod + Number(aux[i])*(i+1);
-	}
-	cod=cod%11;
-	if (cod==10){cod='x';}
-	return cod;
-}
-function dame13cod(pisbn){
-	var j,cod=0;
-	for (j=1;j<=12;j=j+2){
-		cod=cod + Number(pisbn[j])*3 + Number(pisbn[j-1]);
-	}
-	cod=10-(cod%10);
-	return cod;
-}
-
+//Esta función comprueba la longitud del ISBN y aplica la validación correspondiente
+//según sea de 10 o 13 dígitos (supone que la validación de formato ya se ha hecho por
+//lo que el argumento sólo puede tener 10 o 13 dígitos)
 function contarNumeros(pisbn) {
 	 var cuentaNumeros = pisbn.length;
 	 var salida;
@@ -174,24 +180,27 @@ function contarNumeros(pisbn) {
 	 return salida;
 }
 
+//NOTA: la validación de esta función sólo se utiliza en Altas, nn en modificaciones
+//Esta función recorre el array libreri comparando el valor de los ISBN almacenados
+//con el del argumento. Si HAY UNA COINCIDENCIA DEVUELVE FALSE (no valido)
 function compararisbn(numisbn) {
 	var extensionlibre = libreria.length;
 	var x = 0;
 	for (var i=0; i<extensionlibre; i++) {
-		console.log('array['+i+'] '+libreria[i].isbn+' ISBN: '+numisbn);
 		if (libreria[i].isbn == numisbn) {
+			//Si hay una coincidencia x=1 y paro de comparar
 			x = 1;
 			break;
 		}
 	}
+	//En caso de coincidencia
 	if (x == 1)	{
-		console.log('coincidencia: false');
+		//Pinto el mensaje de error en el campo correspondiente
 		$('#isbnnull').html('Ya existe una entrada con este ISBN');
 		salida = false;
 		$('#isbn').css('border','1px solid red');
 		return false;
 	} else {
-		console.log('no coincidencia: true');
 		return true;
 	}
 }
@@ -199,9 +208,13 @@ function compararisbn(numisbn) {
 function validarIsbn(){
 	var mensaje='',salida;
 	var reisbn=/^\s*(?:\d{9}[0-9xX]{1}|\d{13})\s*?/g;
+	//Elimino posibles espacios en blanco al principio y al final
+	//(para el formato no hace falta pero luego si)
 	var visbn=($('#isbn').val()).trim();
+	//1er Nivel de validación: Formato de ISBN
 	if(reisbn.test(visbn)){
 		visbn.toLowerCase();
+		//2º Nivel de validación: Código de control válido
 		if (contarNumeros(visbn)){
 				$('#isbn').css('border','1px solid black');
 				salida=true;
@@ -248,7 +261,7 @@ function validarAutor(){
 }
 
 function validarAnio(){
-	var reanio=/\d{4}/;
+	var reanio=/\d{1,4}/;
 	var vanio=($('#anio').val()).trim();
 	if(reanio.test(vanio)){
 		$('#anio').css('border','1px solid black');
