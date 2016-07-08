@@ -29,7 +29,8 @@ $(function(){
 	$("#editorial").bind("input change", validarEditorial);
 
 	$('#anadir').click(function (){
-		alta();
+		//Si hay algo seleccionado no se puede añadir
+		if(!Boolean($('.seleccionado')[0])){alta();}
 	});
 
 	// $('#modificar').click(function (){
@@ -55,15 +56,16 @@ $(function(){
 //si lo hay habilita los botones y si no los deshabilita
 function chequeaBotones(){
 	var aux=Boolean($('.seleccionado')[0]);
-	console.log(aux);
 	//Si el array no está vacío Y hay un objeto con .seleccionado
 	if (libreria.length!==0 && aux) {
 		//añade la clase de Bootstrap disabled
 		$('#modificar').removeClass('disabled');
 		$('#quitar').removeClass('disabled');
+		$('#anadir').addClass('disabled');
 	}else{
 		$('#modificar').addClass('disabled');
 		$('#quitar').addClass('disabled');
+		$('#anadir').removeClass('disabled');
 	}
 }
 
@@ -113,13 +115,14 @@ function actualizar() {
 /******************** VALIDACIONES ********************/
 
 function calculaIsbn10(pisbn){
-	var i, cod=0;
-	for (i=0; i<(pisbn.length-1);i++){
-		cod = cod + Number(pisbn[i])*(i+1);
+	var i, cod=0, aux;
+	aux=pisbn.toLowerCase();
+	for (i=0; i<(aux.length-1);i++){
+		cod = cod + Number(aux[i])*(i+1);
 	}
 	cod=cod%11;
 	if (cod==10){cod='x';}
-	if(cod==Number(pisbn[pisbn.length-1])){
+	if(cod==aux[aux.length-1]){
 		return true;
 	} else {
 		return false;
@@ -127,7 +130,7 @@ function calculaIsbn10(pisbn){
 }
 
 function calculaIsbn13(pisbn){
-	var i,j,cod=0;
+	var j,cod=0;
 	for (j=1;j<=12;j=j+2){
 		cod=cod + Number(pisbn[j])*3 + Number(pisbn[j-1]);
 	}
@@ -137,6 +140,26 @@ function calculaIsbn13(pisbn){
 	} else {
 		return false;
 	}
+}
+
+//FUNCIÓN SÓLO PARA DESARROLLO: daodas9 dígitos calcula el cod de ISBN
+function dame10cod(pisbn){
+	var i,cod=0;
+	var aux=pisbn;
+	for (i=0; i<(aux.length);i++){
+		cod = cod + Number(aux[i])*(i+1);
+	}
+	cod=cod%11;
+	if (cod==10){cod='x';}
+	return cod;
+}
+function dame13cod(pisbn){
+	var j,cod=0;
+	for (j=1;j<=12;j=j+2){
+		cod=cod + Number(pisbn[j])*3 + Number(pisbn[j-1]);
+	}
+	cod=10-(cod%10);
+	return cod;
 }
 
 function contarNumeros(pisbn) {
@@ -152,35 +175,36 @@ function contarNumeros(pisbn) {
 }
 
 function compararisbn(numisbn) {
-	extensionlibre = libreria.length;
-	x = 0;
-	for (i=0; i<extensionlibre; i++) {
+	var extensionlibre = libreria.length;
+	var x = 0;
+	for (var i=0; i<extensionlibre; i++) {
+		console.log('array['+i+'] '+libreria[i].isbn+' ISBN: '+numisbn);
 		if (libreria[i].isbn == numisbn) {
 			x = 1;
+			break;
 		}
 	}
 	if (x == 1)	{
+		console.log('coincidencia: false');
+		$('#isbnnull').html('Ya existe una entrada con este ISBN');
+		salida = false;
+		$('#isbn').css('border','1px solid red');
 		return false;
 	} else {
+		console.log('no coincidencia: true');
 		return true;
 	}
 }
 
 function validarIsbn(){
 	var mensaje='',salida;
-	var reisbn=/^\s*(?:\d{9}[09xX]{1}|\d{13})\s*?/g;
+	var reisbn=/^\s*(?:\d{9}[0-9xX]{1}|\d{13})\s*?/g;
 	var visbn=($('#isbn').val()).trim();
 	if(reisbn.test(visbn)){
 		visbn.toLowerCase();
 		if (contarNumeros(visbn)){
-			if (compararisbn(visbn)){
 				$('#isbn').css('border','1px solid black');
 				salida=true;
-			}else{
-				mensaje='Ya existe una entrada con este ISBN';
-				salida = false;
-				$('#isbn').css('border','1px solid red');
-			}
 		}else{
 			mensaje='ISBN inválido, nro. de control incorrecto';
 			$('#isbn').css('border','1px solid red');
@@ -254,7 +278,11 @@ function validarEditorial(){
 function validar(){
 	var aux1,aux2,aux3,aux4,aux5,salida={};
 	//lo primero asigno el indice oculto
-	salida.indice=$('#oculto').val();
+	if ($('#oculto').val()===undefined){
+		salida.indice=libreria.length;
+	} else {
+		salida.indice=$('#oculto').val();
+	}
 	//validar isbn aux1
 	aux1=validarIsbn();
 	salida.isbn=(aux1 ? $('#isbn').val() : '');
@@ -302,8 +330,32 @@ function limpiaForm(){
 	$('span').html('');
 }
 
+//Esta función monta un objeto con el contenido de los campos del formulario sin validacion
+function objFormulario(){
+	var salida={};
+	//lo primero asigno el indice oculto
+	if ($('#oculto').val()===undefined){
+		salida.indice=libreria.length;
+	} else {
+		salida.indice=$('#oculto').val();
+	}
+	salida.isbn=$('#isbn').val();
+	salida.titulo=$('#titulo').val();
+	salida.autor=$('#autor').val();
+	salida.anio=$('#anio').val();
+	salida.editorial=$('#editorial').val();
+	return salida;
+}
+
+function formNoVacio(){
+	var cadena=$('#isbn').val()+$('#titulo').val()+$('#autor').val()+$('#anio').val()+$('#editorial').val();
+	console.log('cadena: '+ cadena);
+	if(cadena === ''){return false;}else{return true;}
+}
+
 //pobj corresponde al <tr> sobre el que se ha hecho click
 function seleccionar(pobj){
+	var user;
 	//Si la línea está seleccionada la deselecciono
 	if ((pobj.getAttribute('class')).indexOf('seleccionado')!==-1) {
 		$(pobj).removeClass('seleccionado');
@@ -313,24 +365,32 @@ function seleccionar(pobj){
 	}
 	//En caso contrario
 	else {
-		//Deselecciono cualquier tr (le quito la clase 'seleccionado')
-		$('tr').removeClass('seleccionado');
-		//Selecciono el clickado
-		$(pobj).addClass('seleccionado');
-		var i,arraux=[];
-		//en un array auxiliar cargo el contenido de cada celda de la línea .seleccionado
-		for (i=1;i<=6;i++){
-			arraux.push($('.seleccionado :nth-of-type(' + i + ')').text());
+		var contenidoForm=objFormulario();
+		if ((contenidoForm!==libreria[contenidoForm.indice]) && formNoVacio()){
+			user=confirm('Si realiza una nueva selección perderá los cambios \n ¿Desea continuar?');
+		} else {
+			user=true;
 		}
-		//Paso el contenido de cada celda a los inputs del formulario
-		$('#isbn').val(arraux[0]);
-		$('#titulo').val(arraux[1]);
-		$('#autor').val(arraux[2]);
-		$('#anio').val(arraux[3]);
-		$('#editorial').val(arraux[4]);
-		$('#oculto').val(arraux[5]);
-		//Para que funcione pintaBotones()
-		//seleccionado=true;
+		if (user){
+			//Deselecciono cualquier tr (le quito la clase 'seleccionado')
+			$('tr').removeClass('seleccionado');
+			//Selecciono el clickado
+			$(pobj).addClass('seleccionado');
+			var i,arraux=[];
+			//en un array auxiliar cargo el contenido de cada celda de la línea .seleccionado
+			for (i=1;i<=6;i++){
+				arraux.push($('.seleccionado :nth-of-type(' + i + ')').text());
+			}
+			//Paso el contenido de cada celda a los inputs del formulario
+			$('#isbn').val(arraux[0]);
+			$('#titulo').val(arraux[1]);
+			$('#autor').val(arraux[2]);
+			$('#anio').val(arraux[3]);
+			$('#editorial').val(arraux[4]);
+			$('#oculto').val(arraux[5]);
+			//Para que funcione pintaBotones()
+			//seleccionado=true;
+		}
 	}
 	chequeaBotones();
 }
@@ -359,34 +419,37 @@ function seleccionar(pobj){
 
 function alta() {
 	$('#oculto').val(libreria.length);
-	nuevodato = validar();
-	if (nuevodato) {		
+	var nuevodato = validar();
+	//La validación global de ISBN sólo comprueba el número, antes de añadirlo al array
+	//hay que ver si ya existe un elemento con ese ISBN
+	var aux=compararisbn($('#isbn').val());
+	if (nuevodato && aux) {
 		librosactuales = libreria.length;
 		libreria[librosactuales] = nuevodato;
+		actualizar();
 	} else {
 		alert('Los datos introducidos no son válidos');
 	}
-	actualizar();
 }
 
 function modificar() {
+	//Al modificar no hay que comprobar si el elemento tiene el mismo ISBN porque es él mismo
 	nuevodato = validar();
 	if (nuevodato) {
 		//El atributo indice de nuevo dato contiene el índice para almacenar en el array
 		libroactual = nuevodato.indice;
+		console.log('indice cargado: '+nuevodato.indice);
 		libreria[libroactual] = nuevodato;
+		actualizar();
 	} else {
 		alert('Los datos introducidos no son válidos');
 	}
-	actualizar();
+	chequeaBotones();
 }
 
 function borrar() {
 	var libroaborrar = $("#oculto").val();
-	console.log('libreria original: ' + libreria);
-	console.log('indice de borrado: ' + libroaborrar);
 	libreria.splice(libroaborrar, 1);
-	console.log('libreria a actualizar: ' + libreria);
 	actualizar();
 }
 
@@ -402,6 +465,7 @@ function probartabla() {
 
 function numeroAzar(){
 	var a=Math.round((Math.random() * 10));
+	if(a===10){a=9;}
 	return a;
 }
 //Constructor de objetos: libro
@@ -417,7 +481,7 @@ function libro(indice,isbn,titulo,autor,anio,editorial){
 var libreriaaux=[new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),];
 //Funcion que genera una lista aleatoria de libros
 function arrayAleatorio(){
-	var arrisbn=['1234567890','1234567890123','1111111111','1212121212123','1452367890','9999999999999','4561597534','9513576546','2584561597','7531598526'];
+	var arrisbn=['123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523'];
 	var arrtitulo=['JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros'];
 	var arrautor=['Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito'];
 	var arranio=['1234','5678','9123','2016','1975','1981','1732','2222','1997','2010'];
@@ -425,7 +489,7 @@ function arrayAleatorio(){
 	var i;
 	for (i=0; i<10;i++){
 		libreriaaux[i].indice=i;
-		libreriaaux[i].isbn=arrisbn[numeroAzar()];
+		libreriaaux[i].isbn=arrisbn[i];
 		libreriaaux[i].titulo=arrtitulo[numeroAzar()];
 		libreriaaux[i].autor=arrautor[numeroAzar()];
 		libreriaaux[i].anio=arranio[numeroAzar()];
