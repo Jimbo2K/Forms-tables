@@ -18,7 +18,7 @@ span {
 	color: orange;
 }
 .seleccionado {
-	background-color: yellow !important;
+	background-color: #F2A6A3 !important;
 	color: red;
 }
 
@@ -32,4 +32,11 @@ tr,th{
 }
 .rebonico{
 	border:solid 1px black;
+}
+h1{
+	color: darkgrey;
+	background-color: #0C3F0E
+}
+body{
+	background-color: #DBAD89;
 }
