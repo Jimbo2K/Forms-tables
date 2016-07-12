@@ -9,15 +9,16 @@ div.oculto {
 	position: absolute;
 	left: 5000px;
 }
+
 span {
 	color: red;
-    font-weight: 600;
 }
+
 #autornull, #anionull, #editorialnull {
-	color: #a8410f;
+	color: orange;
 }
 .seleccionado {
-	background-color: #F2A6A3 !important;
+	background-color: yellow !important;
 	color: red;
 }
 
@@ -32,52 +33,3 @@ tr,th{
 .rebonico{
 	border:solid 1px black;
 }
-h1{
-	color: darkgrey;
-	background-color: #0C3F0E
-}
-body{
-	background-color: #DBAD89;
-}
-#contform {
-    margin-right: -8em
-}
-#botones {
-    position: relative;
-    top: 6em;
-}
-p {
-    margin-left: 5%
-}
-
-@media screen and (max-width: 768px) {
-    #contform {
-        position: relative;
-        width: 100%;
-    }
-    #botones {
-        position: relative;
-        margin-left: 35%;
-        display: flex block;
-        top: -.5em;
-    }
-    label {
-        min-width: 6em;
-    }
-    aside {
-        position: relative;
-        top: 1.5em;
-    }
-
-@media screen and (max-width: 375px) {
-    #botones {
-        margin-left: 13%;
-    }
-    aside{
-        margin-left: -1em !important;
-        margin-right: -1em !important;
-        min-width: 20em !important;
-    }
-    
-
-

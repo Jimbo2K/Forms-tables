@@ -14,66 +14,68 @@ $(function(){
 
 	/******************* GESTIÓN DE EVENTOS *******************/
 	//Cada vez que se escribe algo en el input se valida VISUALMENTE
-	$("#isbn").bind("input change", validarIsbn);
+	$("#isbn").bind("input change", function(){pulsado=true; validarIsbn();});
 
 	//Cada vez que se escribe algo en el input se valida VISUALMENTE
-	$("#titulo").bind("input change", validarTitulo);
+	$("#titulo").bind("input change", function(){pulsado=true; validarTitulo();});
 
 	//Cada vez que se escribe algo en el input se valida VISUALMENTE
-	$("#autor").bind("input change", validarAutor);
+	$("#autor").bind("input change", function(){pulsado=true; validarAutor();});
 
 	//Cada vez que se escribe algo en el input se valida VISUALMENTE
-	$("#anio").bind("input change", validarAnio);
+	$("#anio").bind("input change", function(){pulsado=true; validarAnio();});
 
 	//Cada vez que se escribe algo en el input se valida VISUALMENTE
-	$("#editorial").bind("input change", validarEditorial);
+	$("#editorial").bind("input change", function(){pulsado=true; validarAutor();});
 
 	$('#anadir').click(function (){
-		//Si hay algo seleccionado no se puede añadir porque introduciría una copia en libreria
-		//y no es deseable tener entradas duplicadas
-		if(!Boolean($('.seleccionado')[0])){alta();}
+		alta();
 	});
 
-/*Un objeto Js es algo así (simplificando) {id: 'linea1', class: 'seleccionado', value: 12 ...}
-Un objeto JQ es un objeto que contiene un objeto Js {{objeto Js}, {objeto raruno 1}, {objeto raruno 2} ...}
-Un elemento HTML como <tr></tr> es un objeto Js del DOM. Por ej. un <tr id='linea1'></tr> se podría seleccionar en Js
-document.getElementById('linea1'), y Boolean(document.getElementById('linea1')) devuelve true porque existe ese <tr>
-Si pongo Boolean(document.getElementById('chorizo')) devolverá false porque no hay ningún elemento con ese Id.
-Con un objeto JQ puede no pasar esto, puede que creemos un <tr> con id chorizo y luego lo borremos, en ese caso ya no existe
-en el DOM pero puede haber todavía un objeto JQ $('#chorizo')={undefined, {objeto raruno 1}, {objeto raruno 2}, ...}
-Así que si preguntamos Boolean($('#chorizo')) devuelve true porque el objeto JQ existe. Pero si preguntamos por el primer
-elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boolean(undefined)=false*/
 
+	$('table').click(function(){
+		if(Boolean($('.seleccionado')[0]) && pulsado === true){
+			var r = confirm("Se perderan los datos modificados ¿esta usted absolutamente seguro de lo que hace?");
+			if (r == true) {
+				modificar();
+			} 
+		} else if(Boolean($('.seleccionado')[0]) && pulsado === false){
+				modificar();
+			}	
+	});
+	}
+	// $('#modificar').click(function (){
+	// 	modificar();
+	// });
 	$('#modificar').click(function(){
-		//nos aseguramos que haya una línea seleccionada para poder utilizar el botón
-		if(Boolean($('.seleccionado')[0])){modificar();}
+		//nos aseguramos que haya una línea seleccionada
+		if(Boolean($('.seleccionado')[0]) && X=FALSE){modificar();}
 	});
 
+	// $('#borrar').click(function (){
+	// 	borrar();
+	// });
 	$('#quitar').click(function(){
-		//nos aseguramos que haya una línea seleccionada para poder utilizar el botón
+		//nos aseguramos que haya una línea seleccionada
 		if(Boolean($('.seleccionado')[0])){borrar();}
 	});
 	
 });
-
 /******************** CONTROLAR LOS BOTONES ********************/
 
 //Esta función comprueba si hay algún elemento con la clase seleccionado
-//si lo hay, VISUALMENTE habilita los botones y si no los deshabilita VISUALMENTE
-//El control real de habilitación/inhabilitación está en los gestores de evento
+//si lo hay habilita los botones y si no los deshabilita
 function chequeaBotones(){
 	var aux=Boolean($('.seleccionado')[0]);
+	console.log(aux);
 	//Si el array no está vacío Y hay un objeto con .seleccionado
 	if (libreria.length!==0 && aux) {
-		//Quita la clase Bootstrap disbled para que los botones aparezcan activos
+		//añade la clase de Bootstrap disabled
 		$('#modificar').removeClass('disabled');
 		$('#quitar').removeClass('disabled');
-		//añade la clase de Bootstrap disabled para que el botón aparezca desactivado
-		$('#anadir').addClass('disabled');
 	}else{
 		$('#modificar').addClass('disabled');
 		$('#quitar').addClass('disabled');
-		$('#anadir').removeClass('disabled');
 	}
 }
 
@@ -95,15 +97,14 @@ function chequeaBotones(){
 /******************** PINTAR LA TABLA ********************/
 //Se le pasa un objeto del array (un libro) y pinta una línea
 function pintarLinea(pobj){
-	//Añadimos onclick="seleccionar(this);" para que podamos seleccionar las líneas de la tabla (con los eventos de JQuery no responden)
 	$("#tableta").append('<tr class="linea" onclick="seleccionar(this);"><td>' + pobj.isbn + '</td>' + '<td>' + pobj.titulo + '</td>' + '<td>' + pobj.autor + '</td>' + '<td>' + pobj.anio + '</td>' + '<td>' + pobj.editorial + '</td>' + '<td class="oculto">' + pobj.indice + '</td></tr>');
 }
 
 //Esta función chequea el array y si no está vacío pinta la tabla
 function actualizar() {
 	//Al actualizar se deselecciona
-	//seleccionado=false;
-
+	seleccionado=false;
+	//chequeaBotones();
 	//Si el array no está vacío
 	if (libreria.length !== 0){
 		var i;
@@ -113,124 +114,28 @@ function actualizar() {
 		for (i in libreria){
 			pintarLinea(libreria[i]);
 		}
-		//Borro los campos del formulario
 		limpiaForm();
 	} else {
 		//Borro las filas de la tabla porque tiene que estar vacía
 		$('.linea').remove();
+		chequeaBotones();
 	}
-	//Inicializo el estado VISUAL de los botones
-	chequeaBotones();
 }
 
 /******************** VALIDACIONES ********************/
 
-function calculaIsbn10(pisbn){
-	var i, cod=0, aux;
-	//Paso la cadena a minúsculas ya que un ISBN10 puede acabar en 'x' ó 'X'
-	aux=pisbn.toLowerCase();
-
-	/***** Algoritmo de cálculo del 10º dígito de control *****/
-	for (i=0; i<(aux.length-1);i++){
-		cod = cod + Number(aux[i])*(i+1);
-	}
-	cod=cod%11;
-	//Como trabajo en minúsculas sólo tengo que poner 'x'
-	if (cod==10){cod='x';}
-	/**********************************************************/
-
-	//Si coincide el código calculado con el que ha introducido el usuario
-	if(cod==aux[aux.length-1]){
-		return true;
-	//Si no coincide
-	} else {
-		return false;
-	}
-}
-
-function calculaIsbn13(pisbn){
-	var j,cod=0;
-
-	/***** Algoritmo de cálculo del 13º dígito de control *****/
-	for (j=1;j<=12;j=j+2){
-		cod=cod + Number(pisbn[j])*3 + Number(pisbn[j-1]);
-	}
-	cod=10-(cod%10);
-	/**********************************************************/
-
-	if(cod==Number(pisbn[pisbn.length-1])){
-		return true;
-	} else {
-		return false;
-	}
-}
-
-//Esta función comprueba la longitud del ISBN y aplica la validación correspondiente
-//según sea de 10 o 13 dígitos (supone que la validación de formato ya se ha hecho por
-//lo que el argumento sólo puede tener 10 o 13 dígitos)
-function contarNumeros(pisbn) {
-	 var cuentaNumeros = pisbn.length;
-	 var salida;
-	 if (cuentaNumeros === 10) {
-	 	salida = calculaIsbn10(pisbn);
-	 }
-	 else if (cuentaNumeros === 13) {
-	 	salida = calculaIsbn13(pisbn);
-	 }
-	 return salida;
-}
-
-//NOTA: la validación de esta función sólo se utiliza en Altas, nn en modificaciones
-//Esta función recorre el array libreri comparando el valor de los ISBN almacenados
-//con el del argumento. Si HAY UNA COINCIDENCIA DEVUELVE FALSE (no valido)
-function compararisbn(numisbn) {
-	var extensionlibre = libreria.length;
-	var x = 0;
-	for (var i=0; i<extensionlibre; i++) {
-		if (libreria[i].isbn == numisbn) {
-			//Si hay una coincidencia x=1 y paro de comparar
-			x = 1;
-			break;
-		}
-	}
-	//En caso de coincidencia
-	if (x == 1)	{
-		//Pinto el mensaje de error en el campo correspondiente
-		$('#isbnnull').html('Ya existe una entrada con este ISBN');
-		salida = false;
-		$('#isbn').css('border','1px solid red');
-		return false;
-	} else {
-		return true;
-	}
-}
-
 function validarIsbn(){
-	var mensaje='',salida;
-	var reisbn=/^\s*(?:\d{9}[0-9xX]{1}|\d{13})\s*?/g;
-	//Elimino posibles espacios en blanco al principio y al final
-	//(para el formato no hace falta pero luego si)
+	var reisbn=/^\s*(?:\d{9}[09xX]{1}|\d{13})\s*?/g;
 	var visbn=($('#isbn').val()).trim();
-	//1er Nivel de validación: Formato de ISBN
 	if(reisbn.test(visbn)){
-		visbn.toLowerCase();
-		//2º Nivel de validación: Código de control válido
-		if (contarNumeros(visbn)){
-				$('#isbn').css('border','1px solid black');
-				salida=true;
-		}else{
-			mensaje='ISBN inválido, nro. de control incorrecto';
-			$('#isbn').css('border','2px solid red');
-			salida=false;
-		}
+		$('#isbn').css('border','1px solid black');
+		$('#isbnnull').html('');
+		return true;
 	} else {
-		$('#isbn').css('border','2px solid red');
-		mensaje='Formato de ISBN inválido 10/13 dígitos';
-		$('#isbn').css('border','2px solid red');
-		salida = false;
+		$('#isbn').css('border','1px solid red');
+		$('#isbnnull').html(' ISBN incorrecto: 10 ó 13 dígitos');
+		return false;
 	}
-		$('#isbnnull').html(mensaje);
-		return salida;
 }
 
 function validarTitulo(){
@@ -241,7 +146,7 @@ function validarTitulo(){
 		$('#titulonull').html('');
 		return true;
 	} else {
-		$('#titulo').css('border','2px solid red');
+		$('#titulo').css('border','1px solid red');
 		$('#titulonull').html(' Título incorrecto');
 		return false;
 	}
@@ -254,21 +159,21 @@ function validarAutor(){
 		$('#autornull').html('');
 		return true;
 	} else {
-		$('#autor').css('border','2px solid #a8410f');
+		$('#autor').css('border','1px solid orange');
 		$('#autornull').html(' Autor vacío');
 		return false;
 	}
 }
 
 function validarAnio(){
-	var reanio=/\d{1,4}/;
+	var reanio=/\d{4}/;
 	var vanio=($('#anio').val()).trim();
 	if(reanio.test(vanio)){
 		$('#anio').css('border','1px solid black');
 		$('#anionull').html('');
 		return true;
 	} else {
-		$('#anio').css('border','2px solid #a8410f');
+		$('#anio').css('border','1px solid orange');
 		$('#anionull').html(' Año publ. incorrecto: 4 dígitos');
 		return false;
 	}
@@ -281,7 +186,7 @@ function validarEditorial(){
 		$('#editorialnull').html('');
 		return true;
 	} else {
-		$('#editorial').css('border','2px solid #a8410f');
+		$('#editorial').css('border','1px solid orange');
 		$('#editorialnull').html(' Editorial vacía');
 		return false;
 	}
@@ -291,11 +196,7 @@ function validarEditorial(){
 function validar(){
 	var aux1,aux2,aux3,aux4,aux5,salida={};
 	//lo primero asigno el indice oculto
-	if ($('#oculto').val()===undefined){
-		salida.indice=libreria.length;
-	} else {
-		salida.indice=$('#oculto').val();
-	}
+	salida.indice=$('#oculto').val();
 	//validar isbn aux1
 	aux1=validarIsbn();
 	salida.isbn=(aux1 ? $('#isbn').val() : '');
@@ -333,6 +234,23 @@ function validar(){
 	}
 }
 
+//Esta función es para comprobar si el ISBN esta repetido o no
+
+function compararisbn(numisbn) {
+	extensionlibre = libreria.length;
+	x = 0;
+	for (i=0; i<extensionlibre; i++) {
+	if (libreria[i]['isbn'] == numisbn) {
+			x = 1;
+		}
+	}
+	if (x == 1)	{
+		return false;
+	} else {
+		return true;
+	}
+}
+
 /******************** SELECCIONAR DE LA TABLA ********************/
 
 //Deja el formulario en blanco y elimina los errores
@@ -340,35 +258,11 @@ function validar(){
 function limpiaForm(){
 	$('input').val('');
 	$('input').css('border', '1px solid black');
-	$('.mensaje').html('');
-}
-
-//Esta función monta un objeto con el contenido de los campos del formulario sin validacion
-function objFormulario(){
-	var salida={};
-	//lo primero asigno el indice oculto
-	if ($('#oculto').val()===undefined){
-		salida.indice=libreria.length;
-	} else {
-		salida.indice=$('#oculto').val();
-	}
-	salida.isbn=$('#isbn').val();
-	salida.titulo=$('#titulo').val();
-	salida.autor=$('#autor').val();
-	salida.anio=$('#anio').val();
-	salida.editorial=$('#editorial').val();
-	return salida;
-}
-
-function formNoVacio(){
-	var cadena=$('#isbn').val()+$('#titulo').val()+$('#autor').val()+$('#anio').val()+$('#editorial').val();
-	console.log('cadena: '+ cadena);
-	if(cadena === ''){return false;}else{return true;}
+	$('span').html('');
 }
 
 //pobj corresponde al <tr> sobre el que se ha hecho click
 function seleccionar(pobj){
-	var user;
 	//Si la línea está seleccionada la deselecciono
 	if ((pobj.getAttribute('class')).indexOf('seleccionado')!==-1) {
 		$(pobj).removeClass('seleccionado');
@@ -378,32 +272,24 @@ function seleccionar(pobj){
 	}
 	//En caso contrario
 	else {
-		var contenidoForm=objFormulario();
-		if ((contenidoForm!==libreria[contenidoForm.indice]) && formNoVacio()){
-			user=confirm('Si realiza una nueva selección perderá los cambios \n ¿Desea continuar?');
-		} else {
-			user=true;
+		//Deselecciono cualquier tr (le quito la clase 'seleccionado')
+		$('tr').removeClass('seleccionado');
+		//Selecciono el clickado
+		$(pobj).addClass('seleccionado');
+		var i,arraux=[];
+		//en un array auxiliar cargo el contenido de cada celda de la línea .seleccionado
+		for (i=1;i<=6;i++){
+			arraux.push($('.seleccionado :nth-of-type(' + i + ')').text());
 		}
-		if (user){
-			//Deselecciono cualquier tr (le quito la clase 'seleccionado')
-			$('tr').removeClass('seleccionado');
-			//Selecciono el clickado
-			$(pobj).addClass('seleccionado');
-			var i,arraux=[];
-			//en un array auxiliar cargo el contenido de cada celda de la línea .seleccionado
-			for (i=1;i<=6;i++){
-				arraux.push($('.seleccionado :nth-of-type(' + i + ')').text());
-			}
-			//Paso el contenido de cada celda a los inputs del formulario
-			$('#isbn').val(arraux[0]);
-			$('#titulo').val(arraux[1]);
-			$('#autor').val(arraux[2]);
-			$('#anio').val(arraux[3]);
-			$('#editorial').val(arraux[4]);
-			$('#oculto').val(arraux[5]);
-			//Para que funcione pintaBotones()
-			//seleccionado=true;
-		}
+		//Paso el contenido de cada celda a los inputs del formulario
+		$('#isbn').val(arraux[0]);
+		$('#titulo').val(arraux[1]);
+		$('#autor').val(arraux[2]);
+		$('#anio').val(arraux[3]);
+		$('#editorial').val(arraux[4]);
+		$('#oculto').val(arraux[5]);
+		//Para que funcione pintaBotones()
+		//seleccionado=true;
 	}
 	chequeaBotones();
 }
@@ -432,37 +318,34 @@ function seleccionar(pobj){
 
 function alta() {
 	$('#oculto').val(libreria.length);
-	var nuevodato = validar();
-	//La validación global de ISBN sólo comprueba el número, antes de añadirlo al array
-	//hay que ver si ya existe un elemento con ese ISBN
-	var aux=compararisbn($('#isbn').val());
-	if (nuevodato && aux) {
+	nuevodato = validar();
+	if (nuevodato) {		
 		librosactuales = libreria.length;
 		libreria[librosactuales] = nuevodato;
-		actualizar();
 	} else {
 		alert('Los datos introducidos no son válidos');
 	}
+	actualizar();
 }
 
 function modificar() {
-	//Al modificar no hay que comprobar si el elemento tiene el mismo ISBN porque es él mismo
 	nuevodato = validar();
 	if (nuevodato) {
 		//El atributo indice de nuevo dato contiene el índice para almacenar en el array
 		libroactual = nuevodato.indice;
-		console.log('indice cargado: '+nuevodato.indice);
 		libreria[libroactual] = nuevodato;
-		actualizar();
 	} else {
 		alert('Los datos introducidos no son válidos');
 	}
-	chequeaBotones();
+	actualizar();
 }
 
 function borrar() {
 	var libroaborrar = $("#oculto").val();
+	console.log('libreria original: ' + libreria);
+	console.log('indice de borrado: ' + libroaborrar);
 	libreria.splice(libroaborrar, 1);
+	console.log('libreria a actualizar: ' + libreria);
 	actualizar();
 }
 
@@ -473,12 +356,12 @@ function probartabla() {
 	var relleno = {isbn:"6969696969",titulo:"jquery mola", autor:"unas",anio:"1979",editorial:"veces o más"};
 	var contenido = '<tr class="linea" onclick="seleccionar(this);"><td>' + relleno.isbn + '</td>' + '<td>' +relleno.titulo + '</td>' + '<td>' + relleno.autor + '</td>' + '<td>' + relleno.anio + '</td>' + '<td>' + relleno.editorial + '</td>' + '<td class="oculto">' + relleno.indice + '</td></tr>';
 	$("#tableta").append(contenido);
+	libreria.push(relleno);
 }
 
 
 function numeroAzar(){
 	var a=Math.round((Math.random() * 10));
-	if(a===10){a=9;}
 	return a;
 }
 //Constructor de objetos: libro
@@ -494,7 +377,7 @@ function libro(indice,isbn,titulo,autor,anio,editorial){
 var libreriaaux=[new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),];
 //Funcion que genera una lista aleatoria de libros
 function arrayAleatorio(){
-	var arrisbn=['123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523'];
+	var arrisbn=['1234567890','1234567890123','1111111111','1212121212123','1452367890','9999999999999','4561597534','9513576546','2584561597','7531598526'];
 	var arrtitulo=['JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros'];
 	var arrautor=['Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito'];
 	var arranio=['1234','5678','9123','2016','1975','1981','1732','2222','1997','2010'];
@@ -502,7 +385,7 @@ function arrayAleatorio(){
 	var i;
 	for (i=0; i<10;i++){
 		libreriaaux[i].indice=i;
-		libreriaaux[i].isbn=arrisbn[i];
+		libreriaaux[i].isbn=arrisbn[numeroAzar()];
 		libreriaaux[i].titulo=arrtitulo[numeroAzar()];
 		libreriaaux[i].autor=arrautor[numeroAzar()];
 		libreriaaux[i].anio=arranio[numeroAzar()];
