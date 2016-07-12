@@ -94,9 +94,9 @@ function chequeaBotones(){
 
 /******************** PINTAR LA TABLA ********************/
 //Se le pasa un objeto del array (un libro) y pinta una línea
-function pintarLinea(pobj){
+function pintarLinea(pobj,pindice){
 	//Añadimos onclick="seleccionar(this);" para que podamos seleccionar las líneas de la tabla (con los eventos de JQuery no responden)
-	$("#tableta").append('<tr class="linea" onclick="seleccionar(this);"><td>' + pobj.isbn + '</td>' + '<td>' + pobj.titulo + '</td>' + '<td>' + pobj.autor + '</td>' + '<td>' + pobj.anio + '</td>' + '<td>' + pobj.editorial + '</td>' + '<td class="oculto">' + pobj.indice + '</td></tr>');
+	$("#tableta").append('<tr class="linea" onclick="seleccionar(this);"><td>' + pobj.isbn + '</td>' + '<td>' + pobj.titulo + '</td>' + '<td>' + pobj.autor + '</td>' + '<td>' + pobj.anio + '</td>' + '<td>' + pobj.editorial + '</td>' + '<td class="oculto">' + pindice + '</td></tr>');
 }
 
 //Esta función chequea el array y si no está vacío pinta la tabla
@@ -111,7 +111,7 @@ function actualizar() {
 		$('.linea').remove();
 		//Recorro el array pintando las líneas
 		for (i in libreria){
-			pintarLinea(libreria[i]);
+			pintarLinea(libreria[i],i);
 		}
 		//Borro los campos del formulario
 		limpiaForm();
