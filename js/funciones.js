@@ -220,13 +220,13 @@ function validarIsbn(){
 				salida=true;
 		}else{
 			mensaje='ISBN inválido, nro. de control incorrecto';
-			$('#isbn').css('border','1px solid red');
+			$('#isbn').css('border','2px solid red');
 			salida=false;
 		}
 	} else {
-		$('#isbn').css('border','1px solid red');
+		$('#isbn').css('border','2px solid red');
 		mensaje='Formato de ISBN inválido 10/13 dígitos';
-		$('#isbn').css('border','1px solid red');
+		$('#isbn').css('border','2px solid red');
 		salida = false;
 	}
 		$('#isbnnull').html(mensaje);
@@ -241,7 +241,7 @@ function validarTitulo(){
 		$('#titulonull').html('');
 		return true;
 	} else {
-		$('#titulo').css('border','1px solid red');
+		$('#titulo').css('border','2px solid red');
 		$('#titulonull').html(' Título incorrecto');
 		return false;
 	}
@@ -254,7 +254,7 @@ function validarAutor(){
 		$('#autornull').html('');
 		return true;
 	} else {
-		$('#autor').css('border','1px solid orange');
+		$('#autor').css('border','2px solid #a8410f');
 		$('#autornull').html(' Autor vacío');
 		return false;
 	}
@@ -268,7 +268,7 @@ function validarAnio(){
 		$('#anionull').html('');
 		return true;
 	} else {
-		$('#anio').css('border','1px solid orange');
+		$('#anio').css('border','2px solid #a8410f');
 		$('#anionull').html(' Año publ. incorrecto: 4 dígitos');
 		return false;
 	}
@@ -281,7 +281,7 @@ function validarEditorial(){
 		$('#editorialnull').html('');
 		return true;
 	} else {
-		$('#editorial').css('border','1px solid orange');
+		$('#editorial').css('border','2px solid #a8410f');
 		$('#editorialnull').html(' Editorial vacía');
 		return false;
 	}
@@ -340,7 +340,7 @@ function validar(){
 function limpiaForm(){
 	$('input').val('');
 	$('input').css('border', '1px solid black');
-	$('span').html('');
+	$('.mensaje').html('');
 }
 
 //Esta función monta un objeto con el contenido de los campos del formulario sin validacion
