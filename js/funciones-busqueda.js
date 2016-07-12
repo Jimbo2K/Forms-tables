@@ -556,10 +556,11 @@ function abuscar (dondebusco, quebusco) {
 	for (i=0; i<librosactuales; i++) {
 		if (libreria[i][dondebusco] == quebusco) {
 				busquedas.push(libreria[i]);
-		} else {
-			sinencontrar = true; // para que si no encuentra nada, y en caso de que sea más de un campo a buscar, no siga pues si no coincide uno ya no se buscara más
-			alert("No encontramos libros que coincidan con los valores introducidos");
-		}
+		} 
+	}
+	if (libreria.lenght == 0) {
+		sinencontrar = true;
+		alert("No encontramos libros que coincidan con los valores introducidos");
 	}
 }
 function abuscarb (dondebusco, quebusco) {
