@@ -480,17 +480,18 @@ function borrar() {
 
 var busquedas = [];
 var textobusca;
-var multibusqueda =[ ];
+
 
 function busqueda() {
+	var sinencontrar = false;
 	if ($('#isbn').val()) {
 		var aux1 = validarIsbn();
 		if (aux1) {
 			busquedasactuales = busquedas.length;
-			if (busquedasactuales==0) {
+			if (busquedasactuales==0 && sinencontrar==false) {
 				textobusca = $('#isbn').val();
 				abuscar("isbn", textobusca);
-			} else {
+			} else if (busquedasactuales>0){
 				abuscarb("isbn", textobusca);
 			}
 		}
@@ -499,10 +500,10 @@ function busqueda() {
 		var aux2 = validarTitulo();
 		if (aux2) {
 			busquedasactuales = busquedas.length;
-			if (busquedasactuales==0) {
+			if (busquedasactuales==0 && sinencontrar==false) {
 			textobusca = $('#titulo').val();
 			abuscar("titulo", textobusca);
-			} else {
+			} else if (busquedasactuales>0){
 			textobusca = $('#titulo').val();
 			abuscarb("titulo", textobusca);
 			}
@@ -512,10 +513,10 @@ function busqueda() {
 		var aux3 = validarAutor();
 		if (aux3) {
 			busquedasactuales = busquedas.length;
-			if (busquedasactuales==0) {
+			if (busquedasactuales==0 && sinencontrar==false) {
 			textobusca = $('#autor').val();
 			abuscar("autor", textobusca);
-			} else {
+			} else if (busquedasactuales>0){
 			textobusca = $('#autor').val();
 			abuscarb("autor", textobusca);
 			}
@@ -525,27 +526,27 @@ function busqueda() {
 		var aux4 = validarAnio();
 		if (aux4) {
 			busquedasactuales = busquedas.length;
-			if (busquedasactuales==0) {
+			if (busquedasactuales==0 && sinencontrar==false) {
 			textobusca = $('#anio').val();
 			abuscar("anio", textobusca);
-			} else {
+			} else if (busquedasactuales>0){
 			textobusca = $('#anio').val();
 			abuscarb("anio", textobusca);
-			}
+			} 
 		}
 	}
 	if ($('#editorial').val()) {
 		var aux5 = validarEditorial();
 		if (aux5) {
 			busquedasactuales = busquedas.length;
-			if (busquedasactuales==0) {
+			if (busquedasactuales==0 && sinencontrar==false) {
 			textobusca = $('#editorial').val();
 			abuscar("editorial", textobusca);
-			} else {
+			} else if (busquedasactuales>0){
 			textobusca = $('#editorial').val();
 			abuscarb("editorial", textobusca);
 			}
-		}
+		}	
 	}
 	actualizar(busquedas);
 }
@@ -554,8 +555,10 @@ function abuscar (dondebusco, quebusco) {
 	librosactuales = libreria.length;
 	for (i=0; i<librosactuales; i++) {
 		if (libreria[i][dondebusco] == quebusco) {
-
 				busquedas.push(libreria[i]);
+		} else {
+			sinencontrar = true; // para que si no encuentra nada, y en caso de que sea más de un campo a buscar, no siga pues si no coincide uno ya no se buscara más
+			alert("No encontramos libros que coincidan con los valores introducidos");
 		}
 	}
 }
