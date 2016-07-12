@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <!-- Fecha: 05/07/16
 Descripcion: Página/aplicación WEB que permite crear, modificar y visualizar una estructura de datos
@@ -15,48 +15,49 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- Latest compiled and minified CSS & JS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-		<link rel="stylesheet" href="css/estilos.css">
+		<link rel="stylesheet" href="css/estilos2.css">
 	</head>
 	<body>
 		<article class="container">
-		<h1 class="text-center">Consulta de datos</h1><br>
+		<h1 class="text-center">Consulta de datos</h1><br><p>Los campos marcados con "<span>*</span>" son obligatorios</p>
+		
 			<div class="row, col-lg-10, col-md-10, col-sm-10, col-xs-10" id="contform">
 				<!-- Aquí va el formulario -->
 				<form action="#" id="form1" class="form-horizontal" role="form" autocomplete>
 					<div class="form-group">
-						<label for="isbn" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">ISBN: <span>*</span></label>
-						<div class="col-lg-6, col-md-6, col-sm-6, col-xs-6">
+						<div><label for="isbn" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">ISBN: <span>*</span></label></div>
+						<div class="col-lg-6, col-md-6, col-sm-6">
 						<input type="text" class="form-control clearable, col-lg-10 rebonico" name="isbn" id="isbn" maxlength="13" required tabindex="1" placeholder="ISBN de 10 ó 13 dígitos">&nbsp <span id="isbnnull"></span><br>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="titulo" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">Título: <span>*</span></label>
-						<div class="col-lg-6, col-md-6, col-sm-6, col-xs-6">
+						<div class="col-lg-6, col-md-6, col-sm-6">
 							<input type="text" class="form-control clearable, col-lg-10 rebonico" name="titulo" id="titulo" placeholder="Ej. La Galatea" required tabindex="2">&nbsp <span id="titulonull"></span><br>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="Autor" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">Autor: </label>
-						<div class="col-lg-6, col-md-6, col-sm-6, col-xs-6">
+						<div class="col-lg-6, col-md-6, col-sm-6">
 							<input type="text" class="form-control clearable, col-lg-10 rebonico" name="autor" id="autor" placeholder="Ej. Miguel de Cervantes" tabindex="3">&nbsp <span id="autornull"></span><br>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="anio" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">Año: </label>
-						<div class="col-lg-6, col-md-6, col-sm-6, col-xs-6">
+						<div class="col-lg-6, col-md-6, col-sm-6">
 							<input type="text" class="form-control clearable, col-lg-10 rebonico" name="anio" id="anio" placeholder="Ej. 1591" tabindex="4" maxlength="4">&nbsp <span id="anionull"></span><br>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="editorial" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">Editorial: </label>
-						<div class="col-lg-6, col-md-6, col-sm-6, col-xs-6">
+						<div class="col-lg-6, col-md-6, col-sm-6">
 							<input type="text" class="form-control clearable, col-lg-10 rebonico" name="editorial" id="editorial" placeholder="Ej. Planeta" tabindex="5">&nbsp <span id="editorialnull"></span>
 						</div>
 					</div>
 					<div class="oculto"><input type="text" id="oculto"></div>
 				</form>
 			</div>
-			<div class="btn-group-vertical id="botones">
+			<div class="btn-group-vertical" id="botones">
 				<button type="button" class="btn btn-success" id="anadir" tabindex="6" accesskey="a">AÑADIR</button>
 				<br>
 				<button type="button" class="btn btn-danger" id="quitar" tabindex="7" accesskey="q">QUITAR</button>
