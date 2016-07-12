@@ -461,9 +461,11 @@ function modificar() {
 }
 
 function borrar() {
-	var libroaborrar = $("#oculto").val();
-	libreria.splice(libroaborrar, 1);
-	actualizar();
+	if (confirm('¿Desea borrar esta entrada?')){
+		var libroaborrar = $("#oculto").val();
+		libreria.splice(libroaborrar, 1);
+		actualizar();
+	}
 }
 
 /******************** FUNCIONES PARA DESARROLLO ********************/
