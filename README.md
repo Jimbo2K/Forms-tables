@@ -2,6 +2,7 @@
 
 ##Descripción
 La práctica consiste en la creación de una estructura de datos con las siguientes funcionalidades:
+
 * Visualización de la misma a través de una tabla en HTML.
 * Alta de datos en dicha estructura obtenidos mediante formulario validado.
 * Modificación de datos existentes en la estructura a través del formulario anterior.
@@ -30,6 +31,7 @@ Una reprersentación en "pseudocódigo" de esta estructura sería la siguiente:
 
 ##Miembros del proyecto
 Las personas que han participado en el desarrollo del código son:
+
 * Adrián Arteaga
 * Juan José Basco
 * Pablo Andueza
@@ -41,6 +43,7 @@ Las personas que han participado en el desarrollo del código son:
 **\- Interfaz del usuario**
 
 Se compondrá de:
+
 * Un formulario con los campos correspondientes a las 5 propiedades de los objetos libros almacenados en el array librería, que permitirá añadir nuevos libros o modificar los datos de los ya existentes.
 * Un grupo de tres botones: "Actualizar" (altas de datos); "Modificar" (modificación de datos almacenados); "Borrar" (bajas de datos).
 * Una tabla con una cabecera fija para representar el contenido de la estructura de datos.
@@ -53,6 +56,7 @@ También se atenderá a la accesibilidad de la aplicación, tanto para la navega
 **\- Validaciones de datos**
 
 La validaciíon de datos se realizará en varios niveles:
+
 1. Mediante mensajes de texto en HTML: indicación de campos obligatorios; sugerencias en los propios campos del formulario mediante el atributo ==*placeholder*==.
 2. Validación según el usuario va escribiendo en cada uno de los campos. De esta forma recibirá orientación sobre la validez de los datos que está introduciendo.
 3. Validación antes de añadir o modificar. Si los datos no cumplen los requisitos especificados no se almacenarán o modificarán en la estructura de datos.
@@ -80,6 +84,7 @@ Una vez seleccionada una fila, el usuario puede modificar los datos en el formul
 Una vez seleccionada una fila el usuario puede pulsar el botón "Borrar" se eliminará esa entrada del array, se mostrará la tabla modificada y se limpiará el formulario.
 
 **\- Testeo y correcciones**
+
 1. Cuando se selecciona una fila de la tabla y se modifica algún campo del formulario, si se selecciona una nueva fila (si haber pulsado "Modificar") se pierden los cambios realizados por el usuario. CORRECCIÓN: solicitar confirmación del usuario cuando esto suceda.
 2. Es posible borrar una entrada por descuido del usuario. CORRECCIÓN: solicitar confirmación al usuario antes de borrar.
 3. Los botones carecen de una lógica de negocio adecuada. Es posible pulsar "Modificar" y "Borrar" sin haber seleccionado una fila de la tabla. Si se selecciona una fila y se pulsa "Añadir" se genera un nuevo elemento en el array que es una copia del seleccionado. CORRECCIÓN: "Añadir" sólo está disponible si no hay ninguna fila seleccionada, y "Modificar" y "Borrar" cuando si lo está.
@@ -95,8 +100,9 @@ Una vez seleccionada una fila el usuario puede pulsar el botón "Borrar" se elim
 Se han aplicado las correcciones indicadas en la versión 0.
 
 También se han realizado las siguientes correcciones sobre fallos detectados en el desarrollo:
+
 1. Mejoras en la responsividad y aspecto de la página.
-2. Corrección de un bug que eliminaba los "*" que indican los campos obligatorios al actualizar la tabla.
+2. Corrección de un bug que eliminaba los "\*" que indican los campos obligatorios al actualizar la tabla.
 3. Corrección de un bug al borrar entradas de la tabla que falseaban los índices que relacionan las filas de la tabla con su posición en el array libreria. La corrección también a supuesto modificar el código de gestiona la selección de filas en la tabla.
 4. Adaptada la función ==*Actualizar()*== para admitir parametros y ser reutilizada en las consultas.
 5. Corrección de un bug al comprobar duplicidades de ISBN. La comparación era sensible a mayúsculas y minúsculas por lo que 123456789x se consideraba distinto de 123456789X, ahora ya no.
@@ -108,6 +114,7 @@ Dicha tabla adjuntará un "mensaje" que indique que se trata de una consulta y n
 El **botón "Consultar"** sólo estará disponible si no hay ninguna fila seleccionada. En el momento de ser pulsado **cambiará el texto "Consultar" por "Volver"** de manera que al pulsarlo de nuevo se volverá al estado anterior a la consulta, es decir: formulario en blanco y la tabla mostrando el contenido de la estructura de datos.
 
 **\- Testeo y correcciones**
+
 1. Mejorar las indicaciones de los campos y botones mediante el uso del atributo HTML ==*title*==
 
 
