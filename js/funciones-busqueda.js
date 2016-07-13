@@ -480,19 +480,20 @@ function borrar() {
 // LO NECESARIO PARA LA BÚSQUEDA ///////////
 
 
-var busquedas = {};
-var busquedasaux ={};
+var busquedas = [];
+var busquedasaux =[];
 
 function busqueda() {
 	busquedas = []; // se inicializan a cero aquí pero se declaran fuera porque se utilizan en otra función
 	busquedasaux =[]; // se inicializan a cero aquí pero se declaran fuera porque se utilizan en otra función
+	var aux;
 	var textobusca;
-	var sinencontrar = false; // tras la una  búsqueda sin resultado (de por ejemplo el auto) el valor de sinencontrar sera true para evitar realizar más búsquedas (si no encuentra el autor no queremos que siga buscando desde los textos de los imputs y añada por ejemplo todos los libros que coinciden con el año)
-
+	var sinencontrar = false; // tras una búsqueda sin resultado (de por ejemplo el auto) el valor de sinencontrar sera true para evitar realizar más búsquedas (si no encuentra el autor no queremos que siga buscando desde los textos de los imputs y añada por ejemplo todos los libros que coinciden con el año)
 	if ($('#isbn').val()) {
-		//var aux1 = validarIsbn(); // devuelve true o false
-		//if (aux1) { // si es true
+		//aux = validarIsbn(); // devuelve true o false   IGUAL ES MEJOR NO VALIDAR LOS DATOS
+		//if (aux) { // si es true
 			busquedasactuales = busquedas.length;
+			//
 			// si no hay resultados de búsquedas previas (realizadas siguiendo otros imputs) y no es porque no se han encontrado sino porque no se han hecho búsquedas entonces se busca en el array libreria:
 			if (busquedasactuales==0 && sinencontrar==false) {
 				textobusca = $('#isbn').val();
@@ -504,8 +505,8 @@ function busqueda() {
 		//}
 	}
 	if ($('#titulo').val()) {
-		//var aux2 = validarTitulo();
-		//if (aux2) {
+		//aux = validarTitulo();
+		//if (aux) {
 			busquedasactuales = busquedas.length;
 			if (busquedasactuales==0 && sinencontrar==false) {
 			textobusca = $('#titulo').val();
@@ -517,8 +518,8 @@ function busqueda() {
 		//}
 	}
 	if ($('#autor').val()) {
-		//var aux3 = validarAutor();
-		//if (aux3) {
+		//aux = validarAutor();
+		//if (aux) {
 			busquedasactuales = busquedas.length;
 			if (busquedasactuales==0 && sinencontrar==false) {
 			textobusca = $('#autor').val();
@@ -530,8 +531,8 @@ function busqueda() {
 		//}
 	}
 	if ($('#anio').val()) {
-		//var aux4 = validarAnio();
-		//if (aux4) {
+		//aux = validarAnio();
+		//if (aux) {
 			busquedasactuales = busquedas.length;
 			if (busquedasactuales==0 && sinencontrar==false) {
 			textobusca = $('#anio').val();
@@ -543,8 +544,8 @@ function busqueda() {
 		//}
 	}
 	if ($('#editorial').val()) {
-		//var aux5 = validarEditorial();
-		//if (aux5) {
+		//aux = validarEditorial();
+		//if (aux) {
 			busquedasactuales = busquedas.length;
 			if (busquedasactuales==0 && sinencontrar==false) {
 			textobusca = $('#editorial').val();
@@ -563,36 +564,30 @@ function abuscar (dondebusco, quebusco) {
 	librosactuales = libreria.length;
 	for (i=0; i<librosactuales; i++) {
 		if (libreria[i][dondebusco] == quebusco) {
-				//console.log(quebusco + " encontrado en " + libreria[i][dondebusco]);
 				busquedas.push(libreria[i]);
 		}
-		console.log(busquedas[0]);
-		console.log(busquedas[1]);
-		console.log(busquedas[2]);
-		console.log(busquedas[3]);
 	}
-	if (libreria.lenght == 0) {
+	if (busquedas.length == 0) {
 		sinencontrar = true; // una variable importante para poder diferenciar casos en los que el array de búsquedas esta vació pero porque no se ha hecho ninguna búsqueda de los casos en el que el array esta vació pero porque no ha encontrado nada (en este ultimo caso no se harán mas búsquedas)
 		alert("No encontramos libros que coincidan con los valores introducidos");
 	}
 }
 
-// la función abuscarb se activara cuando ya se haya hecho una búsqueda inicial y se haya añadido algún elemento al array de búsquedas pues la búsqueda ahora se hará sobre este ultimo array y no sobre todo el array de libreria
+// la función abuscarb se activara cuando ya se haya hecho una búsqueda inicial y, tras encontrarse algo, se haya añadido algún elemento al array de búsquedas pues la búsqueda ahora se hará sobre este ultimo array y no sobre todo el array de libreria
 function abuscarb (dondebusco, quebusco) {
-	// es necesario crear una imagen de un objeto (el array búsquedas) y no una referencia que es lo que se consigue mediante una igualación simple, una manera funcional de hacerlo (había algún método con jQuery que no funcionaba del todo bien) es como se ve en la siguiente instrucción:
-	//var busquedasaux = JSON.parse(JSON.stringify(busquedas));
-	// la razón de usar este array auxiliar es para que el splice que se utiliza más abajo y que quita elementos del array no interfiera con el condicional del for (de tal forma que siga buscando en is que no existen y de error)
-	//busquedasactuales = busquedasaux.length;
-	console.log(busquedas);
-	for (t=0; t<busquedas.length; t++) {
-		console.log("busco en " + busquedas[t][dondebusco]);
-		console.log("y busco "+ quebusco);
-		if (busquedas[t][dondebusco] != quebusco) {
-			busquedas.splice(t,1);
+	busquedasaux =[]; //se pone a cero para eliminar cualquier valor de búsquedas anteriores mediante esta misma función.
+	busquedasactuales = busquedas.length;
+	for (t=0; t<busquedasactuales; t++) { // se busca sobre lo a buscado para seguir filtrando
+		if (busquedas[t][dondebusco] == quebusco) { 
+			busquedasaux.push(busquedas[t]); // se añaden los elementos que coinciden en un array auxiliar (busquedasaux)
 		}
 	}
-
+	busquedas = JSON.parse(JSON.stringify(busquedasaux)); // se hace un volcado total o copia del array auxiliar en el array búsquedas. Hay que hacerlo de esta manera porque si se hace mediante una igualación no se copia sino que el array de la izquierda solo seria una referencia más a los datos que ya referencia el array de la derecha.
+	if (busquedas.length == 0) {
+		alert("No encontramos libros que coincidan con los valores introducidos");
+	}
 }
+
 
 /******************** FUNCIONES PARA DESARROLLO ********************/
 
@@ -624,8 +619,8 @@ var libreriaaux=[new libro(),new libro(),new libro(),new libro(),new libro(),new
 function arrayAleatorio(){
 	var arrisbn=['123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523'];
 	var arrtitulo=['JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros'];
-	var arrautor=['Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito'];
-	var arranio=['1234','5678','9123','2016','1975','1981','1732','2222','1997','2010'];
+	var arrautor=['León Tostón','León Tostón','León Tostón','León Tostón','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Andueza','Pablo Andueza','Pablo Andueza'];
+	var arranio=['1234','9123','9123','2016','1975','1997','9123','1997','1997','1997'];
 	var arreditorial=['Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs'];
 	var i;
 	for (i=0; i<10;i++){
