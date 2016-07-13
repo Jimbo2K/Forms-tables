@@ -480,8 +480,8 @@ function borrar() {
 // LO NECESARIO PARA LA BÚSQUEDA ///////////
 
 
-var busquedas = []; 
-var busquedasaux =[];
+var busquedas = {};
+var busquedasaux ={};
 
 function busqueda() {
 	busquedas = []; // se inicializan a cero aquí pero se declaran fuera porque se utilizan en otra función
@@ -490,22 +490,22 @@ function busqueda() {
 	var sinencontrar = false; // tras la una  búsqueda sin resultado (de por ejemplo el auto) el valor de sinencontrar sera true para evitar realizar más búsquedas (si no encuentra el autor no queremos que siga buscando desde los textos de los imputs y añada por ejemplo todos los libros que coinciden con el año)
 
 	if ($('#isbn').val()) {
-		var aux1 = validarIsbn(); // devuelve true o false
-		if (aux1) { // si es true
+		//var aux1 = validarIsbn(); // devuelve true o false
+		//if (aux1) { // si es true
 			busquedasactuales = busquedas.length;
 			// si no hay resultados de búsquedas previas (realizadas siguiendo otros imputs) y no es porque no se han encontrado sino porque no se han hecho búsquedas entonces se busca en el array libreria:
-			if (busquedasactuales==0 && sinencontrar==false) { 
+			if (busquedasactuales==0 && sinencontrar==false) {
 				textobusca = $('#isbn').val();
 				abuscar("isbn", textobusca);
 			// si ya hay resultados de búsqueda se busca en el array de resultados para continuar filtrando:
-			} else if (busquedasactuales>0){ 
+			} else if (busquedasactuales>0){
 				abuscarb("isbn", textobusca);
 			}
-		}
+		//}
 	}
 	if ($('#titulo').val()) {
-		var aux2 = validarTitulo(); 
-		if (aux2) {
+		//var aux2 = validarTitulo();
+		//if (aux2) {
 			busquedasactuales = busquedas.length;
 			if (busquedasactuales==0 && sinencontrar==false) {
 			textobusca = $('#titulo').val();
@@ -514,11 +514,11 @@ function busqueda() {
 			textobusca = $('#titulo').val();
 			abuscarb("titulo", textobusca);
 			}
-		}
+		//}
 	}
 	if ($('#autor').val()) {
-		var aux3 = validarAutor();
-		if (aux3) {
+		//var aux3 = validarAutor();
+		//if (aux3) {
 			busquedasactuales = busquedas.length;
 			if (busquedasactuales==0 && sinencontrar==false) {
 			textobusca = $('#autor').val();
@@ -527,11 +527,11 @@ function busqueda() {
 			textobusca = $('#autor').val();
 			abuscarb("autor", textobusca);
 			}
-		}
+		//}
 	}
 	if ($('#anio').val()) {
-		var aux4 = validarAnio();
-		if (aux4) {
+		//var aux4 = validarAnio();
+		//if (aux4) {
 			busquedasactuales = busquedas.length;
 			if (busquedasactuales==0 && sinencontrar==false) {
 			textobusca = $('#anio').val();
@@ -539,12 +539,12 @@ function busqueda() {
 			} else if (busquedasactuales>0){
 			textobusca = $('#anio').val();
 			abuscarb("anio", textobusca);
-			} 
-		}
+			}
+		//}
 	}
 	if ($('#editorial').val()) {
-		var aux5 = validarEditorial();
-		if (aux5) {
+		//var aux5 = validarEditorial();
+		//if (aux5) {
 			busquedasactuales = busquedas.length;
 			if (busquedasactuales==0 && sinencontrar==false) {
 			textobusca = $('#editorial').val();
@@ -553,7 +553,7 @@ function busqueda() {
 			textobusca = $('#editorial').val();
 			abuscarb("editorial", textobusca);
 			}
-		}	
+		//}
 	}
 	actualizar(busquedas);
 }
@@ -563,8 +563,13 @@ function abuscar (dondebusco, quebusco) {
 	librosactuales = libreria.length;
 	for (i=0; i<librosactuales; i++) {
 		if (libreria[i][dondebusco] == quebusco) {
+				//console.log(quebusco + " encontrado en " + libreria[i][dondebusco]);
 				busquedas.push(libreria[i]);
-		} 
+		}
+		console.log(busquedas[0]);
+		console.log(busquedas[1]);
+		console.log(busquedas[2]);
+		console.log(busquedas[3]);
 	}
 	if (libreria.lenght == 0) {
 		sinencontrar = true; // una variable importante para poder diferenciar casos en los que el array de búsquedas esta vació pero porque no se ha hecho ninguna búsqueda de los casos en el que el array esta vació pero porque no ha encontrado nada (en este ultimo caso no se harán mas búsquedas)
@@ -575,12 +580,15 @@ function abuscar (dondebusco, quebusco) {
 // la función abuscarb se activara cuando ya se haya hecho una búsqueda inicial y se haya añadido algún elemento al array de búsquedas pues la búsqueda ahora se hará sobre este ultimo array y no sobre todo el array de libreria
 function abuscarb (dondebusco, quebusco) {
 	// es necesario crear una imagen de un objeto (el array búsquedas) y no una referencia que es lo que se consigue mediante una igualación simple, una manera funcional de hacerlo (había algún método con jQuery que no funcionaba del todo bien) es como se ve en la siguiente instrucción:
-	var busquedasaux = JSON.parse(JSON.stringify(busquedas)); 
+	//var busquedasaux = JSON.parse(JSON.stringify(busquedas));
 	// la razón de usar este array auxiliar es para que el splice que se utiliza más abajo y que quita elementos del array no interfiera con el condicional del for (de tal forma que siga buscando en is que no existen y de error)
-	busquedasactuales = busquedasaux.length;
-	for (i=0; i<busquedasactuales; i++) {
-		if (busquedasaux[i][dondebusco] != quebusco) {
-			busquedas.splice(i,1);
+	//busquedasactuales = busquedasaux.length;
+	console.log(busquedas);
+	for (t=0; t<busquedas.length; t++) {
+		console.log("busco en " + busquedas[t][dondebusco]);
+		console.log("y busco "+ quebusco);
+		if (busquedas[t][dondebusco] != quebusco) {
+			busquedas.splice(t,1);
 		}
 	}
 
