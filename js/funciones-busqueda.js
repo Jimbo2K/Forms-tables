@@ -563,7 +563,7 @@ function busqueda() {
 function abuscar (dondebusco, quebusco) {
 	librosactuales = libreria.length;
 	for (i=0; i<librosactuales; i++) {
-		if (libreria[i][dondebusco] == quebusco) {
+		if (libreria[i][dondebusco].indexOf(quebusco) != -1) { // si el contenido de quebusco forma parte de lo que hay en el contenido dondebusco (es decir no tiene que por ser igual solo formar parte, una parte) dará un valor mayor a -1 y entonces ejecutara lo siguiente:
 				busquedas.push(libreria[i]);
 		}
 	}
@@ -578,7 +578,7 @@ function abuscarb (dondebusco, quebusco) {
 	busquedasaux =[]; //se pone a cero para eliminar cualquier valor de búsquedas anteriores mediante esta misma función.
 	busquedasactuales = busquedas.length;
 	for (t=0; t<busquedasactuales; t++) { // se busca sobre lo a buscado para seguir filtrando
-		if (busquedas[t][dondebusco] == quebusco) { 
+		if (busquedas[t][dondebusco].indexOf(quebusco) != -1) { 
 			busquedasaux.push(busquedas[t]); // se añaden los elementos que coinciden en un array auxiliar (busquedasaux)
 		}
 	}
@@ -619,8 +619,8 @@ var libreriaaux=[new libro(),new libro(),new libro(),new libro(),new libro(),new
 function arrayAleatorio(){
 	var arrisbn=['123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523'];
 	var arrtitulo=['JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros'];
-	var arrautor=['León Tostón','León Tostón','León Tostón','León Tostón','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Andueza','Pablo Andueza','Pablo Andueza'];
-	var arranio=['1234','9123','9123','2016','1975','1997','9123','1997','1997','1997'];
+	var arrautor=['Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito'];
+	var arranio=['1234','5678','9123','2016','1975','1981','1732','2222','1997','2010'];
 	var arreditorial=['Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs'];
 	var i;
 	for (i=0; i<10;i++){
