@@ -12,7 +12,10 @@ $(function(){
 	//Inicialización de botones
 	chequeaBotones();
 
+	/**********************************************************/
 	/******************* GESTIÓN DE EVENTOS *******************/
+	/**********************************************************/
+
 	//Cada vez que se escribe algo en el input se valida VISUALMENTE
 	$("#isbn").bind("input change", validarIsbn);
 
@@ -56,7 +59,9 @@ elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boo
 	
 });
 
+/***************************************************************/
 /******************** CONTROLAR LOS BOTONES ********************/
+/***************************************************************/
 
 //Esta función comprueba si hay algún elemento con la clase seleccionado
 //si lo hay, VISUALMENTE habilita los botones y si no los deshabilita VISUALMENTE
@@ -91,27 +96,45 @@ function chequeaBotones(){
 // 	}
 // }
 
-
+/*********************************************************/
 /******************** PINTAR LA TABLA ********************/
-//Se le pasa un objeto del array (un libro) y pinta una línea
+/*********************************************************/
+
+//Se le pasa un objeto del array (un libro) y pinta una línea. pindice es el valor que
+//relaciona la fila de la tabla con la posición del objeto en el array
 function pintarLinea(pobj,pindice){
 	//Añadimos onclick="seleccionar(this);" para que podamos seleccionar las líneas de la tabla (con los eventos de JQuery no responden)
 	$("#tableta").append('<tr class="linea" onclick="seleccionar(this);"><td>' + pobj.isbn + '</td>' + '<td>' + pobj.titulo + '</td>' + '<td>' + pobj.autor + '</td>' + '<td>' + pobj.anio + '</td>' + '<td>' + pobj.editorial + '</td>' + '<td class="oculto">' + pindice + '</td></tr>');
 }
 
 //Esta función chequea el array y si no está vacío pinta la tabla
-function actualizar() {
+//Se ha actualizado con argumentos para poder utilizar la función con el array de librería
+//y el que almacena los resultados de búsqueda
+function actualizar(parray) {
 	//Al actualizar se deselecciona
 	//seleccionado=false;
 
 	//Si el array no está vacío
-	if (libreria.length !== 0){
+	if (parray.length !== 0){
 		var i;
 		//Borro las filas de la tabla
 		$('.linea').remove();
-		//Recorro el array pintando las líneas
-		for (i in libreria){
-			pintarLinea(libreria[i],i);
+		//Si el array pasado como argumento es libreria
+		if (parray===libreria){
+			//Recorro el array pintando las líneas
+			for (i in parray){
+				//i es el valor de la posición del array y el contenido de la celda oculta con índice
+				pintarLinea(parray[i],i);
+			}
+		//Si se trata de otro (el de busqueda)
+		} else {
+			//Recorro el array pintando las líneas
+			for (i in parray){
+				//Paso como valor de la celda oculta el indice que apunta a la posición del elemento en libreria
+				//De esta forma si se modifica o borra lo hará correctamente.
+				pintarLinea(parray[i],parray[i].indice);
+			}
+			$('#busqueda').text('Resultados de la búsqueda');
 		}
 		//Borro los campos del formulario
 		limpiaForm();
@@ -123,7 +146,9 @@ function actualizar() {
 	chequeaBotones();
 }
 
+/******************************************************/
 /******************** VALIDACIONES ********************/
+/******************************************************/
 
 function calculaIsbn10(pisbn){
 	var i, cod=0, aux;
@@ -180,16 +205,17 @@ function contarNumeros(pisbn) {
 	 return salida;
 }
 
-//NOTA: la validación de esta función sólo se utiliza en Altas, nn en modificaciones
-//Esta función recorre el array libreri comparando el valor de los ISBN almacenados
+//NOTA: la validación de esta función sólo se utiliza en Altas, no en modificaciones
+//Esta función recorre el array libreria comparando el valor de los ISBN almacenados
 //con el del argumento. Si HAY UNA COINCIDENCIA DEVUELVE FALSE (no valido)
 function compararisbn(numisbn) {
 	var extensionlibre = libreria.length;
 	var x = 0;
 	for (var i=0; i<extensionlibre; i++) {
-		if (libreria[i].isbn == numisbn) {
+		if (libreria[i].isbn.toLowerCase() == numisbn.toLowerCase()) {//123456789X!=123456789x pero 123456789x==123456789x
 			//Si hay una coincidencia x=1 y paro de comparar
 			x = 1;
+			console.log('coincidencia');
 			break;
 		}
 	}
@@ -205,6 +231,7 @@ function compararisbn(numisbn) {
 	}
 }
 
+//Esta función valida el formato y el código de control
 function validarIsbn(){
 	var mensaje='',salida;
 	var reisbn=/^\s*(?:\d{9}[0-9xX]{1}|\d{13})\s*?/g;
@@ -333,24 +360,29 @@ function validar(){
 	}
 }
 
+/*****************************************************************/
 /******************** SELECCIONAR DE LA TABLA ********************/
+/*****************************************************************/
 
 //Deja el formulario en blanco y elimina los errores
-//La utilizan: seleccionar, atualizar
+//La utilizan: seleccionar, actualizar
 function limpiaForm(){
 	$('input').val('');
 	$('input').css('border', '1px solid black');
+	//La clase mensaje corresponde sólo a los span de validación
 	$('.mensaje').html('');
 }
 
 //Esta función monta un objeto con el contenido de los campos del formulario sin validacion
+//La utilizan: seleccionar
 function objFormulario(){
 	var salida={};
 	//lo primero asigno el indice oculto
 	if ($('#oculto').val()===undefined){
 		salida.indice=libreria.length;
 	} else {
-		salida.indice=$('#oculto').val();
+		//El índice obtenido del formulario es un string
+		salida.indice=Number($('#oculto').val());
 	}
 	salida.isbn=$('#isbn').val();
 	salida.titulo=$('#titulo').val();
@@ -360,10 +392,31 @@ function objFormulario(){
 	return salida;
 }
 
+//Comprueba si NO TODOS los campos del formulario están vacios
 function formNoVacio(){
 	var cadena=$('#isbn').val()+$('#titulo').val()+$('#autor').val()+$('#anio').val()+$('#editorial').val();
 	console.log('cadena: '+ cadena);
 	if(cadena === ''){return false;}else{return true;}
+}
+
+//Compara los 6 primeros atributos de 2 objetos para ver si son iguales (devuelve true)
+//Esta función se ha creado porque los objetos de formulario y libreria NO SON EXACTAMENTE iguales en estructura
+//La utilizan: seleccionar
+function comparaObj(pobj1,pobj2){
+	var salida;
+	var i,j=0;
+	for (i in pobj1){
+		console.log('form: ' + pobj1[i] +' libreria: ' + pobj2[i]);
+		if (j>=6){break;}
+		if (pobj1[i]!==pobj2[i]){
+			salida=false;
+			break;
+		} else {
+			salida=true;
+		}
+		j++;
+	}
+	return salida;
 }
 
 //pobj corresponde al <tr> sobre el que se ha hecho click
@@ -379,7 +432,11 @@ function seleccionar(pobj){
 	//En caso contrario
 	else {
 		var contenidoForm=objFormulario();
-		if ((contenidoForm!==libreria[contenidoForm.indice]) && formNoVacio()){
+		//Si el formulario no está en blanco y su contenido es distinto de la entrada de libreria
+		//significa que el usuario ha realizado una nueva selección después de haber hecho cambios
+		//en el formulario (sin pulsar Modificar)
+		console.log('Comparacion ' + comparaObj(contenidoForm,libreria[contenidoForm.indice]));
+		if (!comparaObj(contenidoForm,libreria[contenidoForm.indice]) && formNoVacio()){
 			user=confirm('Si realiza una nueva selección perderá los cambios \n ¿Desea continuar?');
 		} else {
 			user=true;
@@ -428,7 +485,9 @@ function seleccionar(pobj){
 // 		chequeaBotones();
 // 	}
 
+/**************************************************************************/
 /******************** ACCIONES ASOCIADAS A LOS BOTONES ********************/
+/**************************************************************************/
 
 function alta() {
 	$('#oculto').val(libreria.length);
@@ -439,7 +498,7 @@ function alta() {
 	if (nuevodato && aux) {
 		librosactuales = libreria.length;
 		libreria[librosactuales] = nuevodato;
-		actualizar();
+		actualizar(libreria);
 	} else {
 		alert('Los datos introducidos no son válidos');
 	}
@@ -453,7 +512,7 @@ function modificar() {
 		libroactual = nuevodato.indice;
 		console.log('indice cargado: '+nuevodato.indice);
 		libreria[libroactual] = nuevodato;
-		actualizar();
+		actualizar(libreria);
 	} else {
 		alert('Los datos introducidos no son válidos');
 	}
@@ -464,11 +523,13 @@ function borrar() {
 	if (confirm('¿Desea borrar esta entrada?')){
 		var libroaborrar = $("#oculto").val();
 		libreria.splice(libroaborrar, 1);
-		actualizar();
+		actualizar(libreria);
 	}
 }
 
+/*******************************************************************/
 /******************** FUNCIONES PARA DESARROLLO ********************/
+/*******************************************************************/
 
 // función para crear pruebas en el html BORRAR cuando funcione BORRAR BORRAR BORRAR
 function probartabla() {
@@ -511,5 +572,5 @@ function arrayAleatorio(){
 		libreriaaux[i].editorial=arreditorial[numeroAzar()];
 	}
 	libreria=libreriaaux;
-	actualizar();
+	actualizar(libreria);
 }

@@ -97,7 +97,9 @@ Se han aplicado las correcciones indicadas en la versión 0.
 También se han realizado las siguientes correcciones sobre fallos detectados en el desarrollo:
 1. Mejoras en la responsividad y aspecto de la página.
 2. Corrección de un bug que eliminaba los "*" que indican los campos obligatorios al actualizar la tabla.
-3. Corrección de un bug al borrar entradas de la tabla que falseaban los índices que relacionan las filas de la tabla con su posición en el array libreria.
+3. Corrección de un bug al borrar entradas de la tabla que falseaban los índices que relacionan las filas de la tabla con su posición en el array libreria. La corrección también a supuesto modificar el código de gestiona la selección de filas en la tabla.
+4. Adaptada la función ==*Actualizar()*== para admitir parametros y ser reutilizada en las consultas.
+5. Corrección de un bug al comprobar duplicidades de ISBN. La comparación era sensible a mayúsculas y minúsculas por lo que 123456789x se consideraba distinto de 123456789X, ahora ya no.
 
 **\- Implementación de consultas a la estructura de datos**
 
