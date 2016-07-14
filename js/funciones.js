@@ -648,7 +648,7 @@ function abuscar (dondebusco, quebusco) {
 	for (i=0; i<librosactuales; i++) {
 		/*si el contenido de quebusco forma parte de lo que hay en el contenido dondebusco (es decir no tiene que por ser igual solo formar
 		parte, una parte) dará un valor mayor a -1 y entonces ejecutara lo siguiente:*/
-		if (libreria[i][dondebusco].indexOf(quebusco) != -1) {
+		if (libreria[i][dondebusco].toLowerCase().indexOf(quebusco.toLowerCase()) != -1) {
 				busquedas.push(libreria[i]);
 		}
 	}
@@ -668,7 +668,7 @@ function abuscarb (dondebusco, quebusco) {
 	busquedasaux =[]; //se pone a cero para eliminar cualquier valor de búsquedas anteriores mediante esta misma función.
 	busquedasactuales = busquedas.length;
 	for (var t=0; t<busquedasactuales; t++) { // se busca sobre lo a buscado para seguir filtrando
-		if (busquedas[t][dondebusco].indexOf(quebusco) != -1) {
+		if (busquedas[t][dondebusco].toLowerCase().indexOf(quebusco.toLowerCase()) != -1) {
 			busquedasaux.push(busquedas[t]); // se añaden los elementos que coinciden en un array auxiliar (busquedasaux)
 		}
 	}
