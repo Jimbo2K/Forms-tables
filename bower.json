@@ -20,6 +20,7 @@
     "tests"
   ],
   "dependencies": {
-    "firebase": "^3.1.0"
+    "firebase": "^3.1.0",
+    "sweetalert": "^1.1.3"
   }
 }
