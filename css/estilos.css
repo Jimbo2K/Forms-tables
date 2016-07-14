@@ -34,20 +34,31 @@ tr,th{
 }
 h1{
 	color: darkgrey;
-	background-color: #0C3F0E
+	background-color: #0C3F0E;
 }
 body{
 	background-color: #DBAD89;
 }
 #contform {
-    margin-right: -8em
+    margin-right: -8em;
 }
 #botones {
     position: relative;
     top: 6em;
 }
 p {
-    margin-left: 5%
+    margin-left: 5%;
+}
+
+#busqueda {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#resultado {
+    font-size: 3em;
+    font-weight: bold;
+    color: #a8410f;
 }
 
 @media screen and (max-width: 768px) {

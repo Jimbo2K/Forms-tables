@@ -21,7 +21,7 @@ La estructura de datos estará formada por un array que corresponde al inventari
 4. Año de publicación
 5. Editorial
 
-Una reprersentación en "pseudocódigo" de esta estructura sería la siguiente:
+Una representación en "pseudocódigo" de esta estructura sería la siguiente:
 
 	libreria[
     	[0]{isbn:"1234567890", titulo:"JQuery y tú", autor:"Guillermo Puertas", anio:"2016", editorial:"Mocosoft"}
@@ -55,9 +55,9 @@ También se atenderá a la accesibilidad de la aplicación, tanto para la navega
 
 **\- Validaciones de datos**
 
-La validaciíon de datos se realizará en varios niveles:
+La validación de datos se realizará en varios niveles:
 
-1. Mediante mensajes de texto en HTML: indicación de campos obligatorios; sugerencias en los propios campos del formulario mediante el atributo ==*placeholder*==.
+1. Mediante mensajes de texto en HTML: indicación de campos obligatorios; sugerencias en los propios campos del formulario mediante el atributo *placeholder*.
 2. Validación según el usuario va escribiendo en cada uno de los campos. De esta forma recibirá orientación sobre la validez de los datos que está introduciendo.
 3. Validación antes de añadir o modificar. Si los datos no cumplen los requisitos especificados no se almacenarán o modificarán en la estructura de datos.
 
@@ -69,7 +69,7 @@ En ese momento se almacenará un objeto formado con los datos del formulario al 
 
 **\- Seleccionar datos de la tabla para modificar o borrar**
 
-Al hacer click sobre una fila de la tabla esta quedará remarcada en color y el formuilario se autocompletará con los datos de la misma.
+Al hacer click sobre una fila de la tabla esta quedará remarcada en color y el formulario se auto-completará con los datos de la misma.
 Si se vuelve a clickar sobre la línea esta volverá a su estado visual anterior y el formulario quedará en blanco.
 
 Como las líneas de la tabla tienen que estar relacionadas con el índice del array librería (para saber que elemento hay que modificar o borrar), la tabla incluirá una **celda al final que estará oculta y que incluirá el índice correspondiente del elemento en el array**.
@@ -94,7 +94,7 @@ Una vez seleccionada una fila el usuario puede pulsar el botón "Borrar" se elim
 
 ***
 
-###Vers. 0.1 (en desarrollo)
+###Vers. 0.1
 
 **\- Aplicación de correcciones**
 Se han aplicado las correcciones indicadas en la versión 0.
@@ -103,19 +103,54 @@ También se han realizado las siguientes correcciones sobre fallos detectados en
 
 1. Mejoras en la responsividad y aspecto de la página.
 2. Corrección de un bug que eliminaba los "\*" que indican los campos obligatorios al actualizar la tabla.
-3. Corrección de un bug al borrar entradas de la tabla que falseaban los índices que relacionan las filas de la tabla con su posición en el array libreria. La corrección también a supuesto modificar el código de gestiona la selección de filas en la tabla.
-4. Adaptada la función ==*Actualizar()*== para admitir parametros y ser reutilizada en las consultas.
+3. Corrección de un bug al borrar entradas de la tabla que falseaban los índices que relacionan las filas de la tabla con su posición en el array libreria. La corrección también ha supuesto modificar el código de gestiona la selección de filas en la tabla.
+4. Adaptada la función *Actualizar()* para admitir parámetros y ser reutilizada en las consultas.
 5. Corrección de un bug al comprobar duplicidades de ISBN. La comparación era sensible a mayúsculas y minúsculas por lo que 123456789x se consideraba distinto de 123456789X, ahora ya no.
 
 **\- Implementación de consultas a la estructura de datos**
 
-El usuario podrá rellenar uno o más campos del formulario y pulsar el botón "Consultar". Como resultado la tabla que muestra los elementos alamcenados será sustituida por una que muestre las entradas que contengan coincidencias con los datos introducidos.
+El usuario podrá rellenar uno o más campos del formulario y pulsar el botón "Consultar". Como resultado la tabla que muestra los elementos almacenados será sustituida por una que muestre las entradas que contengan coincidencias con los datos introducidos.
 Dicha tabla adjuntará un "mensaje" que indique que se trata de una consulta y no de los datos almacenados.
 El **botón "Consultar"** sólo estará disponible si no hay ninguna fila seleccionada. En el momento de ser pulsado **cambiará el texto "Consultar" por "Volver"** de manera que al pulsarlo de nuevo se volverá al estado anterior a la consulta, es decir: formulario en blanco y la tabla mostrando el contenido de la estructura de datos.
 
 **\- Testeo y correcciones**
 
-1. Mejorar las indicaciones de los campos y botones mediante el uso del atributo HTML ==*title*==
+1. Mejorar las indicaciones de los campos y botones mediante el uso del atributo HTML *title*
+2. Un complemento al punto anterior sería añadir un botón/icono de ayuda que muestre una ventana/recuadro con indicaciones más precisas del uso de la página.
+
+***
+
+###Vers. 0.2 (en desarrollo)
+
+**\- Implementación de Firebase a la aplicación web (persitencia de la estructura de datos)**
+
+En las versiones anteriores la estructura de datos se implementaba con un array generado desde el código JavaScript de manera que los datos almacenados se perdían al cerrar la ventana del navegador.
+Para solucionar esta importante limitación se va a migrar la estructura a una base de datos que se alamcene en un servidor.
+La opción tecnológica escogida es **[Firebase](https://firebase.google.com/)**, una plataforma "[backend as a service](https://es.wikipedia.org/wiki/Backend_as_a_service)" de Google que ofrece a desarrolladores WEB frontend acceder a servicios del lado del servidor, siendo uno de ellos el de base de datos clave-valor en tiempo real.
+La estructura de datos será muy similar:
+
+    proyecto_firebase_BD-+
+                         |
+                         coleccion1--+
+                         |           |
+                         |			isbn: "123456789x"
+                         |			titulo: "JQuery y tú"
+                         |			autor: "Guillermo Puertas"
+                         |			anio: "2016"
+                         |			editorial: "Mocosoft"
+                         |
+                         coleccion2--+
+                         |		   |
+                        ...         ...
+El array pasa a ser la base de datos, los objetos colecciones y los atributos de los objetos junto con sus valores, pares de clave-valor almacenados en las colecciones.
+
+**\- Uso del array libreria**
+Se va a mantener la estructura del array como un contenedor intermedio al que volcar la base de datos cuando sea modificada para facilitar la adaptación del código existente. Muchas funciones trabajan con el array libreria y habría que recodificarlas por completo si tuviesen que hacerlo directamente con la base de datos.
+No es una solución de código óptima pero si funcional y más rápida.
+
+
+
+
 
 
 

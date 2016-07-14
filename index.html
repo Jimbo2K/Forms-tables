@@ -60,9 +60,11 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 			<div class="btn-group-vertical" id="botones">
 				<button type="button" class="btn btn-success" id="anadir" tabindex="6" accesskey="a">AÑADIR</button>
 				<br>
-				<button type="button" class="btn btn-danger" id="quitar" tabindex="7" accesskey="q">QUITAR</button>
+				<button type="button" class="btn btn-warning" id="buscar" tabindex="7" accesskey="b">BUSCAR</button>
 				<br>
 				<button type="button" class="btn btn-warning" id="modificar" tabindex="8" accesskey="m">MODIFICAR</button>
+				<br>
+				<button type="button" class="btn btn-danger" id="quitar" tabindex="9" accesskey="q">QUITAR</button>
 				<button type="button" onclick="probartabla();">PRUEBA1</button>
 				<button type="button" onclick="arrayAleatorio()">PRUEBA2</button>
 				<br>
@@ -70,6 +72,7 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 		</article>
 		<!-- Aquí va la tabla -->
 		<aside class="container">
+			<p id="busqueda" class="text-center"></p>
 			<div class="table-responsive">
 				<table  class="table table-bordered" id="tableta">
 					<tr>
@@ -81,6 +84,7 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 					</tr>
 				</table>
 			</div>
+			<p id="resultado" class="text-center"></p>
 		</aside>
 	<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
 	<script>

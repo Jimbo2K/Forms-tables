@@ -4,7 +4,9 @@ Autores: Adrián Arteaga, Juan José Basco, Pablo Andueza, Pablo Garrido, Rubén
 Desarrollado con: Sublime Text 3 (editor) y JQuery*/
 
 //Variables globales
-var libreria =[];
+var libreria =[]; //array con la estructura de datos
+var busquedas = []; //array para contener resultados de busquedas
+var busquedasaux =[]; //array auxiliar empleado en las funciones de busqueda
 //var seleccionado = false;
 
 
@@ -37,6 +39,26 @@ $(function(){
 		if(!Boolean($('.seleccionado')[0])){alta();}
 	});
 
+	$('#buscar').click(function (){
+		//Si hay algo seleccionado no se puede añadir porque introduciría una copia en libreria
+		//y no es deseable tener entradas duplicadas
+		if(!Boolean($('.seleccionado')[0])){
+			switch($('#buscar').text()) {
+				case 'BUSCAR':
+					//Si el formulario está vacío no hay que buscar y por lo tanto tampoco hay que cambiar el botón a 'VOLVER'
+					if (formNoVacio()){
+						$('#buscar').text('VOLVER');
+						busqueda();
+					}
+					break;
+				case 'VOLVER':
+					$('#buscar').text('BUSCAR');
+					actualizar(libreria);
+					break;
+			}
+		}
+	});
+
 /*Un objeto Js es algo así (simplificando) {id: 'linea1', class: 'seleccionado', value: 12 ...}
 Un objeto JQ es un objeto que contiene un objeto Js {{objeto Js}, {objeto raruno 1}, {objeto raruno 2} ...}
 Un elemento HTML como <tr></tr> es un objeto Js del DOM. Por ej. un <tr id='linea1'></tr> se podría seleccionar en Js
@@ -56,7 +78,7 @@ elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boo
 		//nos aseguramos que haya una línea seleccionada para poder utilizar el botón
 		if(Boolean($('.seleccionado')[0])){borrar();}
 	});
-	
+
 });
 
 /***************************************************************/
@@ -75,10 +97,12 @@ function chequeaBotones(){
 		$('#quitar').removeClass('disabled');
 		//añade la clase de Bootstrap disabled para que el botón aparezca desactivado
 		$('#anadir').addClass('disabled');
+		$('#buscar').addClass('disabled');
 	}else{
 		$('#modificar').addClass('disabled');
 		$('#quitar').addClass('disabled');
 		$('#anadir').removeClass('disabled');
+		$('#buscar').removeClass('disabled');
 	}
 }
 
@@ -119,6 +143,9 @@ function actualizar(parray) {
 		var i;
 		//Borro las filas de la tabla
 		$('.linea').remove();
+		$('#busqueda').text('');
+		$('#resultado').text('');
+		$('th').css('background-color','#B4C9CC');
 		//Si el array pasado como argumento es libreria
 		if (parray===libreria){
 			//Recorro el array pintando las líneas
@@ -134,6 +161,7 @@ function actualizar(parray) {
 				//De esta forma si se modifica o borra lo hará correctamente.
 				pintarLinea(parray[i],parray[i].indice);
 			}
+			$('th').css('background-color','#66ffb3');
 			$('#busqueda').text('Resultados de la búsqueda');
 		}
 		//Borro los campos del formulario
@@ -524,6 +552,122 @@ function borrar() {
 		var libroaborrar = $("#oculto").val();
 		libreria.splice(libroaborrar, 1);
 		actualizar(libreria);
+	}
+}
+
+/******************************************************************/
+/******************** FUNCIONES PARA BUSQUEDAS ********************/
+/******************************************************************/
+
+
+function busqueda() {
+	busquedas = []; // se inicializan a cero aquí pero se declaran fuera porque se utilizan en otra función
+	busquedasaux =[]; // se inicializan a cero aquí pero se declaran fuera porque se utilizan en otra función
+	var aux;
+	var textobusca;
+	$('#resultado').text('');
+	/* sinencontrar: tras una búsqueda sin resultado (de por ejemplo el autor) el valor de sinencontrar sera true para evitar
+	realizar más búsquedas (si no encuentra el autor no queremos que siga buscando desde los textos de los imputs
+	y añada por ejemplo todos los libros que coinciden con el año)*/
+	var sinencontrar = false;
+
+	if ($('#isbn').val()) {
+		busquedasactuales = busquedas.length;
+		/*si no hay resultados de búsquedas previas (realizadas siguiendo otros imputs) y no es porque no se han encontrado
+		sino porque no se han hecho búsquedas entonces se busca en el array libreria:*/
+		if (busquedasactuales===0 && sinencontrar===false) {
+			textobusca = $('#isbn').val();
+			abuscar("isbn", textobusca);
+		// si ya hay resultados de búsqueda se busca en el array de resultados para continuar filtrando:
+		} else if (busquedasactuales>0){
+			abuscarb("isbn", textobusca);
+		}
+	}
+
+	if ($('#titulo').val()) {
+		busquedasactuales = busquedas.length;
+		if (busquedasactuales===0 && sinencontrar===false) {
+			textobusca = $('#titulo').val();
+			abuscar("titulo", textobusca);
+		} else if (busquedasactuales>0){
+			textobusca = $('#titulo').val();
+			abuscarb("titulo", textobusca);
+		}
+	}
+
+	if ($('#autor').val()) {
+		busquedasactuales = busquedas.length;
+		if (busquedasactuales===0 && sinencontrar===false) {
+			textobusca = $('#autor').val();
+			abuscar("autor", textobusca);
+		} else if (busquedasactuales>0){
+			textobusca = $('#autor').val();
+			abuscarb("autor", textobusca);
+		}
+	}
+
+	if ($('#anio').val()) {
+		busquedasactuales = busquedas.length;
+		if (busquedasactuales===0 && sinencontrar===false) {
+			textobusca = $('#anio').val();
+			abuscar("anio", textobusca);
+		} else if (busquedasactuales>0){
+			textobusca = $('#anio').val();
+			abuscarb("anio", textobusca);
+		}
+	}
+
+	if ($('#editorial').val()) {
+		busquedasactuales = busquedas.length;
+		if (busquedasactuales===0 && sinencontrar===false) {
+			textobusca = $('#editorial').val();
+			abuscar("editorial", textobusca);
+		} else if (busquedasactuales>0){
+			textobusca = $('#editorial').val();
+			abuscarb("editorial", textobusca);
+		}
+	}
+
+	actualizar(busquedas);
+}
+
+// función con la que se buscaran los primeros resultados la primera vez (utilizando como filtrado del primer imput que tenga algo de texto)
+function abuscar (dondebusco, quebusco) {
+	librosactuales = libreria.length;
+	for (i=0; i<librosactuales; i++) {
+		/*si el contenido de quebusco forma parte de lo que hay en el contenido dondebusco (es decir no tiene que por ser igual solo formar
+		parte, una parte) dará un valor mayor a -1 y entonces ejecutara lo siguiente:*/
+		if (libreria[i][dondebusco].indexOf(quebusco) != -1) {
+				busquedas.push(libreria[i]);
+		}
+	}
+	if (busquedas.length === 0) {
+		/*una variable importante para poder diferenciar casos en los que el array de búsquedas esta vació pero porque no se ha hecho ninguna
+		búsqueda de los casos en el que el array esta vació pero porque no ha encontrado nada (en este ultimo caso no se harán mas búsquedas)*/
+		sinencontrar = true;
+		$('#resultado').text("No encontramos libros que coincidan con los valores introducidos");
+		$('#busqueda').text('Resultados de la búsqueda');
+		$('th').css('background-color','#66ffb3');
+	}
+}
+
+/*la función abuscarb se activara cuando ya se haya hecho una búsqueda inicial y, tras encontrarse algo, se haya añadido algún elemento al
+array de búsquedas pues la búsqueda ahora se hará sobre este ultimo array y no sobre todo el array de libreria*/
+function abuscarb (dondebusco, quebusco) {
+	busquedasaux =[]; //se pone a cero para eliminar cualquier valor de búsquedas anteriores mediante esta misma función.
+	busquedasactuales = busquedas.length;
+	for (var t=0; t<busquedasactuales; t++) { // se busca sobre lo a buscado para seguir filtrando
+		if (busquedas[t][dondebusco].indexOf(quebusco) != -1) {
+			busquedasaux.push(busquedas[t]); // se añaden los elementos que coinciden en un array auxiliar (busquedasaux)
+		}
+	}
+	/*se hace un volcado total o copia del array auxiliar en el array búsquedas. Hay que hacerlo de esta manera porque si se hace mediante
+	una igualación no se copia sino que el array de la izquierda solo seria una referencia más a los datos que ya referencia el array de la derecha.*/
+	busquedas = JSON.parse(JSON.stringify(busquedasaux));
+	if (busquedas.length === 0) {
+		$('#resultado').text("No encontramos libros que coincidan con los valores introducidos");
+		$('#busqueda').text('Resultados de la búsqueda');
+		$('th').css('background-color','#66ffb3');
 	}
 }
 
