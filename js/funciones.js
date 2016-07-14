@@ -536,7 +536,7 @@ function alta() {
 		libreria[librosactuales] = nuevodato;
 		actualizar(libreria);
 	} else {
-		alert('Los datos introducidos no son válidos');
+		sweetAlert('Los datos introducidos no son válidos');
 	}
 }
 
