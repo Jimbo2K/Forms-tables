@@ -33,6 +33,14 @@ $(function(){
 	//Cada vez que se escribe algo en el input se valida VISUALMENTE
 	$("#editorial").bind("input change", validarEditorial);
 
+	$("input").bind("input change", function(){
+		if (formNoVacio()){
+			$("#resetear").removeClass('disabled');
+		} else {
+			$("#resetear").addClass('disabled');
+		}
+	});
+
 	$('#anadir').click(function (){
 		//Si hay algo seleccionado no se puede añadir porque introduciría una copia en libreria
 		//y no es deseable tener entradas duplicadas
@@ -77,6 +85,10 @@ elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boo
 	$('#quitar').click(function(){
 		//nos aseguramos que haya una línea seleccionada para poder utilizar el botón
 		if(Boolean($('.seleccionado')[0])){borrar();}
+	});
+
+	$('#reset').click(function(){
+		limpiaForm();
 	});
 
 });
@@ -243,7 +255,6 @@ function compararisbn(numisbn) {
 		if (libreria[i].isbn.toLowerCase() == numisbn.toLowerCase()) {//123456789X!=123456789x pero 123456789x==123456789x
 			//Si hay una coincidencia x=1 y paro de comparar
 			x = 1;
-			console.log('coincidencia');
 			break;
 		}
 	}
@@ -423,7 +434,6 @@ function objFormulario(){
 //Comprueba si NO TODOS los campos del formulario están vacios
 function formNoVacio(){
 	var cadena=$('#isbn').val()+$('#titulo').val()+$('#autor').val()+$('#anio').val()+$('#editorial').val();
-	console.log('cadena: '+ cadena);
 	if(cadena === ''){return false;}else{return true;}
 }
 
@@ -434,7 +444,6 @@ function comparaObj(pobj1,pobj2){
 	var salida;
 	var i,j=0;
 	for (i in pobj1){
-		console.log('form: ' + pobj1[i] +' libreria: ' + pobj2[i]);
 		if (j>=6){break;}
 		if (pobj1[i]!==pobj2[i]){
 			salida=false;
@@ -463,7 +472,6 @@ function seleccionar(pobj){
 		//Si el formulario no está en blanco y su contenido es distinto de la entrada de libreria
 		//significa que el usuario ha realizado una nueva selección después de haber hecho cambios
 		//en el formulario (sin pulsar Modificar)
-		console.log('Comparacion ' + comparaObj(contenidoForm,libreria[contenidoForm.indice]));
 		if (!comparaObj(contenidoForm,libreria[contenidoForm.indice]) && formNoVacio()){
 			user=confirm('Si realiza una nueva selección perderá los cambios \n ¿Desea continuar?');
 		} else {
@@ -538,7 +546,6 @@ function modificar() {
 	if (nuevodato) {
 		//El atributo indice de nuevo dato contiene el índice para almacenar en el array
 		libroactual = nuevodato.indice;
-		console.log('indice cargado: '+nuevodato.indice);
 		libreria[libroactual] = nuevodato;
 		actualizar(libreria);
 	} else {
@@ -550,7 +557,11 @@ function modificar() {
 function borrar() {
 	if (confirm('¿Desea borrar esta entrada?')){
 		var libroaborrar = $("#oculto").val();
+		var i;
 		libreria.splice(libroaborrar, 1);
+		for (i=0;i<libreria.length;i++){
+			libreria[i].indice=i;
+		}
 		actualizar(libreria);
 	}
 }
