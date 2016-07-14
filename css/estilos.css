@@ -61,7 +61,28 @@ p {
     font-weight: bold;
     color: #a8410f;
 }
-
+#ayuda{
+    position: relative;
+    right: -405px;
+    background-color: transparent;
+    border: none;
+}
+#oculto{
+    width:400;
+    height: 500;
+    z-index: 10;
+    position:absolute;
+    left: 3em;
+    right: 3em;
+    top: 1em;
+    background-color: #f3e4d8 ;
+    color: black;
+    border: 1px solid black ;
+    text-align:left;
+}
+h2{
+    text-align: center;
+}
 @media screen and (max-width: 768px) {
     #contform {
         position: relative;
