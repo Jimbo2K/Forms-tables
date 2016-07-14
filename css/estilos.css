@@ -38,6 +38,7 @@ h1{
 }
 body{
 	background-color: #DBAD89;
+    overflow-x: hidden;
 }
 #contform {
     margin-right: -8em;
