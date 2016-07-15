@@ -22,20 +22,20 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 	</head>
 	<body>
 		<article class="container">
-		<h1 class="text-center">Consulta de datos<button type="button" id="ayuda" value="Mostrar" onclick="mostrar()"><i class="fa fa-question-circle" aria-hidden="true"></i></button></h1><br><p>Los campos marcados con "<span>*</span>" son obligatorios</p>
-			<div id="oculto" style='display:none;'>
-				<h2>AYUDA DE CONSULTA DE DATOS</h2>
+		<h1 class="text-center">Consulta de datos<button type="button" class="ayuda" title="Pulsa para obtener ayuda" value="Mostrar" onclick="mostrar()"><i class="fa fa-question-circle" aria-hidden="true"></i></button></h1><br><p>Los campos marcados con "<span>*</span>" son obligatorios</p>
+		<div id="textoa" style='display:none;'>
+
+		<h2><span id="spanco">AYUDA DE CONSULTA DE DATOS</span><button type="button" class="ayuda" id="exit" onclick="volver()" ><i class="fa fa-times-circle" aria-hidden="true"></i></button></h2>
 				<h3>Boton Añadir</h3>
-				<h4>Para añadir un libro debe completar al menos los dos campos obligatorios con el formato adecuado y pulsar el botón "Añadir".
-				   En ese momento se almacenarán los datos del formulario ala librería.</h4>
+				<h4>Para añadir un libro debe completar al menos los dos campos obligatorios con el formato adecuado y pulsar el botón "Añadir".Si algun dato es erroneo el usuario recibira un aviso con los campos incorrectos, en caso contrario se almacenarán en la base de datos.</h4>
 				<h3>Boton Buscar</h3>
-				<h4>Para buscar un libro de la libreria debe escribir cualquier caracter o dato de algun libro incluido en la libreria y pulsar el boton "Buscar". A partir de hay se mostrara en la libreria los relacionados con su posible busqueda.</h4>
+				<h4>Para realizar una busqueda en la base de datos el usuario la puede filtrar rellenando uno o varios campos al pulsar el boton "Buscar" el programa mostrara por pantalla las coincidencias.Los datos a introducir en los campos pueden ser parciales en mayusculas o minusculas indistintamente. </h4>
 				<h3>Boton Modificar</h3>
-				<h4>Al hacer click sobre una fila de la tabla esta quedará remarcada en color, modificar los datos necesarios en el formulario y pulsar boton "Modificar". </p>
+				<h4>Al hacer click sobre una fila de la tabla esta quedará remarcada en color, modificar los datos necesarios en el formulario y pulsar boton "Modificar". La modificacion tambien puede ser utilizada con resultados de busqueda. </h4>
 				<h3>Boton Quitar</h3>
 				<h4>Una vez seleccionada una fila puede pulsar el botón "Borrar" se eliminará de la libreria.</h4>
-				<button type="button" onclick="volver()" >Volver</button>
 			</div>
+
 			<div class="row, col-lg-10, col-md-10, col-sm-10, col-xs-10" id="contform">
 				<!-- Aquí va el formulario -->
 				<form action="#" id="form1" class="form-horizontal" role="form" autocomplete>

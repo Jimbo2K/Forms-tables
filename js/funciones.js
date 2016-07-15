@@ -731,7 +731,7 @@ function arrayAleatorio(){
 }
 // Funciones del boton ayuda que muestra y oculta la ayuda.
 function mostrar(){
-document.getElementById('oculto').style.display = 'block';}
+document.getElementById('textoa').style.display = 'block';}
 
 function volver(){
-document.getElementById('oculto').style.display = 'none';}
+document.getElementById('textoa').style.display = 'none';}

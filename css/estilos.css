@@ -61,13 +61,17 @@ p {
     font-weight: bold;
     color: #a8410f;
 }
-#ayuda{
-    position: relative;
-    right: -405px;
+.ayuda{
     background-color: transparent;
     border: none;
+    float:right;
 }
-#oculto{
+#exit{
+    color:red;
+    position: relative;
+    top: -0.5em;
+}
+#textoa{
     width:400;
     height: 500;
     z-index: 10;
@@ -79,9 +83,19 @@ p {
     color: black;
     border: 1px solid black ;
     text-align:left;
+    padding-top: 0;
+    border-radius: 6px;
+    padding-left: 0.8em;
 }
 h2{
     text-align: center;
+    width: 100%;
+
+}
+#spanco{
+    padding: 3px 1em;
+    background-color: green;
+    color:black;
 }
 @media screen and (max-width: 768px) {
     #contform {
