@@ -13,65 +13,97 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 		<meta name="author" content="Adrián, Pablo, Pablo, Ruben, Juan">
 		<meta name="keywords" content="jquary,tablas,bootstrap,ejercicio jquary,adrformacion,uf1306">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<!-- Latest compiled and minified CSS & JS -->
+		<!-- CSS's de Bootstrap -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 		<link rel="stylesheet" href="css/footable.bootstrap.min.css">
+		<!-- Enlace al css de Sweet Alert -->
   		<link rel="stylesheet" href="bower_components/sweetalert/dist/sweetalert.css">
+  		<!-- Enlace a Fontawesome -->
   		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  		<!-- Enlace al CSS de la aplicación -->
 		<link rel="stylesheet" href="css/estilos.css">
 	</head>
-	<body>
-		<article class="container">
-		<h1 class="text-center">Consulta de datos<button type="button" class="ayuda" title="Pulsa para obtener ayuda" value="Mostrar" onclick="mostrar()"><i class="fa fa-question-circle" aria-hidden="true"></i></button></h1><br><p>Los campos marcados con "<span>*</span>" son obligatorios</p>
-		<div id="textoa" style='display:none;'>
 
-		<h2><span id="spanco">AYUDA DE CONSULTA DE DATOS</span><button type="button" class="ayuda" id="exit" onclick="volver()" ><i class="fa fa-times-circle" aria-hidden="true"></i></button></h2>
+	<body>
+		<!-- Este <article> contiene el formulario y la botonera -->
+		<article class="container">
+			<h1 class="text-center">Consulta de datos
+				<!-- Botón de ayuda -->
+				<button type="button" class="ayuda" title="Pulsa para obtener ayuda" value="Mostrar" onclick="mostrar()">
+					<i class="fa fa-question-circle" aria-hidden="true"></i>
+				</button>
+			</h1>
+			<br>
+			<p>Los campos marcados con "<span>*</span>" son obligatorios</p>
+
+			<!-- Cuadro con la ayuda -->
+			<div id="textoa" style='display:none;'>
+				<h2>
+					<span id="spanco">AYUDA DE CONSULTA DE DATOS</span>
+					<!-- Botón para cerrar la ayuda -->
+					<button type="button" class="ayuda" id="exit" onclick="volver()" >
+						<i class="fa fa-times-circle" aria-hidden="true"></i>
+					</button>
+				</h2>
+
 				<h3>Boton Añadir</h3>
 				<h4>Para añadir un libro debe completar al menos los dos campos obligatorios con el formato adecuado y pulsar el botón "Añadir".Si algun dato es erroneo el usuario recibira un aviso con los campos incorrectos, en caso contrario se almacenarán en la base de datos.</h4>
+
 				<h3>Boton Buscar</h3>
 				<h4>Para realizar una busqueda en la base de datos el usuario la puede filtrar rellenando uno o varios campos al pulsar el boton "Buscar" el programa mostrara por pantalla las coincidencias.Los datos a introducir en los campos pueden ser parciales en mayusculas o minusculas indistintamente. </h4>
+
 				<h3>Boton Modificar</h3>
 				<h4>Al hacer click sobre una fila de la tabla esta quedará remarcada en color, modificar los datos necesarios en el formulario y pulsar boton "Modificar". La modificacion tambien puede ser utilizada con resultados de busqueda. </h4>
+
 				<h3>Boton Quitar</h3>
 				<h4>Una vez seleccionada una fila puede pulsar el botón "Borrar" se eliminará de la libreria.</h4>
 			</div>
 
+			<!-- Contenedor del formulario -->
 			<div class="row, col-lg-10, col-md-10, col-sm-10, col-xs-10" id="contform">
 				<!-- Aquí va el formulario -->
 				<form action="#" id="form1" class="form-horizontal" role="form" autocomplete>
+					<!-- ISBN -->
 					<div class="form-group">
 						<div><label for="isbn" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">ISBN: <span>*</span></label></div>
 						<div class="col-lg-6, col-md-6, col-sm-6">
 						<input type="text" class="form-control clearable, col-lg-10 rebonico" name="isbn" id="isbn" maxlength="13" required tabindex="1" placeholder="ISBN de 10 ó 13 dígitos">&nbsp <span id="isbnnull" class="mensaje"></span><br>
 						</div>
 					</div>
+					<!-- Título -->
 					<div class="form-group">
 						<label for="titulo" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">Título: <span>*</span></label>
 						<div class="col-lg-6, col-md-6, col-sm-6">
 							<input type="text" class="form-control clearable, col-lg-10 rebonico" name="titulo" id="titulo" placeholder="Ej. La Galatea" required tabindex="2">&nbsp <span id="titulonull" class="mensaje"></span><br>
 						</div>
 					</div>
+					<!-- Autor -->
 					<div class="form-group">
 						<label for="Autor" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">Autor: </label>
 						<div class="col-lg-6, col-md-6, col-sm-6">
 							<input type="text" class="form-control clearable, col-lg-10 rebonico" name="autor" id="autor" placeholder="Ej. Miguel de Cervantes" tabindex="3">&nbsp <span id="autornull" class="mensaje"></span><br>
 						</div>
 					</div>
+					<!-- Año de publicación -->
 					<div class="form-group">
 						<label for="anio" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">Año: </label>
 						<div class="col-lg-6, col-md-6, col-sm-6">
 							<input type="text" class="form-control clearable, col-lg-10 rebonico" name="anio" id="anio" placeholder="Ej. 1591" tabindex="4" maxlength="4">&nbsp <span id="anionull" class="mensaje"></span><br>
 						</div>
 					</div>
+					<!-- Editorial -->
 					<div class="form-group">
 						<label for="editorial" class="col-lg-2, col-md-2, col-sm-2, col-xs-2 control-label">Editorial: </label>
 						<div class="col-lg-6, col-md-6, col-sm-6">
 							<input type="text" class="form-control clearable, col-lg-10 rebonico" name="editorial" id="editorial" placeholder="Ej. Planeta" tabindex="5">&nbsp <span id="editorialnull" class="mensaje"></span>
 						</div>
 					</div>
+					<!-- Campo oculto para recibir el índice que relaciona una línea de la tabla con el array -->
 					<div class="oculto"><input type="text" id="oculto"></div>
 				</form>
 			</div>
+
+			<!-- Contenedor de la botonera -->
 			<div class="btn-group-vertical" id="botones">
 				<button type="button" class="btn btn-success" id="anadir" tabindex="6" accesskey="a">AÑADIR</button>
 				<br>
@@ -85,9 +117,12 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 				<br>
 			</div>
 		</article>
+
 		<!-- Aquí va la tabla -->
-		<aside class="container">
+		<article class="container">
+			<!-- Cuando la tabla es el resultado de una búsqueda se indica con este párrafo -->
 			<p id="busqueda" class="text-center"></p>
+
 			<div class="table-responsive">
 				<table  class="table table-bordered" id="tableta">
 					<tr>
@@ -102,11 +137,14 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 				<table class="paginacion table table-striped">
 				</table>
 			</div>
+
+			<!-- Si una búsqueda no ofrece ningún resultado se muestra en este párrafo que sustituye a la tabla -->
 			<p id="resultado" class="text-center"></p>
-		</aside>
+		</article>
 		<!-- La paginación de la tabla -->
 		<div id="divPaginacion"></div>
 
+	<!-- Enlace de la aplicación con Firebase -->
 	<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
 	<script>
   	// Initialize Firebase
@@ -118,10 +156,14 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
   	};
   	firebase.initializeApp(config);
 	</script>
+	<!-- Enlace a JQuery -->
 	<script src="//code.jquery.com/jquery.js"></script>
+	<!-- Enlace al JS de JQuery -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<script src="js/footable.min.js"></script>
+	<!-- Enlace al JS de Sweet Alert -->
 	<script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
+	<!-- Enlace al JS de la aplicación -->
 	<script src="js/funciones.js"></script>
 	</body>
 </html>
