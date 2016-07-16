@@ -15,10 +15,10 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- Latest compiled and minified CSS & JS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-		<link rel="stylesheet" href="css/estilos.css">
-		<script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
+		<link rel="stylesheet" href="css/footable.bootstrap.min.css">
   		<link rel="stylesheet" href="bower_components/sweetalert/dist/sweetalert.css">
   		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/estilos.css">
 	</head>
 	<body>
 		<article class="container">
@@ -98,9 +98,15 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 						<th>EDITORIAL</th>
 					</tr>
 				</table>
+
+				<table class="paginacion table table-striped">
+				</table>
 			</div>
 			<p id="resultado" class="text-center"></p>
 		</aside>
+		<!-- La paginación de la tabla -->
+		<div id="divPaginacion"></div>
+
 	<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
 	<script>
   	// Initialize Firebase
@@ -114,6 +120,8 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 	</script>
 	<script src="//code.jquery.com/jquery.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<script src="js/footable.min.js"></script>
+	<script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="js/funciones.js"></script>
 	</body>
 </html>

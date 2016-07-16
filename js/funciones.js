@@ -9,8 +9,34 @@ var busquedas = []; //array para contener resultados de busquedas
 var busquedasaux =[]; //array auxiliar empleado en las funciones de busqueda
 //var seleccionado = false;
 
+window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+var jsonLineas = [];
+
+var jsonColumnas = [
+
+	{"name":"indice","title":"Índice","visible":false},
+  	{"name":"isbn","title":"ISBN","visible":true,"breakpoints":"xs sm","type":"number","style":{"width":80,"maxWidth":80}},
+  	{"name":"titulo","title":"Título"},
+  	{"name":"autor","title":"Autor"},
+  	{"name":"anio","title":"Año","type":"number"},
+  	{"name":"editorial","title":"Editorial"}
+
+];
+
+//Ejemplo de declaración de Columnas:
+
+// {"name":"indice","title":"Índice","breakpoints":"xs sm","type":"number","style":{"width":80,"maxWidth":80}},
+// {"name":"firstName","title":"First Name"},
+// {"name":"lastName","title":"Last Name"},
+// {"name":"something","title":"Never seen but always around","visible":false,"filterable":false},
+// {"name":"jobTitle","title":"Job Title","breakpoints":"xs sm","style":{"maxWidth":200,"overflow":"hidden","textOverflow":"ellipsis","wordBreak":"keep-all","whiteSpace":"nowrap"}},
+// {"name":"started","title":"Started On","type":"date","breakpoints":"xs sm md","formatString":"MMM YYYY"},
+// {"name":"dob","title":"Date of Birth","type":"date","breakpoints":"xs sm md","formatString":"DD MMM YYYY"},
+// {"name":"status","title":"Status"}
 
 $(function(){
+
+
 	//Inicialización de botones
 	chequeaBotones();
 
@@ -136,12 +162,44 @@ function chequeaBotones(){
 /******************** PINTAR LA TABLA ********************/
 /*********************************************************/
 
+
+
+
 //Se le pasa un objeto del array (un libro) y pinta una línea. pindice es el valor que
 //relaciona la fila de la tabla con la posición del objeto en el array
 function pintarLinea(pobj,pindice){
 	//Añadimos onclick="seleccionar(this);" para que podamos seleccionar las líneas de la tabla (con los eventos de JQuery no responden)
 	$("#tableta").append('<tr class="linea" onclick="seleccionar(this);"><td>' + pobj.isbn + '</td>' + '<td>' + pobj.titulo + '</td>' + '<td>' + pobj.autor + '</td>' + '<td>' + pobj.anio + '</td>' + '<td>' + pobj.editorial + '</td>' + '<td class="oculto">' + pindice + '</td></tr>');
 }
+function pintarPaginado() {
+	$('.paginacion').footable({
+			"paging": {
+				"enabled": true
+			},
+			"filtering": {
+				"enabled": true
+			},
+			"sorting": {
+				"enabled": true
+			},
+			"columns":  jsonColumnas,
+			"rows":  $.get("jsonLineas.json")
+	});
+};
+
+function createJsonFile() {
+
+    // some jQuery to write to file
+    // $.ajax({
+    //     type : "POST",
+    //     url : "json.php",
+    //     dataType : 'json',
+    //     data : {
+    //         json : JSON.stringify(jsonLineas)
+    //     }
+    // });
+    $.post("json.php", {json : JSON.stringify(jsonLineas)});
+};
 
 //Esta función chequea el array y si no está vacío pinta la tabla
 //Se ha actualizado con argumentos para poder utilizar la función con el array de librería
@@ -158,8 +216,12 @@ function actualizar(parray) {
 		$('#busqueda').text('');
 		$('#resultado').text('');
 		$('th').css('background-color','#B4C9CC');
+
 		//Si el array pasado como argumento es libreria
 		if (parray===libreria){
+			jsonLineas = parray;
+			createJsonFile();
+			pintarPaginado();
 			//Recorro el array pintando las líneas
 			for (i in parray){
 				//i es el valor de la posición del array y el contenido de la celda oculta con índice
@@ -167,6 +229,9 @@ function actualizar(parray) {
 			}
 		//Si se trata de otro (el de busqueda)
 		} else {
+			jsonLineas = parray;
+			createJsonFile();
+			pintarPaginado();
 			//Recorro el array pintando las líneas
 			for (i in parray){
 				//Paso como valor de la celda oculta el indice que apunta a la posición del elemento en libreria
@@ -695,8 +760,8 @@ function probartabla() {
 
 
 function numeroAzar(){
-	var a=Math.round((Math.random() * 10));
-	if(a===10){a=9;}
+	var a=Math.round((Math.random() * 40));
+	if(a===40){a=39;}
 	return a;
 }
 //Constructor de objetos: libro
@@ -709,16 +774,46 @@ function libro(indice,isbn,titulo,autor,anio,editorial){
 	this.editorial=editorial;
 }
 //Array con 10 objetos predefinidos
-var libreriaaux=[new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),];
+var libreriaaux=[
+	new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),
+	new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),
+	new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),
+	new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro()
+];
 //Funcion que genera una lista aleatoria de libros
 function arrayAleatorio(){
-	var arrisbn=['123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523'];
-	var arrtitulo=['JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros'];
-	var arrautor=['Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito'];
-	var arranio=['1234','5678','9123','2016','1975','1981','1732','2222','1997','2010'];
-	var arreditorial=['Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs'];
+	var arrisbn=[
+		'123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523',
+		'123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523',
+		'123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523',
+		'123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523'
+	];
+	var arrtitulo=[
+		'JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros',
+		'JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros',
+		'JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros',
+		'JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros'
+	];
+	var arrautor=[
+		'Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito',
+		'Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito',
+		'Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito',
+		'Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito'
+	];
+	var arranio=[
+		'1234','5678','9123','2016','1975','1981','1732','2222','1997','2010',
+		'1234','5678','9123','2016','1975','1981','1732','2222','1997','2010',
+		'1234','5678','9123','2016','1975','1981','1732','2222','1997','2010',
+		'1234','5678','9123','2016','1975','1981','1732','2222','1997','2010'
+	];
+	var arreditorial=[
+		'Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs',
+		'Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs',
+		'Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs',
+		'Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs'
+	];
 	var i;
-	for (i=0; i<10;i++){
+	for (i=0; i<40;i++){
 		libreriaaux[i].indice=i;
 		libreriaaux[i].isbn=arrisbn[i];
 		libreriaaux[i].titulo=arrtitulo[numeroAzar()];
