@@ -79,16 +79,16 @@
 }
 .jTPS .sortAsc {
 	border-bottom: 1px solid #e3e3e3;
-	/*background: #eee url(../img/bullet_arrow_up.png) center -4px no-repeat;*/
+	background: #eee url(../img/bullet_arrow_up.png) center -4px no-repeat;
 }
 .jTPS .sortDesc {
 	border-bottom: 1px solid #e3e3e3;
-	/*background: #eee url(../img/bullet_arrow_down.png) center -4px no-repeat;*/
+	background: #eee url(../img/bullet_arrow_down.png) center -4px no-repeat;
 }
 .jTPS tfoot td {
 	padding: 2px 5px 0 5px;
 
-	/*background: #eee url(../img/eeGrad2.gif) bottom repeat-x;*/
+	background: #eee url(../img/eeGrad2.gif) bottom repeat-x;
 }
 .jTPS thead th {
 	color: #000;
