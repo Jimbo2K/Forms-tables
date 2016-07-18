@@ -1,78 +1,76 @@
-/*Fecha: 05/07/16
+/*Fecha: 18/07/16
 Descripcion: Código JS (JQuery) asociado a index.html para añadir funcionalidad a la página
 Autores: Adrián Arteaga, Juan José Basco, Pablo Andueza, Pablo Garrido, Rubén Álvarez
 Desarrollado con: Sublime Text 3 (editor) y JQuery*/
 
-//Variables globales
+/**********************************************************/
+/******************* VARIABLES GLOBALES *******************/
+/**********************************************************/
+
 var libreria =[]; //array con la estructura de datos
 var busquedas = []; //array para contener resultados de busquedas
 var busquedasaux =[]; //array auxiliar empleado en las funciones de busqueda
-//var seleccionado = false;
+var arrmensajes=[]; //0: error ISBN; 1 error Título; 2 error Autor; 3 error año; 4 error editorial
+var alertmensaje; //En esta variable se montará el mensaje a pasar al usuario en alerta
 
-window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-var jsonLineas = [];
+/**********************************************************/
+/****************** REFERENCIAS FIREBASE ******************/
+/**********************************************************/
 
-var jsonColumnas = [
+//Referencia a base de datos del proyecto indicado en HTML (si se cambia el código por el de otro proyecto cambia de BD)
+var db=firebase.database();
+//Referencia a la colección/base de datos concreta que vamos a utilizar
+var libreriaDB=db.ref("libreria");
 
-	{"name":"indice","title":"Índice","visible":false},
-  	{"name":"isbn","title":"ISBN","visible":true,"breakpoints":"xs sm","type":"number","style":{"width":80,"maxWidth":80}},
-  	{"name":"titulo","title":"Título"},
-  	{"name":"autor","title":"Autor"},
-  	{"name":"anio","title":"Año","type":"number"},
-  	{"name":"editorial","title":"Editorial"}
-
-];
-
-//Ejemplo de declaración de Columnas:
-
-// {"name":"indice","title":"Índice","breakpoints":"xs sm","type":"number","style":{"width":80,"maxWidth":80}},
-// {"name":"firstName","title":"First Name"},
-// {"name":"lastName","title":"Last Name"},
-// {"name":"something","title":"Never seen but always around","visible":false,"filterable":false},
-// {"name":"jobTitle","title":"Job Title","breakpoints":"xs sm","style":{"maxWidth":200,"overflow":"hidden","textOverflow":"ellipsis","wordBreak":"keep-all","whiteSpace":"nowrap"}},
-// {"name":"started","title":"Started On","type":"date","breakpoints":"xs sm md","formatString":"MMM YYYY"},
-// {"name":"dob","title":"Date of Birth","type":"date","breakpoints":"xs sm md","formatString":"DD MMM YYYY"},
-// {"name":"status","title":"Status"}
 
 $(function(){
-
-
 	//Inicialización de botones
-	chequeaBotones();
+	//chequeaBotones();
+
+	//Carga en el array librería la BD y lo pinta
+	cargaLibreria(libreria);
 
 	/**********************************************************/
 	/******************* GESTIÓN DE EVENTOS *******************/
 	/**********************************************************/
 
-	//Cada vez que se escribe algo en el input se valida VISUALMENTE
+	//Cada vez que se escribe algo en el input o pierde el foco se valida VISUALMENTE
 	$("#isbn").bind("input change", validarIsbn);
+	$("#isbn").blur(validarIsbn);
 
 	//Cada vez que se escribe algo en el input se valida VISUALMENTE
 	$("#titulo").bind("input change", validarTitulo);
+	$("#titulo").blur(validarTitulo);
 
 	//Cada vez que se escribe algo en el input se valida VISUALMENTE
 	$("#autor").bind("input change", validarAutor);
+	$("#autor").blur(validarAutor);
 
 	//Cada vez que se escribe algo en el input se valida VISUALMENTE
 	$("#anio").bind("input change", validarAnio);
+	$("#anio").blur(validarAnio);
 
 	//Cada vez que se escribe algo en el input se valida VISUALMENTE
 	$("#editorial").bind("input change", validarEditorial);
+	$("#editorial").blur(validarEditorial);
 
-	$("input").bind("input change", function(){
-		if (formNoVacio()){
+	//Controla el aspecto del cursor sobre el reset
+	$("#resetear").mouseover(function(){
+		if (formNoVacio() || $('.mensaje').html()!==''){
 			$("#resetear").removeClass('disabled');
 		} else {
 			$("#resetear").addClass('disabled');
 		}
 	});
 
+	//Pulsar botón añadir
 	$('#anadir').click(function (){
 		//Si hay algo seleccionado no se puede añadir porque introduciría una copia en libreria
 		//y no es deseable tener entradas duplicadas
 		if(!Boolean($('.seleccionado')[0])){alta();}
 	});
 
+	//Botón buscar
 	$('#buscar').click(function (){
 		//Si hay algo seleccionado no se puede añadir porque introduciría una copia en libreria
 		//y no es deseable tener entradas duplicadas
@@ -102,22 +100,121 @@ Con un objeto JQ puede no pasar esto, puede que creemos un <tr> con id chorizo y
 en el DOM pero puede haber todavía un objeto JQ $('#chorizo')={undefined, {objeto raruno 1}, {objeto raruno 2}, ...}
 Así que si preguntamos Boolean($('#chorizo')) devuelve true porque el objeto JQ existe. Pero si preguntamos por el primer
 elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boolean(undefined)=false*/
-
+	
+	//Botón modificar
 	$('#modificar').click(function(){
 		//nos aseguramos que haya una línea seleccionada para poder utilizar el botón
 		if(Boolean($('.seleccionado')[0])){modificar();}
 	});
 
+	//Botón quitar
 	$('#quitar').click(function(){
 		//nos aseguramos que haya una línea seleccionada para poder utilizar el botón
 		if(Boolean($('.seleccionado')[0])){borrar();}
 	});
 
-	$('#reset').click(function(){
-		limpiaForm();
+	//Botón reset formulario
+	$('#resetear').click(function(){
+		if (!$('#resetear').hasClass('disabled')){
+			limpiaForm();
+			chequeaBotones();
+		}
 	});
 
 });
+
+//Con cualquier cambio en la base de datos (modificación, borrado o añdido) se actualiza libreria
+libreriaDB.on("child_changed",function(snapshot){
+	var dblibro=snapshot.val();
+	console.log('antes de chgremoto',dblibro);
+	cambioRemoto(dblibro,Number(dblibro.indice));
+	// actualizar(libreria);
+});
+//"child_added" se rebota ¿?
+libreriaDB.on("value",function(addshot){
+	var dblibro=addshot.val();
+	console.log('antes de addremoto',dblibro);
+	cargaLibreria(libreria);
+	// actualizar(libreria);
+});
+libreriaDB.on("child_removed",function(snapshot){
+	var dblibro=snapshot.val();
+	console.log('antes de rmvremoto',dblibro);
+	libreria.splice(dblibro.indice, 1);
+	//Actualizo los indices de todos sus elementos
+	for (var i=0;i<libreria.length;i++){
+		libreria[i].indice=i;
+	}
+	actualizar(libreria);
+});
+
+// Funciones del boton ayuda que muestra y oculta la ayuda.
+function mostrar(){
+document.getElementById('textoa').style.display = 'block';}
+
+function volver(){
+document.getElementById('textoa').style.display = 'none';}
+
+/***************************************************************/
+/********************* FUNCIONES FIREBASE **********************/
+/***************************************************************/
+
+//carga la BD en el array que pasemos como argumento, lo normal será librería
+function cargaLibreria(parray){
+	libreriaDB.once('value', function(snapshot){
+		var salida=snapshot.val();
+		var i,j=0;
+		parray.length=0;
+		for (i in salida){
+			parray[j]=salida[i];
+			//La 1ª vez que se añade un dato el atributo iddb='', así que al pasar la BD hay que indicar la key de cada colección
+			//que se corresponde a cada objeto almacenado en el array (que hará falta para poder modificar y/o borrar)
+			//Como cada vez que se añade una entrada a la BD seguido se actualiza el array, los objetos de este siempre tienen iddb definido
+			parray[j].iddb=i;
+			//asigno el indice, si no se ha borrado nada será igual, en caso contario se actualizará
+			parray[j].indice=j;
+			j++;
+		}
+		//IMPORTANTE!!: la actualización tiene que ir dentro del .once() para sincronizarse
+		actualizar(libreria);
+	});
+}
+
+/*Cuando añadimos un nuevo elemento tenemos dos opciones:
+		1.-Añadirlo a la BD, actualizar el array desde la BD y pintar el array
+		2.-Añadirlo a la BD y al array, y pintar el array
+	La opción 1 tiene un problema, que cuando hay que esperar a que se cargue del todo el array para pintarlo.
+	La 2 no tiene ese problema pero el elemento almacenado en el array no tendrá el iddb por lo que no podrá ser
+	borrado o modificado de la BD al no tener la clave
+	La siguiente función viene a solucionar esto. Usaremos la opción 2, añadiremos a la BD y al array el nuevo
+	elemento, con esta función añadiremos en el array la clave iddb, y pintaremos el array*/
+function añadeIddb(parray,pindice){
+	libreriaDB.once('value').then(function(snapshot){
+		var aux=snapshot.val();
+		var i,j=0;
+		for (i in aux){
+			if (j===pindice){
+				parray[j].iddb=i;
+			}
+			j++;
+		}
+	});
+}
+
+function cambioRemoto(pdbobject, pindice){
+	var arlibro=libreria[pindice];
+	// console.log('arlibro.indice ',arlibro.indice);
+	// console.log('indice '+pindice);
+	// console.log('argumento ',pdbobject);
+	arlibro.indice=pindice;
+	arlibro.isbn=pdbobject.isbn;
+	arlibro.titulo=pdbobject.titulo;
+	arlibro.autor=pdbobject.autor;
+	arlibro.anio=pdbobject.anio;
+	arlibro.editorial=pdbobject.editorial;
+	arlibro.iddb=pdbobject.key;
+	actualizar(libreria);
+}
 
 /***************************************************************/
 /******************** CONTROLAR LOS BOTONES ********************/
@@ -144,99 +241,46 @@ function chequeaBotones(){
 	}
 }
 
-// function pintaBotones(){
-
-// 	var librosactuales = libreria.length;
-// 	if(librosactuales > 0 && seleccionado === true) {
-// 		console.log('botones on');
-// 		$("#quitar").removeClass('disabled');
-// 		$("#modificar").removeClass('disabled');
-// 	} else {
-// 		$("#quitar").addClass('disabled');
-// 		$("#modificar").addClass('disabled');
-// 		console.log('botones off');
-// 	}
-// }
-
 /*********************************************************/
 /******************** PINTAR LA TABLA ********************/
 /*********************************************************/
 
-
-
-
 //Se le pasa un objeto del array (un libro) y pinta una línea. pindice es el valor que
 //relaciona la fila de la tabla con la posición del objeto en el array
-function pintarLinea(pobj,pindice){
+function pintarLinea(pobj){
 	//Añadimos onclick="seleccionar(this);" para que podamos seleccionar las líneas de la tabla (con los eventos de JQuery no responden)
-	$("#tableta").append('<tr class="linea" onclick="seleccionar(this);"><td>' + pobj.isbn + '</td>' + '<td>' + pobj.titulo + '</td>' + '<td>' + pobj.autor + '</td>' + '<td>' + pobj.anio + '</td>' + '<td>' + pobj.editorial + '</td>' + '<td class="oculto">' + pindice + '</td></tr>');
+	$("#tableta").append('<tr class="linea" onclick="seleccionar(this);"><td>' + pobj.isbn + '</td>' + '<td>' + pobj.titulo + '</td>' + '<td>' + pobj.autor + '</td>' + '<td>' + pobj.anio + '</td>' + '<td>' + pobj.editorial + '</td>' + '<td class="sr-only">' + pobj.indice + '</td></tr>');
 }
-function pintarPaginado() {
-	$('.paginacion').footable({
-			"paging": {
-				"enabled": true
-			},
-			"filtering": {
-				"enabled": true
-			},
-			"sorting": {
-				"enabled": true
-			},
-			"columns":  jsonColumnas,
-			"rows":  $.get("jsonLineas.json")
-	});
-};
-
-function createJsonFile() {
-
-    // some jQuery to write to file
-    // $.ajax({
-    //     type : "POST",
-    //     url : "json.php",
-    //     dataType : 'json',
-    //     data : {
-    //         json : JSON.stringify(jsonLineas)
-    //     }
-    // });
-    $.post("json.php", {json : JSON.stringify(jsonLineas)});
-};
 
 //Esta función chequea el array y si no está vacío pinta la tabla
 //Se ha actualizado con argumentos para poder utilizar la función con el array de librería
 //y el que almacena los resultados de búsqueda
 function actualizar(parray) {
-	//Al actualizar se deselecciona
-	//seleccionado=false;
-
 	//Si el array no está vacío
 	if (parray.length !== 0){
 		var i;
 		//Borro las filas de la tabla
 		$('.linea').remove();
+		//Borro el aviso de búsqueda por si acaso
 		$('#busqueda').text('');
+		//Borro el mensaje de búsqueda no encontrada por si acaso
 		$('#resultado').text('');
+		//Recupero el color de la barra de encabezado normal
 		$('th').css('background-color','#B4C9CC');
-
 		//Si el array pasado como argumento es libreria
 		if (parray===libreria){
-			jsonLineas = parray;
-			createJsonFile();
-			pintarPaginado();
 			//Recorro el array pintando las líneas
 			for (i in parray){
 				//i es el valor de la posición del array y el contenido de la celda oculta con índice
-				pintarLinea(parray[i],i);
+				pintarLinea(parray[i]);
 			}
 		//Si se trata de otro (el de busqueda)
 		} else {
-			jsonLineas = parray;
-			createJsonFile();
-			pintarPaginado();
 			//Recorro el array pintando las líneas
 			for (i in parray){
 				//Paso como valor de la celda oculta el indice que apunta a la posición del elemento en libreria
 				//De esta forma si se modifica o borra lo hará correctamente.
-				pintarLinea(parray[i],parray[i].indice);
+				pintarLinea(parray[i]);
 			}
 			$('th').css('background-color','#66ffb3');
 			$('#busqueda').text('Resultados de la búsqueda');
@@ -327,6 +371,7 @@ function compararisbn(numisbn) {
 	if (x == 1)	{
 		//Pinto el mensaje de error en el campo correspondiente
 		$('#isbnnull').html('Ya existe una entrada con este ISBN');
+		arrmensajes[0]=' OBLIGATORIO: Ya existe una entrada con este ISBN';
 		salida = false;
 		$('#isbn').css('border','1px solid red');
 		return false;
@@ -350,30 +395,33 @@ function validarIsbn(){
 				$('#isbn').css('border','1px solid black');
 				salida=true;
 		}else{
-			mensaje='ISBN inválido, nro. de control incorrecto';
+			mensaje=' OBLIGATORIO: ISBN inválido, nro. de control incorrecto';
 			$('#isbn').css('border','2px solid red');
 			salida=false;
 		}
 	} else {
 		$('#isbn').css('border','2px solid red');
-		mensaje='Formato de ISBN inválido 10/13 dígitos';
+		mensaje=' OBLIGATORIO: Formato de ISBN inválido 10/13 dígitos';
 		$('#isbn').css('border','2px solid red');
 		salida = false;
 	}
 		$('#isbnnull').html(mensaje);
+		arrmensajes[0]=mensaje;
 		return salida;
 }
 
 function validarTitulo(){
 	var retitulo=/\w+/;
 	var vtitulo=($('#titulo').val()).trim();
-	if(retitulo.test(vtitulo)){
+	if(retitulo.test(vtitulo) && vtitulo!==''){
 		$('#titulo').css('border','1px solid black');
 		$('#titulonull').html('');
+		arrmensajes[1]='';
 		return true;
 	} else {
 		$('#titulo').css('border','2px solid red');
-		$('#titulonull').html(' Título incorrecto');
+		$('#titulonull').html(' OBLIGATORIO: Título vacío');
+		arrmensajes[1]=' OBLIGATORIO: Título vacío';
 		return false;
 	}
 }
@@ -383,10 +431,12 @@ function validarAutor(){
 	if(vautor!==''){
 		$('#autor').css('border','1px solid black');
 		$('#autornull').html('');
+		arrmensajes[2]='';
 		return true;
 	} else {
 		$('#autor').css('border','2px solid #a8410f');
 		$('#autornull').html(' Autor vacío');
+		arrmensajes[2]=' OPCIONAL: Autor vacío';
 		return false;
 	}
 }
@@ -397,10 +447,12 @@ function validarAnio(){
 	if(reanio.test(vanio)){
 		$('#anio').css('border','1px solid black');
 		$('#anionull').html('');
+		arrmensajes[3]='';
 		return true;
 	} else {
 		$('#anio').css('border','2px solid #a8410f');
 		$('#anionull').html(' Año publ. incorrecto: 4 dígitos');
+		arrmensajes[3]=' OPCIONAL: Año publ. incorrecto: 4 dígitos';
 		return false;
 	}
 }
@@ -410,11 +462,29 @@ function validarEditorial(){
 	if(veditorial!==''){
 		$('#editorial').css('border','1px solid black');
 		$('#editorialnull').html('');
+		arrmensajes[4]='';
 		return true;
 	} else {
 		$('#editorial').css('border','2px solid #a8410f');
 		$('#editorialnull').html(' Editorial vacía');
+		arrmensajes[4]=' OPCIONAL: Editorial vacía';
 		return false;
+	}
+}
+
+//Esta función monta un mensaje de alerta para sacar al usuario en un modal
+function montaAlerta(){
+	var i;
+	alertmensaje='';
+	//Si hay mensajes de alerta
+	if (arrmensajes.length!==0){
+		// alertmensaje='Datos erróneos, corregir:\n';
+		for (i in arrmensajes){
+			//Si el mensaje no está vacío lo añade
+			if (arrmensajes[i]!=='' || arrmensajes[i]!==undefined){
+				alertmensaje+=arrmensajes[i] + '\n';
+			}
+		}
 	}
 }
 
@@ -423,9 +493,9 @@ function validar(){
 	var aux1,aux2,aux3,aux4,aux5,salida={};
 	//lo primero asigno el indice oculto
 	if ($('#oculto').val()===undefined){
-		salida.indice=libreria.length;
+		salida.indice=Number(libreria.length);
 	} else {
-		salida.indice=$('#oculto').val();
+		salida.indice=Number($('#oculto').val());
 	}
 	//validar isbn aux1
 	aux1=validarIsbn();
@@ -442,21 +512,12 @@ function validar(){
 	//validar editorial aux5
 	aux5=validarEditorial();
 	salida.editorial=(aux5 ? $('#editorial').val() : '');
+	/*PARA ENTENDERNOS: iddb es a la BD de Firebase lo que indice es al array libreria*/
+	salida.iddb='';//en este atributo se alamacena la key de la colección que almacenará salida
 	//Validacion global
 	//Si los campos obligaotios CUMPLEN
 	if (aux1 && aux2){
-		//Si también cumple el resto
-		if (aux3 && aux4 && aux5) {
-			return salida;
-		}
-		//Si el resto no cumple
-		else{
-			if (confirm('Hay datos incorrectos, ¿desea continuar?')){
-				return salida;
-			} else {
-				return null;
-			}
-		}
+		return salida;
 	}
 	//Si los campos obligatorios NO CUMPLEN
 	else {
@@ -475,6 +536,8 @@ function limpiaForm(){
 	$('input').css('border', '1px solid black');
 	//La clase mensaje corresponde sólo a los span de validación
 	$('.mensaje').html('');
+	$('tr').removeClass('seleccionado');
+	arrmensajes.length=0;
 }
 
 //Esta función monta un objeto con el contenido de los campos del formulario sin validacion
@@ -483,7 +546,7 @@ function objFormulario(){
 	var salida={};
 	//lo primero asigno el indice oculto
 	if ($('#oculto').val()===undefined){
-		salida.indice=libreria.length;
+		salida.indice=libreria.length;//Si no hay indice en oculto es porque se trata de una nueva entrada
 	} else {
 		//El índice obtenido del formulario es un string
 		salida.indice=Number($('#oculto').val());
@@ -493,13 +556,19 @@ function objFormulario(){
 	salida.autor=$('#autor').val();
 	salida.anio=$('#anio').val();
 	salida.editorial=$('#editorial').val();
+	salida.iddb='';//en este atributo se alamacena la key de la colección que almacenará salida
+	/*PARA ENTENDERNOS: iddb es a la BD de Firebase lo que indice es al array libreria*/
 	return salida;
 }
 
 //Comprueba si NO TODOS los campos del formulario están vacios
+//La utiliza: seleccionar
 function formNoVacio(){
+	//Concateno el contenido de texto de todos los campos y compruebo que si el resultado es una cadena vacía ''
 	var cadena=$('#isbn').val()+$('#titulo').val()+$('#autor').val()+$('#anio').val()+$('#editorial').val();
-	if(cadena === ''){return false;}else{return true;}
+	/*cadena.trim() elimina espacios en blanco antes y después del texto de manera que '  hola   '->'hola'=no vacío
+	y '       '->''=vacío*/
+	if(cadena.trim() === ''){return false;}else{return true;}
 }
 
 //Compara los 6 primeros atributos de 2 objetos para ver si son iguales (devuelve true)
@@ -566,26 +635,6 @@ function seleccionar(pobj){
 	chequeaBotones();
 }
 
-/*Función alternativa seleccionar*/
-// function seleccionar(pobj){
-// 		console.log(pobj);
-// 		if ((pobj.getAttribute('class')).indexOf('seleccionado')!==-1) {
-// 			$(pobj).removeClass('seleccionado');
-// 			limpiaForm();
-// 		}
-// 		else {
-// 			$('tr').removeClass('seleccionado');
-// 			$(pobj).addClass('seleccionado');
-// 			$("#isbn").val($(".seleccionado :nth-of-type(1)").text());
-// 		 	$("#titulo").val($(".seleccionado :nth-of-type(2)").text());
-// 		 	$('#autor').val($(".seleccionado :nth-of-type(3)").text());
-// 		 	$('#anio').val($(".seleccionado :nth-of-type(4)").text());
-// 			$('#editorial').val($(".seleccionado :nth-of-type(5)").text());
-// 		 	$('#oculto').val($(".seleccionado :nth-of-type(6)").text());
-// 		}
-// 		chequeaBotones();
-// 	}
-
 /**************************************************************************/
 /******************** ACCIONES ASOCIADAS A LOS BOTONES ********************/
 /**************************************************************************/
@@ -597,38 +646,77 @@ function alta() {
 	//hay que ver si ya existe un elemento con ese ISBN
 	var aux=compararisbn($('#isbn').val());
 	if (nuevodato && aux) {
-		librosactuales = libreria.length;
-		libreria[librosactuales] = nuevodato;
-		actualizar(libreria);
+		//Indice de de libreria donde se añadirá el nuevo elemento
+		nindice = libreria.length;
+		//Se añade a libreria (sin el iddb)
+		libreria[nindice] = nuevodato;
+		//Se añade a la BD
+		libreriaDB.push(nuevodato, function(){
+			//Actualizo el iddb del nuevo elemento en libreria
+			añadeIddb(libreria,nindice);
+			//Pinto la tabla basándome en libreria
+			actualizar(libreria);
+		});
 	} else {
-		sweetAlert('Los datos introducidos no son válidos');
+		montaAlerta();
+		sweetAlert('Datos erróneos, corregir:',alertmensaje);
 	}
 }
 
 function modificar() {
 	//Al modificar no hay que comprobar si el elemento tiene el mismo ISBN porque es él mismo
-	nuevodato = validar();
-	if (nuevodato) {
+	datomodificado = validar();
+	if (datomodificado) {
 		//El atributo indice de nuevo dato contiene el índice para almacenar en el array
-		libroactual = nuevodato.indice;
-		libreria[libroactual] = nuevodato;
+		aindice = datomodificado.indice;
+		//Asigno el iddb que hay en el array al objeto creado para completarlo
+		datomodificado.iddb=libreria[aindice].iddb;
+		//Modifico el array
+		libreria[aindice] = datomodificado;
+		//Modifico la BD
+		db.ref('libreria/'+libreria[aindice].iddb).set(datomodificado);
+		//Pinto la tabla
 		actualizar(libreria);
 	} else {
-		alert('Los datos introducidos no son válidos');
+		montaAlerta();
+		var a=sweetAlert('Datos erróneos, corregir:',alertmensaje);
+
 	}
 	chequeaBotones();
 }
 
 function borrar() {
-	if (confirm('¿Desea borrar esta entrada?')){
-		var libroaborrar = $("#oculto").val();
-		var i;
-		libreria.splice(libroaborrar, 1);
-		for (i=0;i<libreria.length;i++){
-			libreria[i].indice=i;
-		}
-		actualizar(libreria);
-	}
+	swal({	title: "¿Está seguro?",
+			text: "La entrada de la base de datos no se podrá recuperar",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Si, bórralo",
+			cancelButtonText: "Cancelar",
+			closeOnConfirm: true,
+			closeOnCancel: true },
+			//Si el usuario confirma que quiere borrar...
+			function(isConfirm){
+				if (isConfirm) {
+					var eindice = $("#oculto").val();
+					var i;
+					/*PRIMERO borrar en la BD*/
+					//elementkey se carga con el iddb para saber que colección de DB tengo que borrar
+					var elementkey=libreria[eindice].iddb;
+					//Borro el elemento/libro de la BD
+					db.ref('libreria/'+elementkey).remove();
+					/*SEGUNDO borrar en libreria*/
+					//Borro el elemento del array librería
+					libreria.splice(eindice, 1);
+					//Actualizo los indices de todos sus elementos
+					for (i=0;i<libreria.length;i++){
+						libreria[i].indice=i;
+					}
+					//Pinto la tabla
+					actualizar(libreria);
+				}
+			}
+	);
 }
 
 /******************************************************************/
@@ -713,7 +801,7 @@ function abuscar (dondebusco, quebusco) {
 	for (i=0; i<librosactuales; i++) {
 		/*si el contenido de quebusco forma parte de lo que hay en el contenido dondebusco (es decir no tiene que por ser igual solo formar
 		parte, una parte) dará un valor mayor a -1 y entonces ejecutara lo siguiente:*/
-		if (libreria[i][dondebusco].toLowerCase().indexOf(quebusco.toLowerCase()) != -1) {
+		if (libreria[i][dondebusco].indexOf(quebusco) != -1) {
 				busquedas.push(libreria[i]);
 		}
 	}
@@ -733,7 +821,7 @@ function abuscarb (dondebusco, quebusco) {
 	busquedasaux =[]; //se pone a cero para eliminar cualquier valor de búsquedas anteriores mediante esta misma función.
 	busquedasactuales = busquedas.length;
 	for (var t=0; t<busquedasactuales; t++) { // se busca sobre lo a buscado para seguir filtrando
-		if (busquedas[t][dondebusco].toLowerCase().indexOf(quebusco.toLowerCase()) != -1) {
+		if (busquedas[t][dondebusco].indexOf(quebusco) != -1) {
 			busquedasaux.push(busquedas[t]); // se añaden los elementos que coinciden en un array auxiliar (busquedasaux)
 		}
 	}
@@ -751,82 +839,29 @@ function abuscarb (dondebusco, quebusco) {
 /******************** FUNCIONES PARA DESARROLLO ********************/
 /*******************************************************************/
 
-// función para crear pruebas en el html BORRAR cuando funcione BORRAR BORRAR BORRAR
-function probartabla() {
-	var relleno = {isbn:"6969696969",titulo:"jquery mola", autor:"unas",anio:"1979",editorial:"veces o más"};
-	var contenido = '<tr class="linea" onclick="seleccionar(this);"><td>' + relleno.isbn + '</td>' + '<td>' +relleno.titulo + '</td>' + '<td>' + relleno.autor + '</td>' + '<td>' + relleno.anio + '</td>' + '<td>' + relleno.editorial + '</td>' + '<td class="oculto">' + relleno.indice + '</td></tr>';
-	$("#tableta").append(contenido);
-}
-
-
 function numeroAzar(){
-	var a=Math.round((Math.random() * 40));
-	if(a===40){a=39;}
+	var a=Math.round((Math.random() * 10));
+	if(a===10){a=9;}
 	return a;
 }
-//Constructor de objetos: libro
-function libro(indice,isbn,titulo,autor,anio,editorial){
-	this.indice=indice;
-	this.isbn=isbn;
-	this.titulo=titulo;
-	this.autor=autor;
-	this.anio=anio;
-	this.editorial=editorial;
-}
-//Array con 10 objetos predefinidos
-var libreriaaux=[
-	new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),
-	new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),
-	new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),
-	new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro(),new libro()
-];
-//Funcion que genera una lista aleatoria de libros
-function arrayAleatorio(){
-	var arrisbn=[
-		'123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523',
-		'123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523',
-		'123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523',
-		'123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523'
-	];
-	var arrtitulo=[
-		'JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros',
-		'JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros',
-		'JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros',
-		'JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros'
-	];
-	var arrautor=[
-		'Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito',
-		'Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito',
-		'Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito',
-		'Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito'
-	];
-	var arranio=[
-		'1234','5678','9123','2016','1975','1981','1732','2222','1997','2010',
-		'1234','5678','9123','2016','1975','1981','1732','2222','1997','2010',
-		'1234','5678','9123','2016','1975','1981','1732','2222','1997','2010',
-		'1234','5678','9123','2016','1975','1981','1732','2222','1997','2010'
-	];
-	var arreditorial=[
-		'Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs',
-		'Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs',
-		'Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs',
-		'Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs'
-	];
-	var i;
-	for (i=0; i<40;i++){
-		libreriaaux[i].indice=i;
-		libreriaaux[i].isbn=arrisbn[i];
-		libreriaaux[i].titulo=arrtitulo[numeroAzar()];
-		libreriaaux[i].autor=arrautor[numeroAzar()];
-		libreriaaux[i].anio=arranio[numeroAzar()];
-		libreriaaux[i].editorial=arreditorial[numeroAzar()];
-	}
-	libreria=libreriaaux;
-	actualizar(libreria);
-}
-// Funciones del boton ayuda que muestra y oculta la ayuda.
-function mostrar(){
-document.getElementById('textoa').style.display = 'block';}
+var arrisbn=['123456789X','1234567890128','1111111111116','1212121212128','1452367892','9999999999','4561597530','951357654x','258456159x','7531598523'];
+var arrtitulo=['JQuery y tú','El linter, tu gran amigo','100 razones para odiar IE','Oda al pantallazo azul','El Señor de los gramillos','Mucho ruido y pocos altramuces','LSD y programación','10 pasos para desengancharte del código','Guerra y Paz III','Cumbres con nubes y claros'];
+var arrautor=['Guillermo Puertas','Java El Hutt','León Tostón','Alan Turning','Adrián Arteaga', 'Juan José Basco', 'Pablo Andueza','Pablo Garrido','Rubén Álvarez','Chespirito'];
+var arranio=['1234','5678','9123','2016','1975','1981','1732','2222','1997','2010'];
+var arreditorial=['Satelite','Bruguerra','Chonibooks','Mocosoft','Ran-Ma','Livros pa\' que','Editorial','Exoplaneta','Macgrou Jill','Salbamé Delujs'];
 
-function volver(){
-document.getElementById('textoa').style.display = 'none';}
+//Genera un array de prueba
+function cargaDB(){
+	var i=libreria.length;
+	var salida={
+		indice: i,
+		isbn: arrisbn[i],
+		titulo: arrtitulo[numeroAzar()],
+		autor: arrautor[numeroAzar()],
+		anio: arranio[numeroAzar()],
+		editorial: arreditorial[numeroAzar()],
+		iddb: ''
+	};
+	libreria[i]=salida;
+	libreriaDB.push(libreria[i]);
+}
