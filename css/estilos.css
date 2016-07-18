@@ -120,7 +120,7 @@ p {
     text-align:left;
     padding: 0;
     border-radius: 6px;
-    overflow-y: scroll !important;
+    overflow-y: auto !important;
 }
 h2{
     position: fixed;
@@ -200,7 +200,7 @@ h3,h4 {
     }
 
     h2{
-        font-size: 1.2em;
+        font-size: 1.1em;
         padding: 5px 0;
         background-color: green;
         width:86%;
@@ -252,7 +252,7 @@ h3,h4 {
     }
 
     h2{
-        font-size: 1em;
+        font-size: .9em;
         padding: 5px 0;
         background-color: green;
         width:86%;

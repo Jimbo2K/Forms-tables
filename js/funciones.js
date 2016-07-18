@@ -590,6 +590,53 @@ function comparaObj(pobj1,pobj2){
 	return salida;
 }
 
+function sweetConfitm(pobj){
+	swal({	title: "¿Nueva selección?",
+							text: "Los datos modificados en el formulario se perderán",
+							type: "warning",
+							showCancelButton: true,
+							confirmButtonColor: "#DD6B55",
+							confirmButtonText: "Seleccionar",
+							cancelButtonText: "Cancelar",
+							closeOnConfirm: true,
+							closeOnCancel: true
+						},
+						//Si el usuario confirma que quiere borrar...
+						function(isConfirm){
+							if (isConfirm) {
+								user=true;
+							} else {
+								user=false;
+							}
+							if (user){
+							console.log('ha entrado a cambiar'+user);
+							//Deselecciono cualquier tr (le quito la clase 'seleccionado')
+							$('tr').removeClass('seleccionado');
+							//Borra span de errores
+							$('.mensaje').html('');
+							//Pone los bordes de inputs bien
+							$('input').css('border', '1px solid black');
+							//Selecciono el clickado
+							$(pobj).addClass('seleccionado');
+							var i,arraux=[];
+							//en un array auxiliar cargo el contenido de cada celda de la línea .seleccionado
+							for (i=1;i<=6;i++){
+								arraux.push($('.seleccionado :nth-of-type(' + i + ')').text());
+							}
+							//Paso el contenido de cada celda a los inputs del formulario
+							$('#isbn').val(arraux[0]);
+							$('#titulo').val(arraux[1]);
+							$('#autor').val(arraux[2]);
+							$('#anio').val(arraux[3]);
+							$('#editorial').val(arraux[4]);
+							$('#oculto').val(arraux[5]);
+							//Para que funcione pintaBotones()
+							//seleccionado=true;
+							}
+						}
+			);
+}
+
 //pobj corresponde al <tr> sobre el que se ha hecho click
 function seleccionar(pobj){
 	var user;
@@ -607,13 +654,19 @@ function seleccionar(pobj){
 		//significa que el usuario ha realizado una nueva selección después de haber hecho cambios
 		//en el formulario (sin pulsar Modificar)
 		if (!comparaObj(contenidoForm,libreria[contenidoForm.indice]) && formNoVacio()){
-			user=confirm('Si realiza una nueva selección perderá los cambios \n ¿Desea continuar?');
+			// user=confirm('Si realiza una nueva selección perderá los cambios \n ¿Desea continuar?');
+			sweetConfitm(pobj);
 		} else {
 			user=true;
 		}
 		if (user){
+			console.log('ha entrado a cambiar'+user);
 			//Deselecciono cualquier tr (le quito la clase 'seleccionado')
 			$('tr').removeClass('seleccionado');
+			//Borra span de errores
+			$('.mensaje').html('');
+			//Pone los bordes de inputs bien
+			$('input').css('border', '1px solid black');
 			//Selecciono el clickado
 			$(pobj).addClass('seleccionado');
 			var i,arraux=[];
