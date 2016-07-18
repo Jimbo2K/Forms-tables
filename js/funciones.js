@@ -13,6 +13,21 @@ var busquedasaux =[]; //array auxiliar empleado en las funciones de busqueda
 var arrmensajes=[]; //0: error ISBN; 1 error Título; 2 error Autor; 3 error año; 4 error editorial
 var alertmensaje; //En esta variable se montará el mensaje a pasar al usuario en alerta
 
+var numerodefilas; //una variable que se utilizara en paginación por el fichero externo jTPS.js
+var porpagina="8"; // el numero de filas/libros que se muestran por página al iniciar
+var arraymostrado = []; // una copia del array de los libros mostrados en cada momento que se utiliza como dato en la paginación
+
+// pequeña función que se utiliza luego para obtener el numero de elementos de un objeto (se utiliza de cara a la paginación)
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
+
+
+
 /**********************************************************/
 /****************** REFERENCIAS FIREBASE ******************/
 /**********************************************************/
@@ -23,7 +38,10 @@ var db=firebase.database();
 var libreriaDB=db.ref("libreria");
 
 
+
 $(function(){
+
+
 	//Inicialización de botones
 	//chequeaBotones();
 
@@ -120,6 +138,28 @@ elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boo
 			chequeaBotones();
 		}
 	});
+
+	// El selector de numero de filas por hoja de la paginación
+	$('#filasPagina8').click(function(){
+		porpagina=8;
+		actualizar(arraymostrado);
+	})
+	$('#filasPagina16').click(function(){
+		porpagina=16;
+		actualizar(arraymostrado);
+	})
+	$('#filasPagina32').click(function(){
+		porpagina=32;
+		actualizar(arraymostrado);
+	})
+	$('#filasPagina64').click(function(){
+		porpagina=64;
+		actualizar(arraymostrado);
+	})
+	$('#filasPaginaAll').click(function(){
+		porpagina="All";
+		actualizar(arraymostrado);
+	})
 
 });
 
@@ -249,7 +289,7 @@ function chequeaBotones(){
 //relaciona la fila de la tabla con la posición del objeto en el array
 function pintarLinea(pobj){
 	//Añadimos onclick="seleccionar(this);" para que podamos seleccionar las líneas de la tabla (con los eventos de JQuery no responden)
-	$("#tableta").append('<tr class="linea" onclick="seleccionar(this);"><td>' + pobj.isbn + '</td>' + '<td>' + pobj.titulo + '</td>' + '<td>' + pobj.autor + '</td>' + '<td>' + pobj.anio + '</td>' + '<td>' + pobj.editorial + '</td>' + '<td class="sr-only">' + pobj.indice + '</td></tr>');
+	$("#tableta tbody").append('<tr class="linea" onclick="seleccionar(this);"><td>' + pobj.isbn + '</td>' + '<td>' + pobj.titulo + '</td>' + '<td>' + pobj.autor + '</td>' + '<td>' + pobj.anio + '</td>' + '<td>' + pobj.editorial + '</td>' + '<td class="sr-only">' + pobj.indice + '</td></tr>');
 }
 
 //Esta función chequea el array y si no está vacío pinta la tabla
@@ -274,6 +314,9 @@ function actualizar(parray) {
 				//i es el valor de la posición del array y el contenido de la celda oculta con índice
 				pintarLinea(parray[i]);
 			}
+		arraymostrado = JSON.parse(JSON.stringify(parray)); // para la paginación se necesita sacar una copia del array fuera del ámbito
+		numerodefilas = Object.size(arraymostrado); // también para la paginación se necesita este valor que es el numero de elementos (Object.size es una función que sirve para eso)
+		$('#tableta').jTPS( {perPages:[porpagina]} ); // se pagina la tabla con el numero de filas por pagina definido (porpagina)
 		//Si se trata de otro (el de busqueda)
 		} else {
 			//Recorro el array pintando las líneas
@@ -282,6 +325,9 @@ function actualizar(parray) {
 				//De esta forma si se modifica o borra lo hará correctamente.
 				pintarLinea(parray[i]);
 			}
+			arraymostrado = JSON.parse(JSON.stringify(parray));
+			numerodefilas = Object.size(arraymostrado);
+			$('#tableta').jTPS( {perPages:[porpagina]} );
 			$('th').css('background-color','#66ffb3');
 			$('#busqueda').text('Resultados de la búsqueda');
 		}
@@ -292,6 +338,7 @@ function actualizar(parray) {
 		$('.linea').remove();
 	}
 	//Inicializo el estado VISUAL de los botones
+	
 	chequeaBotones();
 }
 
@@ -688,6 +735,10 @@ function seleccionar(pobj){
 	chequeaBotones();
 }
 
+
+
+
+
 /**************************************************************************/
 /******************** ACCIONES ASOCIADAS A LOS BOTONES ********************/
 /**************************************************************************/
@@ -854,7 +905,7 @@ function abuscar (dondebusco, quebusco) {
 	for (i=0; i<librosactuales; i++) {
 		/*si el contenido de quebusco forma parte de lo que hay en el contenido dondebusco (es decir no tiene que por ser igual solo formar
 		parte, una parte) dará un valor mayor a -1 y entonces ejecutara lo siguiente:*/
-		if (libreria[i][dondebusco].indexOf(quebusco) != -1) {
+		if (libreria[i][dondebusco].toLowerCase().indexOf(quebusco.toLowerCase()) != -1) {
 				busquedas.push(libreria[i]);
 		}
 	}
@@ -874,7 +925,7 @@ function abuscarb (dondebusco, quebusco) {
 	busquedasaux =[]; //se pone a cero para eliminar cualquier valor de búsquedas anteriores mediante esta misma función.
 	busquedasactuales = busquedas.length;
 	for (var t=0; t<busquedasactuales; t++) { // se busca sobre lo a buscado para seguir filtrando
-		if (busquedas[t][dondebusco].indexOf(quebusco) != -1) {
+		if (busquedas[t][dondebusco].toLowerCase().indexOf(quebusco.toLowerCase()) != -1) {
 			busquedasaux.push(busquedas[t]); // se añaden los elementos que coinciden en un array auxiliar (busquedasaux)
 		}
 	}

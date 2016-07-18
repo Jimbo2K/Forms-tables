@@ -15,6 +15,8 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- CSS's de Bootstrap -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<!-- Enlace al css de la paginación de la tabla -->
+		<link rel="stylesheet" href="css/jTPS.css">
 		<!-- Enlace al css de Sweet Alert -->
   		<link rel="stylesheet" href="bower_components/sweetalert/dist/sweetalert.css">
   		<!-- Enlace a Fontawesome -->
@@ -134,6 +136,7 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 
 			<div class="table-responsive">
 				<table  class="table table-bordered" id="tableta">
+					<thead>
 					<tr>
 						<th>ISBN</th>
 						<th>TITULO</th>
@@ -141,17 +144,27 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 						<th>AÑO</th>
 						<th>EDITORIAL</th>
 					</tr>
+					</thead>
+					<tbody></tbody>
+					<tfoot class="nav">
+						<tr>
+							<td colspan="5">
+								<!-- <div class="paginationTitle">Página:</div> -->
+								<div class="pagination"></div>
+								<!-- <div class="selectPerPage"></div> -->
+								<div class="status"></div>
+								<div class="filaspPagina">Libros por Página: <span id="filasPagina8">8</span><span id="filasPagina16">16</span><span id="filasPagina32">32</span><span id="filasPagina64">64</span><span id="filasPaginaAll">Todos</span></</div>
+							</td>
+						</tr>
+				</tfoot>
 				</table>
-
-				<table class="paginacion table table-striped">
-				</table>
+				
 			</div>
 
 			<!-- Si una búsqueda no ofrece ningún resultado se muestra en este párrafo que sustituye a la tabla -->
 			<p id="resultado" class="text-center"></p>
 		</article>
 		<!-- La paginación de la tabla -->
-		<div id="divPaginacion"></div>
 
 	<!-- Enlace de la aplicación con Firebase (proyecto de Juan)
 	<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
@@ -185,7 +198,9 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<!-- Enlace al JS de Sweet Alert -->
 	<script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
-	<!-- Enlace al JS de la aplicación -->
+	<!-- Enlace al JS de la paginación de la tabla -->
 	<script src="js/funciones.js"></script>
+	<script src="js/jTPS.js"></script>
+	<!-- Enlace al JS de la aplicación -->
 	</body>
 </html>

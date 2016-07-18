@@ -35,6 +35,11 @@ span {
 	color: #a8410f;
 }
 
+/* para que no se vea la columna oculta (sino el espacio que ocupa se ve blanco)*/
+.sr-only {
+    display: none; 
+}
+
 /*Estilo para la fila de la tabla seleccionada*/
 .seleccionado {
 	background-color: #F2A6A3 !important;
@@ -50,6 +55,10 @@ tr,th{
 /*Estilo para las celdas de las líneas*/
 .linea{
 	background-color:  white;
+}
+
+tfoot tr {
+    text-align: left;
 }
 
 /*Estilo para los cuadros del formulario*/
