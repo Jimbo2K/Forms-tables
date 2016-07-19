@@ -16,6 +16,8 @@ var alertmensaje; //En esta variable se montará el mensaje a pasar al usuario e
 var numerodefilas; //una variable que se utilizara en paginación por el fichero externo jTPS.js
 var porpagina="8"; // el numero de filas/libros que se muestran por página al iniciar
 var arraymostrado = []; // una copia del array de los libros mostrados en cada momento que se utiliza como dato en la paginación
+var busquedaactiva = false;
+
 
 // pequeña función que se utiliza luego para obtener el numero de elementos de un objeto (se utiliza de cara a la paginación)
 Object.size = function(obj) {
@@ -97,12 +99,14 @@ $(function(){
 				case 'BUSCAR':
 					//Si el formulario está vacío no hay que buscar y por lo tanto tampoco hay que cambiar el botón a 'VOLVER'
 					if (formNoVacio()){
+						busquedaactiva=true;
 						$('#buscar').text('VOLVER');
 						busqueda();
 					}
 					break;
 				case 'VOLVER':
 					$('#buscar').text('BUSCAR');
+					busquedaactiva=false;
 					actualizar(libreria);
 					break;
 			}
@@ -308,7 +312,7 @@ function actualizar(parray) {
 		//Recupero el color de la barra de encabezado normal
 		$('th').css('background-color','#B4C9CC');
 		//Si el array pasado como argumento es libreria
-		if (parray===libreria){
+		if (parray===libreria || busquedaactiva===false){
 			//Recorro el array pintando las líneas
 			for (i in parray){
 				//i es el valor de la posición del array y el contenido de la celda oculta con índice
@@ -318,7 +322,7 @@ function actualizar(parray) {
 		numerodefilas = Object.size(arraymostrado); // también para la paginación se necesita este valor que es el numero de elementos (Object.size es una función que sirve para eso)
 		$('#tableta').jTPS( {perPages:[porpagina]} ); // se pagina la tabla con el numero de filas por pagina definido (porpagina)
 		//Si se trata de otro (el de busqueda)
-		} else {
+		} else if(busquedaactiva===true){
 			//Recorro el array pintando las líneas
 			for (i in parray){
 				//Paso como valor de la celda oculta el indice que apunta a la posición del elemento en libreria
