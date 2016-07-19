@@ -116,32 +116,54 @@ p {
     top: -0.3em;
     font-size: 1.5em;
 }
+#myframe {
+    position: fixed;
+    width: 80%;
+    height: 65%;
+    border:0;
+}
+#boxht {
+    position:fixed;
+    display: none;
+    width: 80%;
+    z-index: 100;
+    top:16%;
+    left:10%;
+    height:65%;
+    padding-bottom:0px;
+    /* border: 2px solid #dfdfdf; */
+    /* -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
+    background:#ffffbb; */
+}
 #textoa{
-    width: 96%;
-    height: 90%;
-    z-index: 10;
-    position:absolute;
-    left: 2%;
-    top: 1em;
+    position: absolute;
     background-color: #f3e4d8 ;
     color: black;
-    border: 1px solid black ;
-    text-align:left;
+   text-align:left;
     padding: 0;
+    top:0;
     border-radius: 6px;
-    overflow-y: auto !important;
+
 }
 h2{
-    position: fixed;
+    /* position: fixed; */
+    top:16%;
+    width:80%;
+    left:10%;
     text-align: center;
     background-color: green;
-    width: 86%;
     height: 2em;
-    margin-left: 6%;
-    padding-top: .5em;
+    z-index: 30;
     border: 1px solid black ;
     border-radius: 6px;
-    top: 8px;
+    margin-top:0;
+    
+
+}
+#textocontenido {
+
 }
 #spanco{
     padding: 3px 1em;
@@ -164,6 +186,7 @@ h3,h4 {
         background-color: green;
         width:86%;
         margin-left: 4%;
+        margin-top:0;
     }
     #spanco {
         background-color: transparent;

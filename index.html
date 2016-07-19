@@ -26,40 +26,28 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 	</head>
 
 	<body>
+		<div id="boxht">
+			<h2>
+					<span id="spanco">AYUDA DE CONSULTA DE DATOS</span>
+					<!-- Botón para cerrar la ayuda -->
+					<button type="button" class="ayuda" id="exit" onclick="boxhtOut()" >
+						<i class="fa fa-times-circle" aria-hidden="true"></i>
+					</button>
+				</h2>
+
+		<iframe id="myframe" sandbox="allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock"></iframe></div>
 		<!-- Este <article> contiene el formulario y la botonera -->
 		<article class="container">
 			<h1 class="text-center">Consulta de datos
 				<!-- Botón de ayuda -->
-				<button type="button" class="ayuda" title="Pulsa para obtener ayuda" value="Mostrar" onclick="mostrar()">
+				<button type="button" class="ayuda" title="Pulsa para obtener ayuda" value="Mostrar" onclick="boxhtIn(); loadintoIframe('ayuda.html')">
 					<i class="fa fa-question-circle" aria-hidden="true"></i>
 				</button>
 			</h1>
 			<br>
 			<p>Los campos marcados con "<span>*</span>" son obligatorios</p>
 
-			<!-- Cuadro con la ayuda -->
-			<div id="textoa" style='display:none;'>
-				<h2>
-					<span id="spanco">AYUDA DE CONSULTA DE DATOS</span>
-					<!-- Botón para cerrar la ayuda -->
-					<button type="button" class="ayuda" id="exit" onclick="volver()" >
-						<i class="fa fa-times-circle" aria-hidden="true"></i>
-					</button>
-				</h2>
-				<br><br><br>
-				<h3>Boton Añadir</h3>
-				<h4>Para añadir un libro debe completar al menos los dos campos obligatorios con el formato adecuado y pulsar el botón "Añadir".Si algun dato es erroneo el usuario recibira un aviso con los campos incorrectos, en caso contrario se almacenarán en la base de datos.</h4>
-
-				<h3>Boton Buscar</h3>
-				<h4>Para realizar una busqueda en la base de datos el usuario la puede filtrar rellenando uno o varios campos al pulsar el boton "Buscar" el programa mostrara por pantalla las coincidencias.Los datos a introducir en los campos pueden ser parciales en mayusculas o minusculas indistintamente. </h4>
-
-				<h3>Boton Modificar</h3>
-				<h4>Al hacer click sobre una fila de la tabla esta quedará remarcada en color, modificar los datos necesarios en el formulario y pulsar boton "Modificar". La modificacion tambien puede ser utilizada con resultados de busqueda. </h4>
-
-				<h3>Boton Quitar</h3>
-				<h4>Una vez seleccionada una fila puede pulsar el botón "Borrar" se eliminará de la libreria.</h4>
-
-			</div>
+			
 
 			<!-- Contenedor del formulario -->
 			<div class="row col-lg-10 col-md-10 col-sm-10 col-xs-10" id="contform">
