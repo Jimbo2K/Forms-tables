@@ -117,10 +117,12 @@ El **botón "Consultar"** sólo estará disponible si no hay ninguna fila selecc
 
 1. Mejorar las indicaciones de los campos y botones mediante el uso del atributo HTML *title*
 2. Un complemento al punto anterior sería añadir un botón/icono de ayuda que muestre una ventana/recuadro con indicaciones más precisas del uso de la página.
+3. Los mensajes pop-up al usuario se hacen mediante alerts y confirms propios del navegador. Buscar librerías Js/JQ para sustituir esas ventanas.
+4. La corrección 3 del aptdo. "Aplicación de correcciones" no está bien realizada, ya que al borrar eleemntos no se corrigen los índices.
 
 ***
 
-###Vers. 0.2 (en desarrollo)
+###Vers. 0.2
 
 **\- Implementación de Firebase a la aplicación web (persitencia de la estructura de datos)**
 
@@ -147,7 +149,44 @@ El array pasa a ser la base de datos, los objetos colecciones y los atributos de
 **\- Uso del array libreria**
 Se va a mantener la estructura del array como un contenedor intermedio al que volcar la base de datos cuando sea modificada para facilitar la adaptación del código existente. Muchas funciones trabajan con el array libreria y habría que recodificarlas por completo si tuviesen que hacerlo directamente con la base de datos.
 No es una solución de código óptima pero si funcional y más rápida.
+El primer planteamiento era que cada vez que hubiese un cambio en la base de datos se actualizase el array desde ella (por suscripción) para luego poder trabajar con él (pintar tabla y realizar búsquedas):
 
+	<cambio en la BD>
+    	|
+	<descarga COMPLETA de la BD a la aplicación>
+    	|
+	¿tiempo de descarga? - El tiempo dependerá del tamaño de la BD y de la conexión
+    	|
+	<se actualiza el array>
+    	|
+	<se pinta el array en la tabla>
+
+Sin embargo se ha visto como mejor solución el discriminar los eventos de suscripción:
+
+									<cambio en la BD>
+                    						 |
+			________________________________<?>____________________________
+			|								|							|
+    <Elemento añadido>			<cambio en un elemento>			<elemento borrado>
+    		|								|							|
+	<descarga del elemento>	   <descarga del elemento>			<descarga del elemento> - Cada elemento incluye info.
+    		|								|							|				    sobre su posición en el
+		   ...				   tiempo descarga 1 elemento			  ...				   array (índice i)
+            |								|							|
+	<creo un nuevo elemento	   <modifico los datos del			<borro el elemento i del array>
+      al final del array>		   elemento i del array>		
+
+
+
+
+
+
+a
+a
+a
+a
+a
+a
 
 
 
