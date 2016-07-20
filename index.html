@@ -26,31 +26,34 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 	</head>
 
 	<body>
-		<div id="boxht">
-			<h2>
-					<span id="spanco">AYUDA DE CONSULTA DE DATOS</span>
-					<!-- Botón para cerrar la ayuda -->
-					<button type="button" class="ayuda" id="exit" onclick="boxhtOut()" >
-						<i class="fa fa-times-circle" aria-hidden="true"></i>
-					</button>
-				</h2>
 
-		<iframe id="myframe" sandbox="allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock"></iframe></div>
+		<aside id="contayuda">
+			<nav class="navbar navbar-default">
+  				<div class="container-fluid">
+    				<div class="navbar-header">
+    					<span id="spanco">AYUDA DE LA APLICACIÓN</span>
+    				</div>
+      				<button type="button" class="ayuda navbar-right" id="exit" onclick="ocultar();" title="Pulsa para obtener ayuda">
+								<i class="fa fa-times-circle" aria-hidden="true"></i>
+					</button>
+  				</div>
+			</nav>
+			<iframe id="myframe" sandbox="allow-same-origin allow-scripts allow-top-navigation allow-pointer-lock" src="ayuda.html"></iframe>
+		</aside>
+
 		<!-- Este <article> contiene el formulario y la botonera -->
 		<article class="container">
 			<h1 class="text-center">Consulta de datos
 				<!-- Botón de ayuda -->
-				<button type="button" class="ayuda" title="Pulsa para obtener ayuda" value="Mostrar" onclick="boxhtIn(); loadintoIframe('ayuda.html')">
+				<button type="button" class="ayuda" title="Pulsa para obtener ayuda" value="Mostrar" onclick="mostrar();">
 					<i class="fa fa-question-circle" aria-hidden="true"></i>
 				</button>
 			</h1>
 			<br>
-			<p>Los campos marcados con "<span>*</span>" son obligatorios</p>
-
-			
 
 			<!-- Contenedor del formulario -->
 			<div class="row col-lg-10 col-md-10 col-sm-10 col-xs-10" id="contform">
+				<p>Los campos marcados con "<span>*</span>" son obligatorios</p>
 				<!-- Aquí va el formulario -->
 				<form action="#" id="form1" class="form-horizontal" role="form" autocomplete>
 					<!-- Marco que envuelve el formulario -->
@@ -110,7 +113,7 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 				<br>
 				<button type="button" class="btn btn-warning" id="modificar" tabindex="8" accesskey="m">MODIFICAR</button>
 				<br>
-				<button type="button" class="btn btn-danger" id="quitar" tabindex="9" accesskey="q">QUITAR</button>
+				<button type="button" class="btn btn-danger" id="quitar" tabindex="9" accesskey="q">BORRAR</button>
 				<!-- <button type="button" onclick="probartabla();">PRUEBA1</button> -->
 				<button type="button" onclick="cargaDB();" title="Genera una base de datos automática para pruebas">AUTO BD</button>
 				<br>
@@ -144,9 +147,8 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 								<div class="filaspPagina">Libros por Página: <span id="filasPagina8">8</span><span id="filasPagina16">16</span><span id="filasPagina32">32</span><span id="filasPagina64">64</span><span id="filasPaginaAll">Todos</span></</div>
 							</td>
 						</tr>
-				</tfoot>
+					</tfoot>
 				</table>
-				
 			</div>
 
 			<!-- Si una búsqueda no ofrece ningún resultado se muestra en este párrafo que sustituye a la tabla -->

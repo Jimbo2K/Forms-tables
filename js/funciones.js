@@ -51,8 +51,6 @@ var db=firebase.database();
 //Referencia a la colección/base de datos concreta que vamos a utilizar
 var libreriaDB=db.ref("libreria");
 
-
-
 $(function(){
 
 
@@ -134,7 +132,7 @@ Con un objeto JQ puede no pasar esto, puede que creemos un <tr> con id chorizo y
 en el DOM pero puede haber todavía un objeto JQ $('#chorizo')={undefined, {objeto raruno 1}, {objeto raruno 2}, ...}
 Así que si preguntamos Boolean($('#chorizo')) devuelve true porque el objeto JQ existe. Pero si preguntamos por el primer
 elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boolean(undefined)=false*/
-	
+
 	//Botón modificar
 	$('#modificar').click(function(){
 		//nos aseguramos que haya una línea seleccionada para poder utilizar el botón
@@ -159,23 +157,23 @@ elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boo
 	$('#filasPagina8').click(function(){
 		porpagina=8;
 		actualizar(arraymostrado);
-	})
+	});
 	$('#filasPagina16').click(function(){
 		porpagina=16;
 		actualizar(arraymostrado);
-	})
+	});
 	$('#filasPagina32').click(function(){
 		porpagina=32;
 		actualizar(arraymostrado);
-	})
+	});
 	$('#filasPagina64').click(function(){
 		porpagina=64;
 		actualizar(arraymostrado);
-	})
+	});
 	$('#filasPaginaAll').click(function(){
 		porpagina="All";
 		actualizar(arraymostrado);
-	})
+	});
 
 });
 
@@ -206,10 +204,12 @@ libreriaDB.on("child_removed",function(snapshot){
 
 // Funciones del boton ayuda que muestra y oculta la ayuda.
 function mostrar(){
-document.getElementById('textoa').style.display = 'block';}
+document.getElementById('contayuda').style.display = 'initial';
+}
 
-function volver(){
-document.getElementById('textoa').style.display = 'none';}
+function ocultar(){
+document.getElementById('contayuda').style.display = 'none';
+}
 
 /***************************************************************/
 /********************* FUNCIONES FIREBASE **********************/
@@ -354,7 +354,6 @@ function actualizar(parray) {
 		$('.linea').remove();
 	}
 	//Inicializo el estado VISUAL de los botones
-	
 	chequeaBotones();
 }
 
@@ -653,6 +652,8 @@ function comparaObj(pobj1,pobj2){
 	return salida;
 }
 
+//Cuando se ha seleccionado una línea y se modifica en el formulario, si antes de darle a "Modificar" se vuelve
+//a seleccionar otra línea, se pide al usuario que confirme si desea continuar. Esta función es el aviso.
 function sweetConfitm(pobj){
 	swal({	title: "¿Nueva selección?",
 							text: "Los datos modificados en el formulario se perderán",
@@ -751,10 +752,6 @@ function seleccionar(pobj){
 	chequeaBotones();
 }
 
-
-
-
-
 /**************************************************************************/
 /******************** ACCIONES ASOCIADAS A LOS BOTONES ********************/
 /**************************************************************************/
@@ -842,7 +839,6 @@ function borrar() {
 /******************************************************************/
 /******************** FUNCIONES PARA BUSQUEDAS ********************/
 /******************************************************************/
-
 
 function busqueda() {
 	busquedas = []; // se inicializan a cero aquí pero se declaran fuera porque se utilizan en otra función
