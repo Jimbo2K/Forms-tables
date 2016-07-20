@@ -143,7 +143,7 @@ La estructura de datos será muy similar:
                          |
                          coleccion2--+
                          |		   |
-                        ...         ...
+                        ...       ...
 El array pasa a ser la base de datos, los objetos colecciones y los atributos de los objetos junto con sus valores, pares de clave-valor almacenados en las colecciones.
 
 **\- Uso del array libreria**
@@ -165,17 +165,17 @@ Sin embargo se ha visto como mejor solución el discriminar los eventos de suscr
 
 									<cambio en la BD>
                     						 |
-			________________________________<?>___________________________
+			________________________________<?>__________________________
 			|								|							|
     <Elemento añadido>			<cambio en un elemento>			<elemento borrado>
     		|								|							|
 	<descarga del elemento>	   <descarga del elemento>			<descarga del elemento> - Cada elemento incluye info.
     		|								|							|				    sobre su posición en el
-		   ...				   tiempo descarga 1 elemento			  ...				   array (índice i)
+		   ...				   tiempo descarga 1 elemento			   ...				   array (índice i)
             |								|							|
 	<creo un nuevo elemento	   <modifico los datos del			<borro el elemento i del array>
-      al final del array>		   elemento i del array>				 |	
-      	  |								|							|
+      al final del array>		   elemento i del array>				|	
+      	    |								|							|
 	<se pinta el array en 	    <se pinta el array en		<se pinta el array en la tabla>
     	la tabla>					 la tabla>
 
