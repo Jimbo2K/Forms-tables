@@ -165,7 +165,7 @@ Sin embargo se ha visto como mejor solución el discriminar los eventos de suscr
 
 									<cambio en la BD>
                     						 |
-			________________________________<?>____________________________
+			________________________________<?>___________________________
 			|								|							|
     <Elemento añadido>			<cambio en un elemento>			<elemento borrado>
     		|								|							|
@@ -174,19 +174,33 @@ Sin embargo se ha visto como mejor solución el discriminar los eventos de suscr
 		   ...				   tiempo descarga 1 elemento			  ...				   array (índice i)
             |								|							|
 	<creo un nuevo elemento	   <modifico los datos del			<borro el elemento i del array>
-      al final del array>		   elemento i del array>		
+      al final del array>		   elemento i del array>				 |	
+      	  |								|							|
+	<se pinta el array en 	    <se pinta el array en		<se pinta el array en la tabla>
+    	la tabla>					 la tabla>
+
+Con esta opción sólo hay que descargar un elemento de la BD lo que supone un tiempo de espera menor para poder trabajar con él en el array.
+
+**NOTA**: en el repositorio se ha incluido un archivo comprimido (firbase_test.rar) que contiene un html y js con código de pruebas utilizado para el desarrollo de la implementación de Firebase.
 
 
+**\- Aplicación de correcciones**
 
+1. Integrados *title* en botones como ayuda contextual.
+2. Se ha creado un botón de ayuda que despliega una ventana con instrucciones del manejo de la aplicación.
+3. Se han sustiruido los pop-up de sistema (alert y confirm) por ventanas de aviso generadas con **[Sweet Alert](http://t4t5.github.io/sweetalert/)**.
+4. Corregido el bug relacionado con la selección de elementos de tabla tras un borrado.
 
+###Vers. 0.3
 
+**\- Añadida paginación a la tabla**
 
-a
-a
-a
-a
-a
-a
+Pensando en el uso de la aplicación en dispositivos móviles, se ha implementado la posibilidad de paginar la tabla empleada para visualizar la BD y las consultas.
+La paginación permite al usuario elegir el número de entradas a mostrar en cada página (o mostrar todas).
+También integra funcionalidad en la cabecera de la tabla de manera que se puedan ordenar las entradas en orden ascendente/descendente en función de cualquiera de sus campos.
+
+**\- Código CSS y JavaScript minimizado**
+Se han incluido versiones minificadas de los archivos css y js empleados en la aplicación para utilizarlos en "producción".
 
 
 

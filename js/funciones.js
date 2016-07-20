@@ -29,19 +29,6 @@ Object.size = function(obj) {
 };
 
 
-function boxhtIn() {
-    document.getElementById('boxht').style.display = 'inline';
-}
-function boxhtOut() {
-    document.getElementById('boxht').style.display = 'none';
-    // window.style.display = 'none';
-    // window.close();
-   }
-function loadintoIframe(url){
-    document.getElementById("myframe").src=url;
-}
-
-
 /**********************************************************/
 /****************** REFERENCIAS FIREBASE ******************/
 /**********************************************************/

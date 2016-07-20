@@ -248,6 +248,7 @@ tfoot span {
     #botones button{
         display: inline-block;
         min-width: 26em;
+        margin-left: 8%;
         margin-top: 1em;
     }
     /***** TABLA *****/
@@ -301,6 +302,7 @@ tfoot span {
     #botones button{
         display: inline-block;
         min-width: 20em;
+        margin-left: 5%;
         margin-top: 1em;
     }
     /***** TABLA *****/
@@ -313,7 +315,7 @@ tfoot span {
 @media screen and (max-width: 375px) {
     /***** CABECERA *****/
     h1 {
-        font-size: 2.2em;
+        font-size: 1.8em;
     }
     /***** CONTENEDOR AYUDA *****/
     #contayuda {
@@ -358,7 +360,8 @@ tfoot span {
     }
     #botones button{
         display: inline-block;
-        min-width: 16em;
+        min-width: 18em;
+        margin-left: 2%;
         margin-top: 1.2em;
     }
     /***** TABLA *****/
