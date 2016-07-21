@@ -12,21 +12,21 @@
 		$(this).data('tableSettings', $.extend({
 			perPages:			[8, 16, 32, 64, 'ALL'],				// the "show per page" selection
 			perPageText:		'',						// text that appears before perPages links
-			perPageDelim:		'<span style="color:#ccc;">|</span>',	// text or dom node that deliminates each perPage link 
+			perPageDelim:		'<span style="color:#ccc;">|</span>',	// text or dom node that deliminates each perPage link
 			perPageSeperator:	'..',									// text or dom node that deliminates split in select page links
 			scrollDelay:		30,										// delay (in ms) between steps in anim. - IE has trouble showing animation with < 30ms delay
 			scrollStep:			2,										// how many tr's are scrolled per step in the animated vertical pagination scrolling
 			fixedLayout:		false,									// autoset the width/height on each cell and set table-layout to fixed after auto layout
 			clickCallback:		function () {}							// callback function after clicks on sort, perpage and pagination
 		}, opt));
-		
+
 		// generic pass-through object + other initial variables
 		var pT = $(this), page = page || 1, perPages = $(this).data('tableSettings').perPages, perPage = perPage || perPages[0],
 			rowCount = $('>tbody', this).find('tr').length;
 
 		// append jTPS class "stamp"
 		$(this).addClass('jTPS');
-		
+
 		// setup the fixed table-layout so that the animation doesn't bounce around - faux grid for table
 		if ( $(this).data('tableSettings').fixedLayout ) {
 			// "fix" the table layout and individual cell width & height settings
@@ -61,7 +61,7 @@
 		$('.stubCell', this).remove();
 
 		// add the stub rows
-		var stubCount=0, cols = Math.max( $('>thead:first tr:last th,>thead:first tr:last td', this).length, parseInt( $('>thead:first tr:last th,>thead:first tr:last td').attr('colspan') || 0 ) ), 
+		var stubCount=0, cols = Math.max( $('>thead:first tr:last th,>thead:first tr:last td', this).length, parseInt( $('>thead:first tr:last th,>thead:first tr:last td').attr('colspan') || 0 ) ),
 			stubs = ( perPage - ( $('>tbody>tr', this).length % perPage ) ),
 			stubHeight = $('>tbody>tr:first>td:first', this).css('height');
 		for ( ; stubCount < stubs && stubs != perPage; stubCount++ )
@@ -104,7 +104,7 @@
 
 		// add perPage selection link + delim dom node
 		$('>.nav .selectPerPage', this).empty();
-		
+
 
 		// now draw the page selectors
 		drawPageSelectors( this, page || 1 );
@@ -114,21 +114,21 @@
 			function () {
 				if ( ( parseInt($(this).html()) || rowCount ) == perPage )
 					$(this).addClass('perPageSelected');
-				$(this).bind('mouseover mouseout', 
-					function (e) { 
+				$(this).bind('mouseover mouseout',
+					function (e) {
 						e.type == 'mouseover' ? $(this).addClass('perPageHilight') : $(this).removeClass('perPageHilight');
 					}
 				);
-				$(this).bind('click', 
-					function () { 
+				$(this).bind('click',
+					function () {
 						// set the new number of pages
 						perPage = parseInt( $(this).html() ) || rowCount;
 						if ( perPage > rowCount ) perPage = rowCount;
 						// remove all stub rows
 						$('.stubCell', this).remove();
 						// redraw stub rows
-						var stubCount=0, cols = $('>thead th,>thead td', pT).length, 
-							stubs = ( perPage - ( $('>tbody>tr', pT).length % perPage ) ), 
+						var stubCount=0, cols = $('>thead th,>thead td', pT).length,
+							stubs = ( perPage - ( $('>tbody>tr', pT).length % perPage ) ),
 							stubHeight = $('>tbody>tr:first>td:first', pT).css('height');
 						for ( ; stubCount < stubs && stubs != perPage; stubCount++ )
 							$('>tbody>tr:last', pT).after( '<tr class="stubCell"><td colspan="' + cols + '" style="height: ' + stubHeight + ';">&nbsp;</td></tr>' );
@@ -152,9 +152,9 @@
 				);
 			}
 		);
-		
+
 		// show the correct paging status
-		var cPos = $('>tbody>tr:not(.hideTR):first', this).prevAll().length, 
+		var cPos = $('>tbody>tr:not(.hideTR):first', this).prevAll().length,
 			ePos = $('>tbody>tr:not(.hideTR):not(.stubCell)', this).length;
 		$('>.nav .status', this).html( 'Mostrando ' + ( cPos + 1 ) + ' - ' + ( cPos + ePos ) + ' de ' + numerodefilas );
 
@@ -191,7 +191,7 @@
 				$('>.nav .paginationTitle', target).css('display','none');
 			else
 				$('>.nav .paginationTitle', target).css('display','');
-			
+
 			// bind the pagination onclick
 			$('>.nav .pagination .pageSelector', target).each(
 				function () {
@@ -261,26 +261,26 @@
 									}
 								);
 							}
-							
+
 							// redraw the pagination
 							drawPageSelectors( pT, parseInt( $(this).html() ) );
-							
+
 							// callback function after pagination renderd
 							$(pT).data('tableSettings').clickCallback();
-							
+
 						}
 					);
 				}
 			);
-			
+
 		};
 		// sort wrapper function
 		function sort ( target, tdIndex, desc ) {
 			var fCol = $('>thead th,>thead th', target).get(tdIndex),
 				sorted = $(fCol).hasClass('sortAsc') || $(fCol).hasClass('sortDesc') || false,
-				nullChar = String.fromCharCode(0), 
+				nullChar = String.fromCharCode(0),
 				re = /([-]?[0-9\.]+)/g,
-				rows = $('>tbody>tr:not(.stubCell)', target).get(), 
+				rows = $('>tbody>tr:not(.stubCell)', target).get(),
 				procRow = [];
 
 			$(rows).each(
@@ -329,8 +329,8 @@
 			// remove the old table
 			$('>tbody.jtpstemp', target).remove();
 			// redraw stub rows
-			var stubCount=0, cols = $('>thead>tr:last th', target).length, 
-				stubs = ( perPage - ( $('>tbody>tr', target).length % perPage ) ), 
+			var stubCount=0, cols = $('>thead>tr:last th', target).length,
+				stubs = ( perPage - ( $('>tbody>tr', target).length % perPage ) ),
 				stubHeight = $('>tbody>tr:first>td:first', target).css('height');
 			for ( ; stubCount < stubs && stubs != perPage; stubCount++ )
 				$('>tbody>tr:last', target).after( '<tr class="stubCell"><td colspan="' + cols + '" style="height: ' + stubHeight + ';">&nbsp;</td></tr>' );
