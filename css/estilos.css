@@ -207,7 +207,7 @@ tfoot span {
 /*********************** MEDIA QUERIES *********************/
 /***********************************************************/
 
-@media screen and (max-width: 767px) and (min-width: 591px) {
+@media screen and (max-width: 1199px) and (min-width: 992px) {
     /***** CONTENEDOR AYUDA *****/
     #contayuda {
         width: 90%;
@@ -237,18 +237,12 @@ tfoot span {
         min-width: 6em;
     }
     .marco {
-        width: 105%;
+        width: 80%;
     }
     /***** BOTONERA *****/
-    #botones {
-        position: relative;
-        top: -.5em;
-        text-align: center;
-    }
     #botones button{
-        display: inline-block;
-        min-width: 26em;
-        margin-left: 8%;
+        min-width: 12em;
+        margin-left: -3em;
         margin-top: 1em;
     }
     /***** TABLA *****/
@@ -258,7 +252,7 @@ tfoot span {
     }
 }
 
-@media screen and (max-width: 590px) and (min-width: 376px) {
+@media screen and (max-width: 991px) and (min-width: 769px) {
     /***** CONTENEDOR AYUDA *****/
     #contayuda {
         width: 90%;
@@ -312,7 +306,7 @@ tfoot span {
     }
 }
 
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 768px) {
     /***** CABECERA *****/
     h1 {
         font-size: 1.8em;
@@ -349,7 +343,7 @@ tfoot span {
         padding-right:0;
     }
     .marco {
-        width: 135%;
+        width: 115%;
     }
     /***** BOTONERA *****/
     #botones {
@@ -369,5 +363,11 @@ tfoot span {
         margin-left: -1em !important;
         margin-right: -1em !important;
         min-width: 20em !important;
+    }
+}
+
+@media screen and (max-width: 532px) {
+    .marco {
+        width: 118%;
     }
 }
