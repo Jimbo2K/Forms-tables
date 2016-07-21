@@ -167,20 +167,17 @@ elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boo
 //Con cualquier cambio en la base de datos (modificación, borrado o añdido) se actualiza libreria
 libreriaDB.on("child_changed",function(snapshot){
 	var dblibro=snapshot.val();
-	console.log('antes de chgremoto',dblibro);
 	cambioRemoto(dblibro,Number(dblibro.indice));
 	// actualizar(libreria);
 });
 //"child_added" se rebota ¿?
 libreriaDB.on("value",function(addshot){
 	var dblibro=addshot.val();
-	console.log('antes de addremoto',dblibro);
 	cargaLibreria(libreria);
 	// actualizar(libreria);
 });
 libreriaDB.on("child_removed",function(snapshot){
 	var dblibro=snapshot.val();
-	console.log('antes de rmvremoto',dblibro);
 	libreria.splice(dblibro.indice, 1);
 	//Actualizo los indices de todos sus elementos
 	for (var i=0;i<libreria.length;i++){
@@ -246,9 +243,6 @@ function añadeIddb(parray,pindice){
 
 function cambioRemoto(pdbobject, pindice){
 	var arlibro=libreria[pindice];
-	// console.log('arlibro.indice ',arlibro.indice);
-	// console.log('indice '+pindice);
-	// console.log('argumento ',pdbobject);
 	arlibro.indice=pindice;
 	arlibro.isbn=pdbobject.isbn;
 	arlibro.titulo=pdbobject.titulo;
@@ -660,7 +654,6 @@ function sweetConfitm(pobj){
 								user=false;
 							}
 							if (user){
-							console.log('ha entrado a cambiar'+user);
 							//Deselecciono cualquier tr (le quito la clase 'seleccionado')
 							$('tr').removeClass('seleccionado');
 							//Borra span de errores
@@ -711,7 +704,6 @@ function seleccionar(pobj){
 			user=true;
 		}
 		if (user){
-			console.log('ha entrado a cambiar'+user);
 			//Deselecciono cualquier tr (le quito la clase 'seleccionado')
 			$('tr').removeClass('seleccionado');
 			//Borra span de errores
@@ -941,7 +933,7 @@ function abuscarb (dondebusco, quebusco) {
 /*******************************************************************/
 /******************** FUNCIONES PARA DESARROLLO ********************/
 /*******************************************************************/
-
+/* Estas funciones están comentadas para que al minificar el JS no se añadan
 function numeroAzar(){
 	var a=Math.round((Math.random() * 10));
 	if(a===10){a=9;}
@@ -967,4 +959,4 @@ function cargaDB(){
 	};
 	libreria[i]=salida;
 	libreriaDB.push(libreria[i]);
-}
+}*/
