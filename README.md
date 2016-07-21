@@ -199,6 +199,17 @@ Pensando en el uso de la aplicación en dispositivos móviles, se ha implementad
 La paginación permite al usuario elegir el número de entradas a mostrar en cada página (o mostrar todas).
 También integra funcionalidad en la cabecera de la tabla de manera que se puedan ordenar las entradas en orden ascendente/descendente en función de cualquiera de sus campos.
 
+**\- Testeo y correcciones**
+
+1. La paginación introduce celdas de relleno en las tablas (si hay 8 entradas por página y la página tiene 3 añade 5 vacías) y queda estéticamente mal.
+2. Los botones de paginación reaccionan de forma extraña al pasar de un nro. superior de entradas por pag. a uno inferior.
+3. Cuando no se han encontrado coincidencias en una búsqueda el aviso aparece por debajo de la paginación y estéticamente queda mal.
+4. Cuando se añade una entrada no se visualiza en la tabla si está paginada (se visualiza en la última página).
+5. Al modificar o borrar una entrada en páginas posteriores a la 1ª se reinicializa la tabla a la primera página y no se vé la modificación.
+6. En las búsquedas, al modificar o borrar, se vuelve automáticamente a la tabla global.
+7. El botón de resetear no tiene texto visible que lo identifique (salvo su *title*).
+8. En las ventanas modales de aviso
+
 **\- Código CSS y JavaScript minimizado**
 Se han incluido versiones minificadas de los archivos css y js empleados en la aplicación para utilizarlos en "producción".
 

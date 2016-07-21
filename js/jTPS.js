@@ -195,6 +195,7 @@
 			// bind the pagination onclick
 			$('>.nav .pagination .pageSelector', target).each(
 				function () {
+					$('.stubCell').remove(); //Esto borra TODAS las líneas de relleno
 					$(this).bind('click',
 						function () {
 

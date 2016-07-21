@@ -665,7 +665,7 @@ function validar(){
 	salida.autor=(aux3 ? $('#autor').val() : '');
 	//validar año aux4
 	aux4=validarAnio();
-	salida.anio=(aux4 ? $('#anio').val() : '');
+	salida.anio=(aux4 ? Number($('#anio').val()) : ''); //Uso Number para que la paginación ordene bien
 	//validar editorial aux5
 	aux5=validarEditorial();
 	salida.editorial=(aux5 ? $('#editorial').val() : '');
@@ -695,6 +695,7 @@ function limpiaForm(){
 	//La clase mensaje corresponde sólo a los span de validación
 	$('.mensaje').html('');
 	$('tr').removeClass('seleccionado');
+	chequeaBotones();
 	arrmensajes.length=0;
 }
 
@@ -735,15 +736,19 @@ function formNoVacio(){
 function comparaObj(pobj1,pobj2){
 	var salida;
 	var i,j=0;
-	for (i in pobj1){
-		if (j>=6){break;}
-		if (pobj1[i]!==pobj2[i]){
-			salida=false;
-			break;
-		} else {
-			salida=true;
+	if (pobj2!==undefined){ //pobj2 viene de objFormulario, si el formulario está vacío pobj2 ~=undefined
+		for (i in pobj1){
+			if (j>=6){break;}
+			if (pobj1[i]!==pobj2[i]){
+				salida=false;
+				break;
+			} else {
+				salida=true;
+			}
+			j++;
 		}
-		j++;
+	} else {
+		salida=true;//Cualquier comparación con un registro undefined se considera true
 	}
 	return salida;
 }
@@ -803,8 +808,7 @@ function seleccionar(pobj){
 	if ((pobj.getAttribute('class')).indexOf('seleccionado')!==-1) {
 		$(pobj).removeClass('seleccionado');
 		limpiaForm();
-		//Para que funcione pintaBotones()
-		//seleccionado=false;
+		chequeaBotones();
 	}
 	//En caso contrario
 	else {
