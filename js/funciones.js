@@ -7,15 +7,23 @@ Desarrollado con: Sublime Text 3 (editor) y JQuery*/
 /******************* VARIABLES GLOBALES *******************/
 /**********************************************************/
 
+//Estructura de datos
 var libreria =[]; //array con la estructura de datos
+
+//Estructura de datos para búsquedas en libreria
 var busquedas = []; //array para contener resultados de busquedas
 var busquedasaux =[]; //array auxiliar empleado en las funciones de busqueda
-var arrmensajes=[]; //0: error ISBN; 1 error Título; 2 error Autor; 3 error año; 4 error editorial
-var alertmensaje; //En esta variable se montará el mensaje a pasar al usuario en alerta
 
+//Almacenaje de mensajes de error
+var arrmensajes=[]; //0: error ISBN; 1 error Título; 2 error Autor; 3 error año; 4 error editorial
+var alertmensaje; //En esta variable se montará el mensaje a pasar al usuario en alerta usando el contenido de arrmensajes
+
+//Paginación
 var numerodefilas; //una variable que se utilizara en paginación por el fichero externo jTPS.js
 var porpagina="8"; // el numero de filas/libros que se muestran por página al iniciar
 var arraymostrado = []; // una copia del array de los libros mostrados en cada momento que se utiliza como dato en la paginación
+
+//Flag que índica si la tabla a mostrar es la BD o el resultado de una búsqueda
 var busquedaactiva = false;
 
 
@@ -38,8 +46,8 @@ var db=firebase.database();
 //Referencia a la colección/base de datos concreta que vamos a utilizar
 var libreriaDB=db.ref("libreria");
 
+//On-load de JQuery
 $(function(){
-
 
 	//Inicialización de botones
 	//chequeaBotones();
@@ -47,10 +55,25 @@ $(function(){
 	//Carga en el array librería la BD y lo pinta
 	cargaLibreria(libreria);
 
+
 	/**********************************************************/
 	/******************* GESTIÓN DE EVENTOS *******************/
 	/**********************************************************/
 
+	//Controla el botón de despliegue del formulario y la botonera
+	$('#despUpDown').click(function(){
+		//Si el botón tiene la clase 'fa fa-chevron-circle-up' es que están desplegados
+		if ($(this).hasClass('fa fa-chevron-circle-up')){
+			$(this).removeClass('fa fa-chevron-circle-up');
+			$(this).addClass('fa fa-chevron-circle-down');
+			$('#notabla').slideUp('slow');
+		//Si no  es que están recogidos
+		} else {
+			$(this).removeClass('fa fa-chevron-circle-down');
+			$(this).addClass('fa fa-chevron-circle-up');
+			$('#notabla').slideDown('slow');
+		}
+	});
 	//Cada vez que se escribe algo en el input o pierde el foco se valida VISUALMENTE
 	$("#isbn").bind("input change", validarIsbn);
 	$("#isbn").blur(validarIsbn);
@@ -179,13 +202,15 @@ elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boo
 		}
 	});
 
-	//Tecla Escape=resetear
+	//Teclas Escape=resetear; enter no destructivo
 	$(document).keyup(function(e) {
-	    if (e.keyCode == 27) { // escape key maps to keycode `27`
+	    if (e.keyCode == 27) { // Se ha pulsado Esc (keycode `27`)
 		    prevenirReset();
 	    }
+	    if (e.keyCode == 13) { // se ha pulsado enter/intro (keycode `13`)
+		    return false;
+	    }
 	});
-
 
 	// El selector de numero de filas por hoja de la paginación
 	$('#filasPagina8').click(function(){
@@ -216,6 +241,19 @@ elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boo
 
 });
 
+// Funciones del boton ayuda que muestra y oculta la ayuda.
+function mostrar(){
+document.getElementById('contayuda').style.display = 'initial';
+}
+function ocultar(){
+document.getElementById('contayuda').style.display = 'none';
+}
+
+
+/**************************************************************/
+/****************** SUSCRIPCIONES A FIREBASE ******************/
+/**************************************************************/
+
 //Con cualquier cambio en la base de datos (modificación, borrado o añdido) se actualiza libreria
 libreriaDB.on("child_changed",function(snapshot){
 	var dblibro=snapshot.val();
@@ -238,14 +276,6 @@ libreriaDB.on("child_removed",function(snapshot){
 	// actualizar(libreria);
 });
 
-// Funciones del boton ayuda que muestra y oculta la ayuda.
-function mostrar(){
-document.getElementById('contayuda').style.display = 'initial';
-}
-
-function ocultar(){
-document.getElementById('contayuda').style.display = 'none';
-}
 
 /***************************************************************/
 /********************* FUNCIONES FIREBASE **********************/
@@ -314,6 +344,7 @@ function cambioRemoto(pdbobject, pindice){
 	// actualizar(libreria);
 }
 
+
 /***************************************************************/
 /******************** CONTROLAR LOS BOTONES ********************/
 /***************************************************************/
@@ -338,6 +369,7 @@ function chequeaBotones(){
 		$('#buscar').removeClass('disabled');
 	}
 }
+
 
 /*********************************************************/
 /******************** PINTAR LA TABLA ********************/
@@ -375,7 +407,7 @@ function actualizar(parray) {
 		arraymostrado = JSON.parse(JSON.stringify(parray)); // para la paginación se necesita sacar una copia del array fuera del ámbito
 		numerodefilas = Object.size(arraymostrado); // también para la paginación se necesita este valor que es el numero de elementos (Object.size es una función que sirve para eso)
 		$('#tableta').jTPS( {perPages:[porpagina]} ); // se pagina la tabla con el numero de filas por pagina definido (porpagina)
-		$('.stubCell').remove();
+		$('.stubCell').remove(); //Esto borra las líneas que la librería jTPS añade de relleno
 		//Si se trata de otro (el de busqueda)
 		} else if(busquedaactiva===true){
 			//Recorro el array pintando las líneas
@@ -400,6 +432,7 @@ function actualizar(parray) {
 	//Inicializo el estado VISUAL de los botones
 	chequeaBotones();
 }
+
 
 /******************************************************/
 /******************** VALIDACIONES ********************/
@@ -506,12 +539,18 @@ function validarIsbn(){
 			salida=false;
 		}
 	} else {
-		$('#isbn').css('border','2px solid red');
+		//Sólo pinto el aviso si ya hay campos con datos
+		if (formNoVacio()){
+			$('#isbn').css('border','2px solid red');
+			$('#isbn').css('border','2px solid red');
+		}
 		mensaje=' OBLIGATORIO: Formato de ISBN inválido 10/13 dígitos';
-		$('#isbn').css('border','2px solid red');
 		salida = false;
 	}
-		$('#isbnnull').html(mensaje);
+		//Sólo pinto el aviso si ya hay campos con datos
+		if (formNoVacio()){
+			$('#isbnnull').html(mensaje);
+		}
 		arrmensajes[0]=mensaje;
 		return salida;
 }
@@ -525,8 +564,11 @@ function validarTitulo(){
 		arrmensajes[1]='';
 		return true;
 	} else {
-		$('#titulo').css('border','2px solid red');
-		$('#titulonull').html(' OBLIGATORIO: Título vacío');
+		//Sólo pinto el aviso si ya hay campos con datos
+		if (formNoVacio()){
+			$('#titulo').css('border','2px solid red');
+			$('#titulonull').html(' OBLIGATORIO: Título vacío');
+		}
 		arrmensajes[1]=' OBLIGATORIO: Título vacío';
 		return false;
 	}
@@ -540,8 +582,11 @@ function validarAutor(){
 		arrmensajes[2]='';
 		return true;
 	} else {
-		$('#autor').css('border','2px solid #a8410f');
-		$('#autornull').html(' Autor vacío');
+		//Sólo pinto el aviso si ya hay campos con datos
+		if (formNoVacio()){
+			$('#autor').css('border','2px solid #a8410f');
+			$('#autornull').html(' Autor vacío');
+		}
 		arrmensajes[2]=' OPCIONAL: Autor vacío';
 		return false;
 	}
@@ -556,8 +601,11 @@ function validarAnio(){
 		arrmensajes[3]='';
 		return true;
 	} else {
-		$('#anio').css('border','2px solid #a8410f');
-		$('#anionull').html(' Año publ. incorrecto: 4 dígitos');
+		//Sólo pinto el aviso si ya hay campos con datos
+		if (formNoVacio()){
+			$('#anio').css('border','2px solid #a8410f');
+			$('#anionull').html(' Año publ. incorrecto: 4 dígitos');
+		}
 		arrmensajes[3]=' OPCIONAL: Año publ. incorrecto: 4 dígitos';
 		return false;
 	}
@@ -571,8 +619,11 @@ function validarEditorial(){
 		arrmensajes[4]='';
 		return true;
 	} else {
-		$('#editorial').css('border','2px solid #a8410f');
-		$('#editorialnull').html(' Editorial vacía');
+		//Sólo pinto el aviso si ya hay campos con datos
+		if (formNoVacio()){
+			$('#editorial').css('border','2px solid #a8410f');
+			$('#editorialnull').html(' Editorial vacía');
+		}
 		arrmensajes[4]=' OPCIONAL: Editorial vacía';
 		return false;
 	}
@@ -630,6 +681,7 @@ function validar(){
 		return null;
 	}
 }
+
 
 /*****************************************************************/
 /******************** SELECCIONAR DE LA TABLA ********************/
@@ -700,48 +752,48 @@ function comparaObj(pobj1,pobj2){
 //a seleccionar otra línea, se pide al usuario que confirme si desea continuar. Esta función es el aviso.
 function sweetConfirm(pobj){
 	swal({	title: "¿Nueva selección?",
-							text: "Los datos modificados en el formulario se perderán",
-							type: "warning",
-							showCancelButton: true,
-							confirmButtonColor: "#DD6B55",
-							confirmButtonText: "Seleccionar",
-							cancelButtonText: "Cancelar",
-							closeOnConfirm: true,
-							closeOnCancel: true
-						},
-						//Si el usuario confirma que quiere borrar...
-						function(isConfirm){
-							if (isConfirm) {
-								user=true;
-							} else {
-								user=false;
-							}
-							if (user){
-							//Deselecciono cualquier tr (le quito la clase 'seleccionado')
-							$('tr').removeClass('seleccionado');
-							//Borra span de errores
-							$('.mensaje').html('');
-							//Pone los bordes de inputs bien
-							$('input').css('border', '1px solid black');
-							//Selecciono el clickado
-							$(pobj).addClass('seleccionado');
-							var i,arraux=[];
-							//en un array auxiliar cargo el contenido de cada celda de la línea .seleccionado
-							for (i=1;i<=6;i++){
-								arraux.push($('.seleccionado :nth-of-type(' + i + ')').text());
-							}
-							//Paso el contenido de cada celda a los inputs del formulario
-							$('#isbn').val(arraux[0]);
-							$('#titulo').val(arraux[1]);
-							$('#autor').val(arraux[2]);
-							$('#anio').val(arraux[3]);
-							$('#editorial').val(arraux[4]);
-							$('#oculto').val(arraux[5]);
-							//Para que funcione pintaBotones()
-							//seleccionado=true;
-							}
-						}
-			);
+			text: "Los datos modificados en el formulario se perderán",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Seleccionar",
+			cancelButtonText: "Cancelar",
+			closeOnConfirm: true,
+			closeOnCancel: true
+		},
+		//Si el usuario confirma que quiere borrar...
+		function(isConfirm){
+			if (isConfirm) {
+				user=true;
+			} else {
+				user=false;
+			}
+			if (user){
+				//Deselecciono cualquier tr (le quito la clase 'seleccionado')
+				$('tr').removeClass('seleccionado');
+				//Borra span de errores
+				$('.mensaje').html('');
+				//Pone los bordes de inputs bien
+				$('input').css('border', '1px solid black');
+				//Selecciono el clickado
+				$(pobj).addClass('seleccionado');
+				var i,arraux=[];
+				//en un array auxiliar cargo el contenido de cada celda de la línea .seleccionado
+				for (i=1;i<=6;i++){
+				arraux.push($('.seleccionado :nth-of-type(' + i + ')').text());
+			}
+			//Paso el contenido de cada celda a los inputs del formulario
+			$('#isbn').val(arraux[0]);
+			$('#titulo').val(arraux[1]);
+			$('#autor').val(arraux[2]);
+			$('#anio').val(arraux[3]);
+			$('#editorial').val(arraux[4]);
+			$('#oculto').val(arraux[5]);
+			//Para que funcione pintaBotones()
+			//seleccionado=true;
+			}
+		}
+	);
 }
 
 //pobj corresponde al <tr> sobre el que se ha hecho click
@@ -794,6 +846,7 @@ function seleccionar(pobj){
 	chequeaBotones();
 }
 
+
 /**************************************************************************/
 /******************** ACCIONES ASOCIADAS A LOS BOTONES ********************/
 /**************************************************************************/
@@ -823,7 +876,6 @@ function alta() {
 	}
 }
 
-
 function modificar() {
 	//Al modificar no hay que comprobar si el elemento tiene el mismo ISBN porque es él mismo
 	datomodificado = validar();
@@ -838,26 +890,22 @@ function modificar() {
 		db.ref('libreria/'+libreria[aindice].iddb).set(datomodificado);
 		//Pinto la tabla
 		if (busquedaactiva===true) {
-			console.log("sdf23423234sd");
-			for (var i in busquedas) {				
+			for (var i in busquedas) {
 				if (busquedas[i].indice == aindice) {
 					busquedas[i] = datomodificado;
 				}
 			}
-			limpiaform();
 			$(".seleccionado").html('<td>' + datomodificado.isbn + '</td>' + '<td>' + datomodificado.titulo + '</td>' + '<td>' + datomodificado.autor + '</td>' + '<td>' + datomodificado.anio + '</td>' + '<td>' + datomodificado.editorial + '</td>' + '<td class="sr-only">' + datomodificado.indice + '</td>');
 	 		$(".seleccionado").removeClass('seleccionado');
+			limpiaForm();
 		} else {
-			limpiaform();
 			$(".seleccionado").html('<td>' + datomodificado.isbn + '</td>' + '<td>' + datomodificado.titulo + '</td>' + '<td>' + datomodificado.autor + '</td>' + '<td>' + datomodificado.anio + '</td>' + '<td>' + datomodificado.editorial + '</td>' + '<td class="sr-only">' + datomodificado.indice + '</td>');
 	 		$(".seleccionado").removeClass('seleccionado');
+			limpiaForm();
 		}
-
-		
 	} else {
 		montaAlerta();
 		var a=sweetAlert('Datos erróneos, corregir:',alertmensaje);
-
 	}
 	chequeaBotones();
 }
@@ -896,6 +944,7 @@ function borrar() {
 			}
 	);
 }
+
 
 /******************************************************************/
 /******************** FUNCIONES PARA BUSQUEDAS ********************/

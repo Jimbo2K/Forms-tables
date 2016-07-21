@@ -9,6 +9,15 @@ h1{
     color: darkgrey;
     background-color: #0C3F0E;
     margin-bottom:0;
+    padding: 0 2%;
+}
+
+/*Estilo del botón para desplegar el formulario*/
+.despliegue{
+    background-color: transparent;
+    border: none;
+    float:left;
+    font-size: .9em;
 }
 
 /***********************************************************/
@@ -33,6 +42,13 @@ legend {
     border-bottom:none;
     font-size: 1em;
     color: #555;
+}
+/*Este estilo sólo se aplica para Firefox*/
+@-moz-document url-prefix() {
+    legend {
+        position: relative;
+        top: .5em;
+    }
 }
 
 /*Estilo del botón de reset*/
@@ -247,11 +263,10 @@ tfoot span {
     #contayuda nav {
         max-height: 2em;
     }
-    #exit{
+    /* #exit{
         position: relative;
-        top: -1.2em;
-        margin: 0;
-    }
+        margin: .2em 0 0 0;
+    } */
     /***** FORMULARIO *****/
     #contform {
         position: relative;
@@ -267,7 +282,7 @@ tfoot span {
     #botones button{
         min-width: 12em;
         margin-left: -3em;
-        margin-top: 1em;
+        margin-top: 0;
     }
     /***** TABLA *****/
     article#tabla {
@@ -295,11 +310,10 @@ tfoot span {
     #spanco{
         padding-left: .2em;
     }
-    #exit{
+    /* #exit{
         position: relative;
-        top: -1.5em;
-        right: -.6em;
-    }
+        margin: .2em 0 0 0;
+    } */
     /***** FORMULARIO *****/
     #contform {
         position: relative;
@@ -314,14 +328,14 @@ tfoot span {
     /***** BOTONERA *****/
     #botones {
         position: relative;
-        top: -.5em;
+        top: .2em;
         text-align: center;
     }
     #botones button{
-        display: inline-block;
+        /* display: inline-block; */
         min-width: 20em;
         margin-left: 5%;
-        margin-top: 1em;
+        margin-top: 0;
     }
     /***** TABLA *****/
     article#tabla {
@@ -358,9 +372,7 @@ tfoot span {
         padding-left: .2em;
     }
     #exit{
-        position: relative;
-        top: -1.4em;
-        right: -.8em;
+        margin: -1.1em .1em 0 0;
     }
     /***** FORMULARIO *****/
     #form1{
@@ -368,19 +380,23 @@ tfoot span {
     }
     .marco {
         width: 115%;
+        margin-top: .5em;
+    }
+    legend {
+        width: 35%;
     }
     /***** BOTONERA *****/
     #botones {
         position: relative;
         padding: 0;
         text-align: center;
-        top: -.5em;
+        top: .2em;
     }
     #botones button{
         display: inline-block;
         min-width: 18em;
         margin-left: 2%;
-        margin-top: 1.2em;
+        margin-bottom: 1em;
     }
     /***** TABLA *****/
     article#tabla{
@@ -392,6 +408,18 @@ tfoot span {
 
 @media screen and (max-width: 532px) {
     .marco {
-        width: 118%;
+        width: 115%;
+    }
+    legend {
+        width: 48%;
+    }
+}
+
+@media screen and (max-width: 395px) {
+    .marco {
+        width: 115%;
+    }
+    legend {
+        width: 70%;
     }
 }
