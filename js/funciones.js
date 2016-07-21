@@ -132,13 +132,60 @@ elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boo
 		if(Boolean($('.seleccionado')[0])){borrar();}
 	});
 
+	//confirm utilizado al resetear para evitar perder modificaciones
+	function sweetEscape(){
+		swal({	title: "¿Resetear Formulario?",
+				text: "Los datos modificados en el formulario se perderán",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Resetear",
+				cancelButtonText: "Cancelar",
+				closeOnConfirm: true,
+				closeOnCancel: true
+			},
+			//Si el usuario confirma que quiere borrar...
+			function(isConfirm){
+				if (isConfirm) {
+					user=true;
+				} else {
+					user=false;
+				}
+				if (user){
+	       			$(".seleccionado").removeClass('seleccionado');
+	       			limpiaForm();
+				}
+			}
+		);
+	}
+
+	//Chequea si lo que hay en el formulario es una modificación
+	function prevenirReset(){
+		var contenidoForm=objFormulario();
+				//Si el formulario no está en blanco y su contenido es distinto de la entrada de libreria
+				//significa que el usuario le ha dado a escape después de haber hecho cambios
+				//en el formulario (sin pulsar Modificar)
+				if (!comparaObj(contenidoForm,libreria[contenidoForm.indice]) && formNoVacio()){
+					sweetEscape();
+				} else {
+					limpiaForm();
+				}
+	}
+
 	//Botón reset formulario
 	$('#resetear').click(function(){
 		if (!$('#resetear').hasClass('disabled')){
-			limpiaForm();
-			chequeaBotones();
+			prevenirReset();
 		}
 	});
+
+	//Tecla Escape=resetear
+	$(document).keyup(function(e) {
+	    if (e.keyCode == 27) { // escape key maps to keycode `27`
+		    prevenirReset();
+	    }
+	});
+
 
 	// El selector de numero de filas por hoja de la paginación
 	$('#filasPagina8').click(function(){
@@ -741,47 +788,6 @@ function seleccionar(pobj){
 	}
 	chequeaBotones();
 }
-$(document).keyup(function(e) {
-    if (e.keyCode == 27) { // escape key maps to keycode `27`
-	    var contenidoForm=objFormulario();
-		//Si el formulario no está en blanco y su contenido es distinto de la entrada de libreria
-		//significa que el usuario le ha dado a escape después de haber hecho cambios
-		//en el formulario (sin pulsar Modificar)
-		if (!comparaObj(contenidoForm,libreria[contenidoForm.indice]) && formNoVacio()){
-			sweetEscape();
-
-		} else {
-			limpiaForm();
-		}
-       
-    }
-});
-
-function sweetEscape(){
-	swal({	title: "¿Resetear Formulario?",
-			text: "Los datos modificados en el formulario se perderán",
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Resetear",
-			cancelButtonText: "Cancelar",
-			closeOnConfirm: true,
-			closeOnCancel: true
-		},
-		//Si el usuario confirma que quiere borrar...
-		function(isConfirm){
-			if (isConfirm) {
-				user=true;
-			} else {
-				user=false;
-			}
-			if (user){
-       			$(".seleccionado").removeClass('seleccionado'); 
-			}
-		}
-	);
-}
-
 
 /**************************************************************************/
 /******************** ACCIONES ASOCIADAS A LOS BOTONES ********************/
@@ -812,9 +818,7 @@ function alta() {
 	}
 }
 
-function pintarModificado() {
 
-}
 function modificar() {
 	//Al modificar no hay que comprobar si el elemento tiene el mismo ISBN porque es él mismo
 	datomodificado = validar();
@@ -977,7 +981,7 @@ function abuscar (dondebusco, quebusco) {
 		/*una variable importante para poder diferenciar casos en los que el array de búsquedas esta vació pero porque no se ha hecho ninguna
 		búsqueda de los casos en el que el array esta vació pero porque no ha encontrado nada (en este ultimo caso no se harán mas búsquedas)*/
 		sinencontrar = true;
-		$('#resultado').text("No encontramos libros que coincidan con los valores introducidos");
+		$("#tableta tbody").append('<tr><td colspan="5" id="resultado" style="background-color: white;">No encontramos libros que coincidan con los valores introducidos</td></tr>');
 		$('#busqueda').text('Resultados de la búsqueda');
 		$('th').css('background-color','#66ffb3');
 	}
