@@ -52,7 +52,7 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 			<br>
 
 			<!-- Contenedor del formulario -->
-			<div class="row col-lg-10 col-md-10 col-sm-10 col-xs-10" id="contform">
+			<div class="row col-lg-10 col-md-10 col-sm-11 col-xs-11" id="contform">
 				<p>Los campos marcados con "<span>*</span>" son obligatorios</p>
 				<!-- Aquí va el formulario -->
 				<form action="#" id="form1" class="form-horizontal" role="form" autocomplete="on">
@@ -66,37 +66,37 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 						</legend>
 						<!-- ISBN -->
 						<div class="form-group">
-							<div><label for="isbn" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">ISBN: <span>*</span></label></div>
-							<div class="col-lg-9 col-md-9 col-sm-9">
-							<input type="text" class="form-control clearable, col-lg-12 rebonico" name="isbn" id="isbn" maxlength="13" required tabindex="1" placeholder="ISBN de 10 ó 13 dígitos">&nbsp; <span id="isbnnull" class="mensaje"></span><br>
+							<div><label for="isbn" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">ISBN: <span>*</span></label></div>
+							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+							<input type="text" class="form-control clearable rebonico" name="isbn" id="isbn" maxlength="13" required tabindex="1" placeholder="ISBN de 10 ó 13 dígitos">&nbsp; <span id="isbnnull" class="mensaje"></span><br>
 							</div>
 						</div>
 						<!-- Título -->
 						<div class="form-group">
-							<label for="titulo" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">Título: <span>*</span></label>
-							<div class="col-lg-9 col-md-9 col-sm-9">
-								<input type="text" class="form-control clearable, col-lg-10 rebonico" name="titulo" id="titulo" placeholder="Ej. La Galatea" required tabindex="2">&nbsp; <span id="titulonull" class="mensaje"></span><br>
+							<label for="titulo" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">Título: <span>*</span></label>
+							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+								<input type="text" class="form-control clearable rebonico" name="titulo" id="titulo" placeholder="Ej. La Galatea" required tabindex="2">&nbsp; <span id="titulonull" class="mensaje"></span><br>
 							</div>
 						</div>
 						<!-- Autor -->
 						<div class="form-group">
-							<label for="autor" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">Autor: </label>
-							<div class="col-lg-9 col-md-9 col-sm-9">
-								<input type="text" class="form-control clearable, col-lg-10 rebonico" name="autor" id="autor" placeholder="Ej. Miguel de Cervantes" tabindex="3">&nbsp; <span id="autornull" class="mensaje"></span><br>
+							<label for="autor" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">Autor: </label>
+							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+								<input type="text" class="form-control clearable rebonico" name="autor" id="autor" placeholder="Ej. Miguel de Cervantes" tabindex="3">&nbsp; <span id="autornull" class="mensaje"></span><br>
 							</div>
 						</div>
 						<!-- Año de publicación -->
 						<div class="form-group">
-							<label for="anio" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">Año: </label>
-							<div class="col-lg-9 col-md-9 col-sm-9">
-								<input type="text" class="form-control clearable, col-lg-10 rebonico" name="anio" id="anio" placeholder="Ej. 1591" tabindex="4" maxlength="4">&nbsp; <span id="anionull" class="mensaje"></span><br>
+							<label for="anio" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">Año: </label>
+							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+								<input type="text" class="form-control clearable rebonico" name="anio" id="anio" placeholder="Ej. 1591" tabindex="4" maxlength="4">&nbsp; <span id="anionull" class="mensaje"></span><br>
 							</div>
 						</div>
 						<!-- Editorial -->
 						<div class="form-group">
-							<label for="editorial" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">Editorial: </label>
-							<div class="col-lg-9 col-md-9 col-sm-9">
-								<input type="text" class="form-control clearable, col-lg-10 rebonico" name="editorial" id="editorial" placeholder="Ej. Planeta" tabindex="5">&nbsp; <span id="editorialnull" class="mensaje"></span>
+							<label for="editorial" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">Editorial: </label>
+							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+								<input type="text" class="form-control clearable rebonico" name="editorial" id="editorial" placeholder="Ej. Planeta" tabindex="5">&nbsp; <span id="editorialnull" class="mensaje"></span>
 							</div>
 						</div>
 					</fieldset>
@@ -106,7 +106,7 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 			</div>
 
 			<!-- Contenedor de la botonera -->
-			<div class="btn-group-vertical" id="botones">
+			<div class="btn-group-vertical row col-lg-2 col-md-2 col-sm-12 col-xs-12" id="botones">
 				<button type="button" class="btn btn-success" id="anadir" tabindex="6" accesskey="a">AÑADIR</button>
 				<br>
 				<button type="button" class="btn btn-warning" id="buscar" tabindex="7" accesskey="b">BUSCAR</button>
