@@ -150,6 +150,12 @@ tfoot span {
     color: #555;
 }
 
+
+/* Los numeros de la paginación cuando esten seleccionados se le aplica lo siguiente */
+.selectPaginas {
+    color: blue;
+}
+
 /***********************************************************/
 /*********************** ESTILOS AYUDA *********************/
 /***********************************************************/

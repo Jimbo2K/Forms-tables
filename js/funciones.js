@@ -209,6 +209,11 @@ elemento del objeto JQ que es el objeto Js real $('#chorizo')[0]=undefined y Boo
 		actualizar(arraymostrado);
 	});
 
+	$('.filaspPagina span').click(function(){
+		$('.filaspPagina span').removeClass('selectPaginas');
+		$( this ).addClass( "selectPaginas" );
+	});
+
 });
 
 //Con cualquier cambio en la base de datos (modificación, borrado o añdido) se actualiza libreria
