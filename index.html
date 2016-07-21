@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!-- Fecha: 05/07/16
-Descripcion: Página/aplicación WEB que permite crear, modificar y visualizar una estructura de datos
+Descripción: Página/aplicación WEB que permite crear, modificar y visualizar una estructura de datos
 Autores: Adrián Arteaga, Juan José Basco, Pablo Andueza, Pablo Garrido, Rubén Álvarez
 Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 
@@ -55,7 +55,7 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 			<div class="row col-lg-10 col-md-10 col-sm-10 col-xs-10" id="contform">
 				<p>Los campos marcados con "<span>*</span>" son obligatorios</p>
 				<!-- Aquí va el formulario -->
-				<form action="#" id="form1" class="form-horizontal" role="form" autocomplete>
+				<form action="#" id="form1" class="form-horizontal" role="form" autocomplete="on">
 					<!-- Marco que envuelve el formulario -->
 					<fieldset class="marco">
 						<!-- Botón para resetear el formulario -->
@@ -80,7 +80,7 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 						</div>
 						<!-- Autor -->
 						<div class="form-group">
-							<label for="Autor" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">Autor: </label>
+							<label for="autor" class="col-lg-2 col-md-2 col-sm-2 col-xs-2 control-label">Autor: </label>
 							<div class="col-lg-9 col-md-9 col-sm-9">
 								<input type="text" class="form-control clearable, col-lg-10 rebonico" name="autor" id="autor" placeholder="Ej. Miguel de Cervantes" tabindex="3">&nbsp; <span id="autornull" class="mensaje"></span><br>
 							</div>
@@ -129,6 +129,7 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 				<table  class="table table-bordered" id="tableta">
 					<thead>
 					<tr>
+						<!-- Los atributos sort dan error en la validación de HTML de W3C pero son necesarios para JavaScript -->
 						<th sort="isbn" title="Click para ordenar por ISBN">ISBN</th>
 						<th sort="titulo" title="Click para ordenar por título">TITULO</th>
 						<th sort="autor" title="Click para ordenar por autor">AUTOR</th>
@@ -144,7 +145,7 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 								<div class="pagination"></div>
 								<!-- <div class="selectPerPage"></div> -->
 								<div class="status"></div>
-								<div class="filaspPagina">Libros por Página: <span id="filasPagina8">8</span><span id="filasPagina16">16</span><span id="filasPagina32">32</span><span id="filasPagina64">64</span><span id="filasPaginaAll">Todos</span></</div>
+								<div class="filaspPagina">Libros por Página: <span id="filasPagina8">8</span><span id="filasPagina16">16</span><span id="filasPagina32">32</span><span id="filasPagina64">64</span><span id="filasPaginaAll">Todos</span></div>
 							</td>
 						</tr>
 					</tfoot>
