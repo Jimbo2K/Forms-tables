@@ -646,7 +646,7 @@ function comparaObj(pobj1,pobj2){
 
 //Cuando se ha seleccionado una línea y se modifica en el formulario, si antes de darle a "Modificar" se vuelve
 //a seleccionar otra línea, se pide al usuario que confirme si desea continuar. Esta función es el aviso.
-function sweetConfitm(pobj){
+function sweetConfirm(pobj){
 	swal({	title: "¿Nueva selección?",
 							text: "Los datos modificados en el formulario se perderán",
 							type: "warning",
@@ -710,7 +710,7 @@ function seleccionar(pobj){
 		//en el formulario (sin pulsar Modificar)
 		if (!comparaObj(contenidoForm,libreria[contenidoForm.indice]) && formNoVacio()){
 			// user=confirm('Si realiza una nueva selección perderá los cambios \n ¿Desea continuar?');
-			sweetConfitm(pobj);
+			sweetConfirm(pobj);
 		} else {
 			user=true;
 		}
@@ -741,6 +741,47 @@ function seleccionar(pobj){
 	}
 	chequeaBotones();
 }
+$(document).keyup(function(e) {
+    if (e.keyCode == 27) { // escape key maps to keycode `27`
+	    var contenidoForm=objFormulario();
+		//Si el formulario no está en blanco y su contenido es distinto de la entrada de libreria
+		//significa que el usuario le ha dado a escape después de haber hecho cambios
+		//en el formulario (sin pulsar Modificar)
+		if (!comparaObj(contenidoForm,libreria[contenidoForm.indice]) && formNoVacio()){
+			sweetEscape();
+
+		} else {
+			limpiaForm();
+		}
+       
+    }
+});
+
+function sweetEscape(){
+	swal({	title: "¿Resetear Formulario?",
+			text: "Los datos modificados en el formulario se perderán",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Resetear",
+			cancelButtonText: "Cancelar",
+			closeOnConfirm: true,
+			closeOnCancel: true
+		},
+		//Si el usuario confirma que quiere borrar...
+		function(isConfirm){
+			if (isConfirm) {
+				user=true;
+			} else {
+				user=false;
+			}
+			if (user){
+       			$(".seleccionado").removeClass('seleccionado'); 
+			}
+		}
+	);
+}
+
 
 /**************************************************************************/
 /******************** ACCIONES ASOCIADAS A LOS BOTONES ********************/
