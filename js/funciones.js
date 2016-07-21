@@ -183,7 +183,7 @@ libreriaDB.on("child_removed",function(snapshot){
 	for (var i=0;i<libreria.length;i++){
 		libreria[i].indice=i;
 	}
-	actualizar(libreria);
+	// actualizar(libreria);
 });
 
 // Funciones del boton ayuda que muestra y oculta la ayuda.
@@ -202,6 +202,12 @@ document.getElementById('contayuda').style.display = 'none';
 //carga la BD en el array que pasemos como argumento, lo normal será librería
 function cargaLibreria(parray){
 	libreriaDB.once('value', function(snapshot){
+		var inicio;
+		if (libreria.length !== 0){
+			 inicio = false;
+		} else {
+			 inicio = true;
+		}
 		var salida=snapshot.val();
 		var i,j=0;
 		parray.length=0;
@@ -216,7 +222,10 @@ function cargaLibreria(parray){
 			j++;
 		}
 		//IMPORTANTE!!: la actualización tiene que ir dentro del .once() para sincronizarse
-		actualizar(libreria);
+		if (inicio) {
+			actualizar(libreria);
+		}
+
 	});
 }
 
@@ -250,7 +259,7 @@ function cambioRemoto(pdbobject, pindice){
 	arlibro.anio=pdbobject.anio;
 	arlibro.editorial=pdbobject.editorial;
 	arlibro.iddb=pdbobject.key;
-	actualizar(libreria);
+	// actualizar(libreria);
 }
 
 /***************************************************************/
@@ -314,6 +323,7 @@ function actualizar(parray) {
 		arraymostrado = JSON.parse(JSON.stringify(parray)); // para la paginación se necesita sacar una copia del array fuera del ámbito
 		numerodefilas = Object.size(arraymostrado); // también para la paginación se necesita este valor que es el numero de elementos (Object.size es una función que sirve para eso)
 		$('#tableta').jTPS( {perPages:[porpagina]} ); // se pagina la tabla con el numero de filas por pagina definido (porpagina)
+		$('.stubCell').remove();
 		//Si se trata de otro (el de busqueda)
 		} else if(busquedaactiva===true){
 			//Recorro el array pintando las líneas
@@ -325,6 +335,7 @@ function actualizar(parray) {
 			arraymostrado = JSON.parse(JSON.stringify(parray));
 			numerodefilas = Object.size(arraymostrado);
 			$('#tableta').jTPS( {perPages:[porpagina]} );
+			$('.stubCell').remove();
 			$('th').css('background-color','#66ffb3');
 			$('#busqueda').text('Resultados de la búsqueda');
 		}
@@ -752,6 +763,7 @@ function alta() {
 			añadeIddb(libreria,nindice);
 			//Pinto la tabla basándome en libreria
 			actualizar(libreria);
+			$('.pageSelector:last').click();
 		});
 	} else {
 		montaAlerta();
@@ -759,6 +771,9 @@ function alta() {
 	}
 }
 
+function pintarModificado() {
+
+}
 function modificar() {
 	//Al modificar no hay que comprobar si el elemento tiene el mismo ISBN porque es él mismo
 	datomodificado = validar();
@@ -772,7 +787,23 @@ function modificar() {
 		//Modifico la BD
 		db.ref('libreria/'+libreria[aindice].iddb).set(datomodificado);
 		//Pinto la tabla
-		actualizar(libreria);
+		if (busquedaactiva===true) {
+			console.log("sdf23423234sd");
+			for (var i in busquedas) {				
+				if (busquedas[i].indice == aindice) {
+					busquedas[i] = datomodificado;
+				}
+			}
+			limpiaform();
+			$(".seleccionado").html('<td>' + datomodificado.isbn + '</td>' + '<td>' + datomodificado.titulo + '</td>' + '<td>' + datomodificado.autor + '</td>' + '<td>' + datomodificado.anio + '</td>' + '<td>' + datomodificado.editorial + '</td>' + '<td class="sr-only">' + datomodificado.indice + '</td>');
+	 		$(".seleccionado").removeClass('seleccionado');
+		} else {
+			limpiaform();
+			$(".seleccionado").html('<td>' + datomodificado.isbn + '</td>' + '<td>' + datomodificado.titulo + '</td>' + '<td>' + datomodificado.autor + '</td>' + '<td>' + datomodificado.anio + '</td>' + '<td>' + datomodificado.editorial + '</td>' + '<td class="sr-only">' + datomodificado.indice + '</td>');
+	 		$(".seleccionado").removeClass('seleccionado');
+		}
+
+		
 	} else {
 		montaAlerta();
 		var a=sweetAlert('Datos erróneos, corregir:',alertmensaje);
@@ -808,8 +839,9 @@ function borrar() {
 					for (i=0;i<libreria.length;i++){
 						libreria[i].indice=i;
 					}
-					//Pinto la tabla
-					actualizar(libreria);
+					//Borro la linea
+					limpiaform();
+					$(".seleccionado").remove();
 				}
 			}
 	);

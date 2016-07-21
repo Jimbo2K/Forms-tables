@@ -87,6 +87,11 @@ p {
 /*********************** ESTILOS TABLA *********************/
 /***********************************************************/
 
+
+.stubCell {
+    display: none;
+}
+
 /*Estilo para la fila de la tabla seleccionada*/
 .seleccionado {
     background-color: #F2A6A3 !important;
