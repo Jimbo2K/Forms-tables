@@ -23,7 +23,7 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
   		<link rel="stylesheet" href="bower_components/sweetalert/dist/sweetalert.css">
   		<!-- Enlace a Fontawesome -->
   		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-  		<!-- Enlace al CSS de la aplicación -->
+	 	<!-- Enlace al CSS de la aplicación -->
 		<link rel="stylesheet" href="css/estilos.css">
 	</head>
 
@@ -116,13 +116,13 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 
 			<!-- Contenedor de la botonera -->
 			<div class="btn-group-vertical row col-lg-2 col-md-2 col-sm-12 col-xs-12" id="botones">
-				<button type="button" class="btn btn-success" id="anadir" tabindex="6" accesskey="a">AÑADIR</button>
+				<button type="button" class="btn btn-success" id="anadir" tabindex="6" accesskey="a">AÑADIR <div class="icono"></span></button>
 				<br>
-				<button type="button" class="btn btn-warning" id="buscar" tabindex="7" accesskey="b">BUSCAR</button>
+				<button type="button" class="btn btn-warning" id="buscar" tabindex="7" accesskey="b">BUSCAR <span class="icono"></span></button>
 				<br>
-				<button type="button" class="btn btn-warning" id="modificar" tabindex="8" accesskey="m">MODIFICAR</button>
+				<button type="button" class="btn btn-warning" id="modificar" tabindex="8" accesskey="m">MODIFICAR <span class="icono"></span></button>
 				<br>
-				<button type="button" class="btn btn-danger" id="quitar" tabindex="9" accesskey="q">BORRAR</button>
+				<button type="button" class="btn btn-danger" id="quitar" tabindex="9" accesskey="q">BORRAR <span class="icono"></span></button>
 				<!-- <button type="button" onclick="probartabla();">PRUEBA1</button> -->
 				<!-- <button type="button" onclick="cargaDB();" title="Genera una base de datos automática para pruebas">AUTO BD</button> -->
 				<br>
@@ -196,6 +196,9 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<!-- Enlace al JS de Sweet Alert -->
 	<script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
+	<!-- Js detector de conexion offline/online -->
+	<script src="js/offline.min.js"></script>
+
 	<!-- Enlace al JS de la aplicación -->
 	<script src="js/funciones.js"></script>
 	<!-- Enlace al JS de la paginación de la tabla -->

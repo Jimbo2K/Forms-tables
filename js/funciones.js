@@ -46,8 +46,20 @@ var db=firebase.database();
 //Referencia a la colección/base de datos concreta que vamos a utilizar
 var libreriaDB=db.ref("libreria");
 
+
+
 //On-load de JQuery
 $(function(){
+
+	//pequeña función que s no hay conexión pinta un icono en llos botones, el detector es una libreria js extena
+	var detectarConexion = function() {
+	if ( $( ".offline-ui" ).is( ".offline-ui-down" ) ) {
+	    $('.icono').html('<i class="fa fa-exclamation" aria-hidden="true"></i>');
+	  } else {
+	  	$('.icono').html('');
+	  }
+	};
+	setInterval(detectarConexion, 1000);
 
 	//Inicialización de botones
 	//chequeaBotones();
@@ -949,7 +961,6 @@ function borrar() {
 	);
 }
 
-
 /******************************************************************/
 /******************** FUNCIONES PARA BUSQUEDAS ********************/
 /******************************************************************/
@@ -1065,6 +1076,8 @@ function abuscarb (dondebusco, quebusco) {
 	}
 }
 
+
+
 /*******************************************************************/
 /******************** FUNCIONES PARA DESARROLLO ********************/
 /*******************************************************************/
@@ -1095,3 +1108,4 @@ function cargaDB(){
 	libreria[i]=salida;
 	libreriaDB.push(libreria[i]);
 }*/
+
