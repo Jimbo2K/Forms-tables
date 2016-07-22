@@ -713,7 +713,7 @@ function objFormulario(){
 	salida.isbn=$('#isbn').val();
 	salida.titulo=$('#titulo').val();
 	salida.autor=$('#autor').val();
-	salida.anio=$('#anio').val();
+	salida.anio=Number($('#anio').val());
 	salida.editorial=$('#editorial').val();
 	salida.iddb='';//en este atributo se alamacena la key de la colección que almacenará salida
 	/*PARA ENTENDERNOS: iddb es a la BD de Firebase lo que indice es al array libreria*/
@@ -942,8 +942,8 @@ function borrar() {
 						libreria[i].indice=i;
 					}
 					//Borro la linea
-					limpiaform();
 					$(".seleccionado").remove();
+					limpiaForm();
 				}
 			}
 	);

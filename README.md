@@ -191,6 +191,8 @@ Con esta opción sólo hay que descargar un elemento de la BD lo que supone un t
 3. Se han sustiruido los pop-up de sistema (alert y confirm) por ventanas de aviso generadas con **[Sweet Alert](http://t4t5.github.io/sweetalert/)**.
 4. Corregido el bug relacionado con la selección de elementos de tabla tras un borrado.
 
+***
+
 ###Vers. 0.3
 
 **\- Añadida paginación a la tabla**
@@ -208,7 +210,48 @@ También integra funcionalidad en la cabecera de la tabla de manera que se pueda
 5. Al modificar o borrar una entrada en páginas posteriores a la 1ª se reinicializa la tabla a la primera página y no se vé la modificación.
 6. En las búsquedas, al modificar o borrar, se vuelve automáticamente a la tabla global.
 7. El botón de resetear no tiene texto visible que lo identifique (salvo su *title*).
-8. En las ventanas modales de aviso
+8. En las ventanas modales de confirmación el enter/intro es por defecto la opción contraria a cancelar.
+9. La ordenación por año de publicación funciona mal (posiblemente por ser texto).
+10. El espacio del formulario y la botonera hacen que en algunos casos la tabla no se visualice y haya que hacer scroll.
+11. El botón de cierre de la ventana de ayuda no se posiciona correctamente.
+
+***
+
+###Vers. 0.4
+
+**\- Aplicación de correcciones**
+
+1. Ya no aparecen líneas de relleno: el código las identifica por su clase y las elimina.
+2. Solucionado bug con los botones de paginación.
+3. Cuando una consulta no arroja coincidencias se muestra un mensaje en la tabala.
+4. Tanto en la tabla global como en la de consultas, cuando se añade, modifica o borra un elemento, la tabla no cambia de manera que se puede comprobar el cambio (abarca a los puntos 4,5 y 6 de "Testeo y correcciones" de la versión 0.3).
+5. Añadido un texto al botón de reset del formulario. También se ha contemplado que la pulsación de Esc (Escape) realice la misma función.
+6. El enter/intro ya no es una opción destructiva en las confirmaciones de acciones del usuario.
+7. El valor de año de publicación ahora se alamcena como un número de manera que la ordenación de la tabla por dicho campo funciona correctamente.
+8. Se ha reducido la altura del formulario para dejar más espacio a la tabla.
+9. Solucionado el problema con el botón de cierre de la ayuda.
+
+**\- Formulario y botonera colapsable **
+
+Además de modificar la altura del formulario (ver punto 8 de "Aplicación de correcciones") ahora el formualrio y la botonera se pueden ocultar para visualizar mejor la tabla.
+Para ello se ha añadido un botón a la cabecera que al pulsar recoge o despliega el formulario y la botonera.
+Esta funcionalidad mejora la usabilidad de la aplicación en dispositivos handheld como móviles y tablets.
+
+**\- Validación HTML y CSS **
+
+* *index.html*: Sólo arroja un error debido al uso del atributo *sort* que es necesario para la funcionalidad de ordenar las filas de la tabla.
+
+    	141	<th sort="isbn" title="Click para ordenar por ISBN">ISBN</th>
+		142	<th sort="titulo" title="Click para ordenar por título">TITULO</th>
+		143	<th sort="autor" title="Click para ordenar por autor">AUTOR</th>
+		144	<th sort="anio" title="Click para ordenar por año de publicación">AÑO</th>
+		145	<th sort="editorial" title="Click para ordenar por editorial">EDITORIAL</th>
+
+* *ayuda.html*: OK
+
+* *estilos.css*:OK
+
+* *cssayuda.css*:OK
 
 **\- Código CSS y JavaScript minimizado**
 Se han incluido versiones minificadas de los archivos css y js empleados en la aplicación para utilizarlos en "producción".
