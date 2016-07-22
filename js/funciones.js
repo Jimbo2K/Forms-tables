@@ -54,7 +54,8 @@ $(function(){
 	//pequeña función que s no hay conexión pinta un icono en llos botones, el detector es una libreria js extena
 	var detectarConexion = function() {
 	if ( $( ".offline-ui" ).is( ".offline-ui-down" ) ) {
-	    $('.icono').html('<i class="fa fa-exclamation" aria-hidden="true"></i>');
+	    $('.icono').html('<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>');
+	    $('.icono').attr('title', 'Sin conexión de red');
 	  } else {
 	  	$('.icono').html('');
 	  }

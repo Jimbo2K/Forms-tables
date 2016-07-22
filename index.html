@@ -59,74 +59,74 @@ Desarrollado con: Sublime Text 3 (editor) y Bootstrap -->
 			</h1>
 			<br>
 			<div class="container" id="notabla">
-			<!-- Contenedor del formulario -->
-			<div class="row col-lg-10 col-md-10 col-sm-11 col-xs-11" id="contform">
-				<p>Los campos marcados con "<span>*</span>" son obligatorios</p>
-				<!-- Aquí va el formulario -->
-				<form action="#" id="form1" class="form-horizontal" role="form" autocomplete="on">
-					<!-- Marco que envuelve el formulario -->
-					<fieldset class="marco">
-						<!-- Botón para resetear el formulario -->
-						<legend>
-							Reset del formulario
-							<button type="button" id="resetear" title="Borra el formulario y alertas" class="btn disabled">
-								<i  class="fa fa-undo" aria-hidden="true"></i>
-							</button>
-						</legend>
-						<!-- ISBN -->
-						<div class="form-group">
-							<div><label for="isbn" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">ISBN: <span>*</span></label></div>
-							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-							<input type="text" class="form-control clearable rebonico" name="isbn" id="isbn" maxlength="13" required tabindex="1" placeholder="ISBN de 10 ó 13 dígitos">&nbsp; <span id="isbnnull" class="mensaje"></span><br>
+				<!-- Contenedor del formulario -->
+				<div class="row col-lg-10 col-md-10 col-sm-11 col-xs-11" id="contform">
+					<p>Los campos marcados con "<span>*</span>" son obligatorios</p>
+					<!-- Aquí va el formulario -->
+					<form action="#" id="form1" class="form-horizontal" role="form" autocomplete="on">
+						<!-- Marco que envuelve el formulario -->
+						<fieldset class="marco">
+							<!-- Botón para resetear el formulario -->
+							<legend>
+								Reset del formulario
+								<button type="button" id="resetear" title="Borra el formulario y alertas" class="btn disabled">
+									<i  class="fa fa-undo" aria-hidden="true"></i>
+								</button>
+							</legend>
+							<!-- ISBN -->
+							<div class="form-group">
+								<div><label for="isbn" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">ISBN: <span>*</span></label></div>
+								<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+								<input type="text" class="form-control clearable rebonico" name="isbn" id="isbn" maxlength="13" required tabindex="1" placeholder="ISBN de 10 ó 13 dígitos">&nbsp; <span id="isbnnull" class="mensaje"></span><br>
+								</div>
 							</div>
-						</div>
-						<!-- Título -->
-						<div class="form-group">
-							<label for="titulo" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">Título: <span>*</span></label>
-							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-								<input type="text" class="form-control clearable rebonico" name="titulo" id="titulo" placeholder="Ej. La Galatea" required tabindex="2">&nbsp; <span id="titulonull" class="mensaje"></span><br>
+							<!-- Título -->
+							<div class="form-group">
+								<label for="titulo" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">Título: <span>*</span></label>
+								<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+									<input type="text" class="form-control clearable rebonico" name="titulo" id="titulo" placeholder="Ej. La Galatea" required tabindex="2">&nbsp; <span id="titulonull" class="mensaje"></span><br>
+								</div>
 							</div>
-						</div>
-						<!-- Autor -->
-						<div class="form-group">
-							<label for="autor" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">Autor: </label>
-							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-								<input type="text" class="form-control clearable rebonico" name="autor" id="autor" placeholder="Ej. Miguel de Cervantes" tabindex="3">&nbsp; <span id="autornull" class="mensaje"></span><br>
+							<!-- Autor -->
+							<div class="form-group">
+								<label for="autor" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">Autor: </label>
+								<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+									<input type="text" class="form-control clearable rebonico" name="autor" id="autor" placeholder="Ej. Miguel de Cervantes" tabindex="3">&nbsp; <span id="autornull" class="mensaje"></span><br>
+								</div>
 							</div>
-						</div>
-						<!-- Año de publicación -->
-						<div class="form-group">
-							<label for="anio" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">Año: </label>
-							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-								<input type="text" class="form-control clearable rebonico" name="anio" id="anio" placeholder="Ej. 1591" tabindex="4" maxlength="4">&nbsp; <span id="anionull" class="mensaje"></span><br>
+							<!-- Año de publicación -->
+							<div class="form-group">
+								<label for="anio" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">Año: </label>
+								<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+									<input type="text" class="form-control clearable rebonico" name="anio" id="anio" placeholder="Ej. 1591" tabindex="4" maxlength="4">&nbsp; <span id="anionull" class="mensaje"></span><br>
+								</div>
 							</div>
-						</div>
-						<!-- Editorial -->
-						<div class="form-group">
-							<label for="editorial" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">Editorial: </label>
-							<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-								<input type="text" class="form-control clearable rebonico" name="editorial" id="editorial" placeholder="Ej. Planeta" tabindex="5">&nbsp; <span id="editorialnull" class="mensaje"></span>
+							<!-- Editorial -->
+							<div class="form-group">
+								<label for="editorial" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 control-label">Editorial: </label>
+								<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+									<input type="text" class="form-control clearable rebonico" name="editorial" id="editorial" placeholder="Ej. Planeta" tabindex="5">&nbsp; <span id="editorialnull" class="mensaje"></span>
+								</div>
 							</div>
-						</div>
-					</fieldset>
-					<!-- Campo ocultado con Bootstrap para recibir el índice que relaciona una línea de la tabla con el array -->
-					<div class="sr-only"><input type="text" id="oculto"></div>
-				</form>
-			</div>
+						</fieldset>
+						<!-- Campo ocultado con Bootstrap para recibir el índice que relaciona una línea de la tabla con el array -->
+						<div class="sr-only"><input type="text" id="oculto"></div>
+					</form>
+				</div>
 
-			<!-- Contenedor de la botonera -->
-			<div class="btn-group-vertical row col-lg-2 col-md-2 col-sm-12 col-xs-12" id="botones">
-				<button type="button" class="btn btn-success" id="anadir" tabindex="6" accesskey="a">AÑADIR <div class="icono"></span></button>
-				<br>
-				<button type="button" class="btn btn-warning" id="buscar" tabindex="7" accesskey="b">BUSCAR <span class="icono"></span></button>
-				<br>
-				<button type="button" class="btn btn-warning" id="modificar" tabindex="8" accesskey="m">MODIFICAR <span class="icono"></span></button>
-				<br>
-				<button type="button" class="btn btn-danger" id="quitar" tabindex="9" accesskey="q">BORRAR <span class="icono"></span></button>
-				<!-- <button type="button" onclick="probartabla();">PRUEBA1</button> -->
-				<!-- <button type="button" onclick="cargaDB();" title="Genera una base de datos automática para pruebas">AUTO BD</button> -->
-				<br>
-			</div>
+				<!-- Contenedor de la botonera -->
+				<div class="btn-group-vertical row col-lg-2 col-md-2 col-sm-12 col-xs-12" id="botones">
+					<button type="button" class="btn btn-success" id="anadir" tabindex="6" accesskey="a">AÑADIR <span class="icono"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span></button>
+					<br>
+					<button type="button" class="btn btn-warning" id="buscar" tabindex="7" accesskey="b">BUSCAR <span class="icono"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span></button>
+					<br>
+					<button type="button" class="btn btn-warning" id="modificar" tabindex="8" accesskey="m">MODIFICAR <span class="icono"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span></button>
+					<br>
+					<button type="button" class="btn btn-danger" id="quitar" tabindex="9" accesskey="q">BORRAR <span class="icono"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span></button>
+					<!-- <button type="button" onclick="probartabla();">PRUEBA1</button> -->
+					<!-- <button type="button" onclick="cargaDB();" title="Genera una base de datos automática para pruebas">AUTO BD</button> -->
+					<br>
+				</div>
 			</div>
 		</article>
 
