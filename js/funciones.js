@@ -61,16 +61,16 @@ $(function(){
 	/**********************************************************/
 
 	//Controla el botón de despliegue del formulario y la botonera
-	$('#despUpDown').click(function(){
+	$('#btnUpDown').click(function(){
 		//Si el botón tiene la clase 'fa fa-chevron-circle-up' es que están desplegados
-		if ($(this).hasClass('fa fa-chevron-circle-up')){
-			$(this).removeClass('fa fa-chevron-circle-up');
-			$(this).addClass('fa fa-chevron-circle-down');
+		if ($('#despUpDown').hasClass('fa fa-chevron-circle-up')){
+			$('#despUpDown').removeClass('fa fa-chevron-circle-up');
+			$('#despUpDown').addClass('fa fa-chevron-circle-down');
 			$('#notabla').slideUp('slow');
 		//Si no  es que están recogidos
 		} else {
-			$(this).removeClass('fa fa-chevron-circle-down');
-			$(this).addClass('fa fa-chevron-circle-up');
+			$('#despUpDown').removeClass('fa fa-chevron-circle-down');
+			$('#despUpDown').addClass('fa fa-chevron-circle-up');
 			$('#notabla').slideDown('slow');
 		}
 	});
