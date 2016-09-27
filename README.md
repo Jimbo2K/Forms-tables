@@ -38,6 +38,8 @@ Las personas que han participado en el desarrollo del código son:
 * Pablo Garrido
 * Rubén Álvarez
 
+##Enlace a la aplicación WEB
+[Proyecto Creación BBDD Equipo 2](http://formtablasfirebase.atwebpages.com/)
 ##Desarrollo
 ###Vers. 0
 **\- Interfaz del usuario**
@@ -219,7 +221,7 @@ También integra funcionalidad en la cabecera de la tabla de manera que se pueda
 
 ###Vers. 0.4
 
-**\- Aplicación de correcciones**
+**\- Aplicación de correcciones **
 
 1. Ya no aparecen líneas de relleno: el código las identifica por su clase y las elimina.
 2. Solucionado bug con los botones de paginación.
@@ -257,13 +259,13 @@ Esta funcionalidad mejora la usabilidad de la aplicación en dispositivos handhe
 
 ###Vers. 0.5
 
-**\- Detección de desconexión.**
+**\- Detección de desconexión. **
 
 Se ha implementado una librería JavaScript, **[Offline.js](http://github.hubspot.com/offline/docs/welcome/)** para detectar cuando no hay conexión a la red.
 Offline.js muestra un mensaje/cuadro superpuesto a la aplicación indicando el estado de conexión. Como estéticamente y funcionalmente, sobre todo para móviles, no nos parecía adecuado, hemos optado por ocultar el cuadro y en función del estado que tenga modificar los botones de la aplicación (Añadir, Modificar, Buscar y Borrar).
 De esta manera, cuando no hay conexión, a los botones se les añade un icóno de warning. Al pasar el ratón sobre el botón un mensaje les informará sobre la desconexión.
 
-**\- Código CSS y JavaScript minimizado**
+**\- Código CSS y JavaScript minimizado **
 Se han incluido versiones minificadas de los archivos css y js empleados en la aplicación para utilizarlos en "producción".
 
 
