@@ -40,6 +40,10 @@ Las personas que han participado en el desarrollo del código son:
 
 ##Enlace a la aplicación WEB
 [Proyecto Creación BBDD Equipo 2](http://formtablasfirebase.atwebpages.com/)
+
+##Presentación del proyecto
+[Presentación realizada con Prezi](https://prezi.com/kveqweizibyb/presentacion-libros/?utm_campaign=share&utm_medium=copy)
+
 ##Desarrollo
 ###Vers. 0
 **\- Interfaz del usuario**
